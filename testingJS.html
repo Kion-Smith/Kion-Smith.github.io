@@ -5,10 +5,26 @@
 
 	<a href="index.html">Back to main page</a>
 	<p id="demo"></p>
-
+		<button onclick="printCode()">Print argc and argv code</button>
 	<script>
 		document.getElementById("demo").innerHTML = "Hello JavaScript!";
-	</script> 
+	</script>
+		
+	function printCode()
+	{
+		alert(" int main(int argc,char* argv[])
+{
+	int i;
+	printf("Print argc %d\n", argc);
+	printf("Print argc %d\n", argc);//try put 
+	for(i=0;i<argc;i++)
+	{
+		printf("argv at %d = %s\n",i,argv[i]);
+	}
+	
+	return 0;
+} ");
+	}
 
 	</body>
 </html>
