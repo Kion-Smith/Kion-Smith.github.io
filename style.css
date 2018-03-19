@@ -23,6 +23,11 @@ ul
     	background-color: #333333;
 }
 
+a:link
+{
+	text-decoration: none;
+}
+
 li 
 {
     	float: left;
