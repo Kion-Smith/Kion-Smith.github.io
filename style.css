@@ -46,3 +46,14 @@ li a:hover
 {
     background-color: #111111;
 }
+
+.contactInfo
+{
+	/*temp going to be fixed*/
+	position: fixed;
+    left: 0;
+    bottom: 0%;
+    width: 100%;
+    background-color: #333333;
+    text-align: right;
+}
