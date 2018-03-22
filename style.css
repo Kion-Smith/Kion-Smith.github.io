@@ -46,6 +46,7 @@ li a:hover
 .contactInfo ul
 {
 
+		position: absolute;
 	    list-style-type: none;
     	margin: 0;
    	 	padding: 0;
@@ -66,7 +67,7 @@ li a:hover
 {
 		font-size:24px; 
 		color: white;
-		line-height: 3;
+		line-height: 3.5;
 	    
 }
 
@@ -74,4 +75,12 @@ li a:hover
 .contactInfo li a:hover
 {
 		 background-color: #333333;
+}
+
+.footer
+{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	width: 100%;
 }
