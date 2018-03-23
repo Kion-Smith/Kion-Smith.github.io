@@ -14,22 +14,23 @@ p
 	color: white;
 }
 
-ul 
+.top ul
 {
+		background-color: #333333;
     	list-style-type: none;
     	margin: 0;
    	 	padding: 0;
     	overflow: hidden;
-    	background-color: #333333;
+    	
 }
 
 
-li 
+.top li 
 {
     	float: left;
 }
 
-li a 
+.top li a 
 {
 	    display: block;
 	    color: white;
@@ -38,28 +39,27 @@ li a
 	    text-decoration: none;
 }
 
-li a:hover 
+.top li a:hover 
 {
     background-color: #111111;
 }
 
-.contactInfo ul
-{
 
-		position: absolute;
-	    list-style-type: none;
-    	margin: 0;
-   	 	padding: 0;
-    	overflow: hidden;
-    	background-color: #333333;
+.contactInfo ul 
+{
 	
+	position: absolute;
+	right:12px;
+	top:20px;
 }
 
-
-.contactInfo li
+.contactInfo li 
 {
-
-	 float: right;
+	list-style-type: none;
+	
+}
+.contactInfo li a
+{
 	
 }
 
@@ -71,16 +71,12 @@ li a:hover
 	    
 }
 
-
-.contactInfo li a:hover
-{
-		 background-color: #333333;
-}
+/**/
 
 .footer
 {
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
-	width: 100%;
-}
+	position: relative;
+	background-color: #333333;
+	margin: 0;
+	padding: 100px;
+	
