@@ -32,14 +32,20 @@
 		<p>I do not own/create these icons place holders until I make ones</p>
 
 		<div class = "tempDiv">	
-
 			<script src="form.js"></script>
-			Email  <input type="text" id="userEmail" >
-		<!--Message: <input type="textarea" id="Message" cols = 40 rows =10 > -->
-			<p>Your message</p>
-			<textarea id="Message" rows="10" cols="30"></textarea>
-			<button onclick="myFunction()">Send</button>
-			
+
+			<form action ="mailto:kion_smith@hotmail.com" method ="post" enctype="text/plain">
+				Name:<br>
+				<input type="text" name="Email" id = "userEmail">
+				<br>
+				Subject:<br>
+				<input type="text" name="subject" id = "userSubject">
+				<br>
+				Your message:<br>
+				<textarea id="Message"  rows="10" cols="30"></textarea>
+				<br>
+				<input type="submit"  value="Send "onclick="myFunction()">
+			</form>
 		</div>
 
 	 	
