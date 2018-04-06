@@ -1,19 +1,10 @@
-html
-{
-	height: 100%;
-}
 body 
 {	
-  position: relative;
-  margin: 0;
-  padding-bottom: 90px;
-  min-height: 100%;
-  background-color:#c6c4c4;
+	background-color:#c6c4c4;
 }
 
 h1
 {
-	
 	color: white;
 }
 
@@ -22,21 +13,21 @@ p
 	color: white;
 }
 
-.top ul
+ul 
 {
-		background-color: #333333;
     	list-style-type: none;
     	margin: 0;
    	 	padding: 0;
     	overflow: hidden;
+    	background-color: #333333;
 }
 
-.top li 
+li 
 {
     	float: left;
 }
 
-.top li a 
+li a 
 {
 	    display: block;
 	    color: white;
@@ -45,52 +36,7 @@ p
 	    text-decoration: none;
 }
 
-.top li a:hover 
+li a:hover 
 {
     background-color: #111111;
-}
-
-
-.contactInfo ul 
-{
-	position: relative;
-}
-
-.contactInfo li 
-{
-	float:right;
-	display: block;
-	color: white;
-	padding: 16px;
-	text-decoration: none;
-
-}
-
-.contactInfo .footerText
-{
-		font-size:24px; 
-		color: white;
-		line-height: 2;
-	    
-}
-
-.footer 
-{
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  background-color: #333333;
-}
-
-
-.tempDiv
-{
-	text-align:left;
-	border:1px solid #ccc;
-	width:300px;
-	padding:0 50px 15px;
-	margin-top:20px;
-	box-shadow:0 0 15px;
-	border-radius:6px;
-	float:left
 }
