@@ -53,6 +53,7 @@ p
 	    text-decoration: none;
 }
 
+
 .top li a:hover 
 {
     background-color: #111111;
@@ -93,6 +94,7 @@ p
 
 .contactForm
 {
+	display: inline-block;
 	text-align:left;
 	border:1px solid #ccc;
 	width:300px;
