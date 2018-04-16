@@ -7,7 +7,7 @@ body
   position: relative;
   text-align: center;
   margin: 0;
-  padding-bottom: 90px;
+  padding-bottom: 300px;
   min-height: 100%;
   background-color:#c6c4c4;
 }
@@ -87,7 +87,7 @@ p
 {
   position: absolute;
   width: 100%;
-  bottom: 100;
+  bottom: 0px;
   background-color: #333333;
 }
 
