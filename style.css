@@ -8,7 +8,7 @@ body
   position: relative;
   text-align: center;
   margin: 0;
-  padding-bottom: 300px;
+  padding-bottom: 140px;
   min-height: 100%;
   background-color:#c6c4c4;
 }
@@ -107,10 +107,10 @@ p
 .textBody
 {
 	background-color:#333333;
-	height: 100%;
+	
 	padding-left: 5%;
-	padding-rght: 5%;
-	padding-bottom: 20%;
+	padding-right: 5%;
+	padding-bottom: 45%;
 	margin:5% auto;
 	width: 75%;
 	word-wrap: normal;
@@ -118,9 +118,6 @@ p
 
 .textBody p
 {	
-	border-color: #ffffff;
-	border-style: solid;
-	border-width: 0px 5px;
 	font-size:18px; 
 
 }
