@@ -13,7 +13,17 @@ body
   background-color:#c6c4c4;
 }
 
-h1
+h1 
+{
+	color: white;
+}
+
+h2 
+{
+	color: white;
+}
+
+h3 
 {
 	color: white;
 }
@@ -45,6 +55,7 @@ p
 
 .top li a 
 {
+		font-weight: bold;
 	    display: inline-block;
 	    color: white;
 	    text-align: center;
@@ -104,10 +115,11 @@ p
 	box-shadow:0 0 15px;
 	border-radius:6px;
 }
+
+
 .textBody
 {
-	background-color:#333333;
-	
+	background-color:#4f4e4e;
 	padding-left: 5%;
 	padding-right: 5%;
 	padding-bottom: 45%;
@@ -115,6 +127,9 @@ p
 	width: 75%;
 	word-wrap: normal;
 }
+
+
+
 
 .textBody p
 {	
