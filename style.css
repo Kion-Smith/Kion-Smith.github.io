@@ -119,16 +119,22 @@ p
 
 .textBody
 {
-	background-color:#4f4e4e;
+	
 	padding-left: 5%;
 	padding-right: 5%;
 	padding-bottom: 45%;
 	margin:5% auto;
 	width: 75%;
 	word-wrap: normal;
+	background: rgb(79,78,78,.4);
 }
 
 
+.bgImage
+{
+	
+	
+}
 
 
 .textBody p
