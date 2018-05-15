@@ -126,7 +126,7 @@ p
 	margin:5% auto;
 	width: 75%;
 	word-wrap: normal;
-	background: rgb(79,78,78,.4);
+	background: rgb(79,78,78,.5);
 	overflow: auto;
   	position: relative;
 }
