@@ -117,7 +117,7 @@ p
 }
 
 
-.textBody
+.textBody 
 {
 	
 	padding-left: 5%;
@@ -127,20 +127,29 @@ p
 	width: 75%;
 	word-wrap: normal;
 	background: rgb(79,78,78,.4);
+	overflow: auto;
+  	position: relative;
 }
 
 
-.bgImage
+.bgImage:before
 {
-	width: 100%;
-	height: 100%;
-   	position: absolute;
- 	left: 0px;
-   	top: 0px;
 
-   	z-index: -1;
-   	filter: blur(4px);
-   	
+  content: "";
+
+  background-image: url("./Resources/Images/BackgroundTemp.jpg");
+ 
+  filter: blur(5px); 
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -1000px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  
+ 
+ 
 }
 
 .textBody p
