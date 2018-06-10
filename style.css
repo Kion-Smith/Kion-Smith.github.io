@@ -134,13 +134,15 @@ p
 }
 
 
-.bgImage:before
+.bgImage:after
 {
 
   content: "";
 
+  background-color: black;
   background-image: url("./Resources/Images/BackgroundTemp.jpg");
- 
+  background-repeat:  no-repeat; 
+  
   filter: blur(5px); 
   display: block;
   position: absolute;
@@ -153,7 +155,10 @@ p
  
  
 }
-
+.bgImage:before
+{
+	/* Want to add gradient to fade background, could do it manuallying photoshop background-image: linear-gradient();*/
+}
 .textBody p
 {	
 	font-size:18px; 
