@@ -36,13 +36,17 @@ p
 
 .top ul
 {
-		background-color: #333333;
-		display: inline-block;
-    	list-style-type: none;
-    	width: 100%;
-    	margin: 0;
-   	 	padding: 0;
-    	overflow: auto;
+	background-color: #333333;
+	display: inline-block;
+    list-style-type: none;
+    width: 100%;
+    margin: 0;
+   	padding: 0;
+    overflow: auto;
+    margin-right: auto;    
+    margin-left: auto;    
+    max-width: 100%;    
+    min-width: 1000px;   
     	
     	
 }
@@ -64,12 +68,14 @@ p
 	    padding-right: 50px;
 	    padding-left: 50px;
 	    text-decoration: none;
+
 }
 
 
 .top li a:hover 
 {
     background-color: #111111;
+
 }
 
 
@@ -150,7 +156,7 @@ p
   display: block;
   position: absolute;
   top: 0;
-  left: -1000px;
+  left: -100px;
   right: 0;
   bottom: 0;
   z-index: -1;
