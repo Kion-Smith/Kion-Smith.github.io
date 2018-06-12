@@ -82,6 +82,7 @@ p
 .contactInfo ul 
 {
 	position: relative;
+
 }
 
 .contactInfo li 
@@ -92,22 +93,27 @@ p
 	padding: 16px;
 	text-decoration: none;
 
+
 }
 
 .contactInfo .footerText
 {
-		font-size:24px; 
-		color: white;
-		line-height: 2;
+	font-size:24px; 
+	color: white;
+	line-height: 2;
 	    
 }
 
 .footer 
 {
-  position: absolute;
-  width: 100%;
-  bottom: 0px;
-  background-color: #333333;
+   position: absolute;
+   width: 100%;
+   bottom: 0px;
+   background-color: #333333;
+   overflow: auto;
+   max-width: 100%;    
+   min-width: 1000px;   
+    	
 }
 
 
