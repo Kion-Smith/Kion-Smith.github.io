@@ -129,7 +129,16 @@ p
 	background: rgb(79,78,78,1);
 }
 
+.projectsLink
+{
 
+	font-size: 24px;
+}
+.projectsLink:visited 
+{
+	
+	color:white;
+}
 .textBody 
 {
 	
@@ -142,6 +151,12 @@ p
 	background: rgb(79,78,78,.5);
 	overflow: auto;
   	position: relative;
+ 
+}
+
+.mainText 
+{
+	text-align: left;
 }
 
 
@@ -160,8 +175,8 @@ p
   min-width: 100%;
 
   /* Set up proportionate scaling */
- width:auto;
- height: auto;
+  width:auto;
+  height: auto;
 
   filter: blur(5px); 
   display: block;
@@ -182,28 +197,5 @@ p
 
 }
 
-.BlogEntry
-{
-	border-color: rgba(255, 255, 255,1); 
-	border-style: solid;
-	border-left-width: 10px; 
-	background:  rgba(67,70,82,.70);
 
-}
-.BlogEntry h2
-{
-	text-align: left;
-	padding-left: 10px;
-}
-.BlogEntry h3
-{
-	text-align: left;
-	padding-left: 10px;
-}
-
-.BlogEntry p
-{
-	text-align: left;
-	padding-left: 10px;
-}
 
