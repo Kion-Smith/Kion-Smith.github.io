@@ -36,12 +36,12 @@ p
 
 .top ul
 {
-	background-color: #333333;
-	display: inline-block;
+background-color: #333333;
+display: inline-block;
     list-style-type: none;
     width: 100%;
     margin: 0;
-   	padding: 0;
+   padding: 0;
     overflow: auto;
     margin-right: auto;    
     margin-left: auto;    
@@ -59,14 +59,14 @@ p
 
 .top li a 
 {
-		font-weight: bold;
-	    display: inline-block;
-	    color: white;
-	    text-align: center;
-	    padding: 16px;
-	    padding-right: 50px;
-	    padding-left: 50px;
-	    text-decoration: none;
+	font-weight: bold;
+	display: inline-block;
+	color: white;
+	 text-align: center;
+	  padding: 16px;
+	  padding-right: 50px;
+	  padding-left: 50px;
+	  text-decoration: none;
 
 }
 
@@ -131,13 +131,13 @@ p
 
 .projectsLink
 {
-
+	color:#8a8ea8;
 	font-size: 24px;
 }
 .projectsLink:visited 
 {
 	
-	color:white;
+	color:#8a8ea8;;
 }
 .textBody 
 {
