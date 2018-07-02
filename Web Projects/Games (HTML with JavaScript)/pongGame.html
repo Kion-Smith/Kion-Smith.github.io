@@ -1,8 +1,120 @@
 <html>
-<Title>PONG</Title>
+	<!-- temp project while I learn how to make game in html-->
+	<Title>PONG</Title>
 
-<script>
-	
-</script>
+	<canvas id="gameCanvas" width = "800" height="600"></canvas>
+
+	<script>
+		var canvas;
+		var canvasContext;
+
+		var ballX = 0;
+		var ballY =0;
+		var ballSpeedY =10;
+		var ballSpeedX = 4;
+
+		var playerX =50;
+		var playerY =50;
+
+		const PADDLE_HEIGHT = 100;
+
+		function calculateMousePos(evt)
+		{
+			var rect = canvas.getBoundingClientRect();
+			var root = document.documentElement;
+			var mouseX = evt.clientX - rect.left - root.scrollLeft;
+			var mouseY = evt.clientY - rect.top - root.scrollTop;
+			return{
+
+				x:mouseX,
+				y:mouseY
+			};
+
+		}
+
+		window.onload = function()
+		{
+			console.log("Start function");
+			canvas = document.getElementById('gameCanvas');
+			canvasContext = canvas.getContext('2d');
+
+			var FPS = 60;
+			//milli seconds excuted
+			setInterval(function()
+				{
+					logic();
+					render();
+				},1000/FPS);
+
+			canvas.addEventListener('mousemove',
+				function(evt) {
+					var mousePos = calculateMousePos(evt);
+					playerY = mousePos.y-(PADDLE_HEIGHT/2);
+					playerX = mousePos.x;
+				});
+
+		}
+
+		function logic()
+		{
+			ballX+=ballSpeedX;
+			ballY+=ballSpeedY;
+
+			if(ballX>canvas.width)
+			{
+				ballSpeedX*=-1;
+			}
+			else if(ballX<0)
+			{
+				ballSpeedX*=-1;
+			}
+
+			if(ballY>canvas.height)
+			{
+				ballSpeedY*=-1;
+			}
+			else if(ballY<0)
+			{
+				ballSpeedY*=-1;
+			}
+
+		}
+
+		function render()
+		{
+			console.log("Rendering");
+
+		
+			console.log(ballX);
+
+			//Canvas background
+			colorRect(0,0,canvas.width,canvas.height,'black');
+
+
+			//White Rectangle player paddle
+			colorRect(0,playerY,10,100,'white');
+
+			//White  ball
+			drawCircle(ballX,ballY,10,'white');
+			
+		}
+
+		function drawCircle(x,y,radius,color)
+		{
+			canvasContext.fillStyle = 'white';
+			canvasContext.beginPath();
+			//x,y,size, ,circumfrance  2pi
+			canvasContext.arc(x,y,radius,0,Math.PI*2,true)
+			canvasContext.fill();
+
+		}
+
+		function colorRect(x,y,width,height,color)
+		{
+			canvasContext.fillStyle= color;
+			canvasContext.fillRect(x,y,width,height);
+		}
+
+	</script>
 
 </html>
