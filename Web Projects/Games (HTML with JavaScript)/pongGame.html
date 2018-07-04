@@ -13,10 +13,21 @@
 		var ballSpeedY =10;
 		var ballSpeedX = 4;
 
-		var playerX =50;
+		//gonna use x later?
+		var playerX =250;
 		var playerY =50;
+		var playerScore =0;
 
+
+		
+		var compY=250;
+		var compScore =0;
+
+		var hasEnded = false;
+
+		const PADDLE_THICKNESS=10;
 		const PADDLE_HEIGHT = 100;
+		const WIN_CONDITION = 2;
 
 		function calculateMousePos(evt)
 		{
@@ -31,7 +42,13 @@
 			};
 
 		}
-
+function handleMouseClick(evt) {
+	if(hasEnded) {
+		playerScore = 0;
+		compScore = 0;
+		hasEnded = false;
+	}
+}
 		window.onload = function()
 		{
 			console.log("Start function");
@@ -46,6 +63,8 @@
 					render();
 				},1000/FPS);
 
+			canvas.addEventListener('mousedown', handleMouseClick);
+
 			canvas.addEventListener('mousemove',
 				function(evt) {
 					var mousePos = calculateMousePos(evt);
@@ -55,18 +74,76 @@
 
 		}
 
+		function ballReset()
+		{
+			if( playerScore >= WIN_CONDITION || compScore >= WIN_CONDITION)
+			{
+				hasEnded = true;
+
+			}
+
+				ballSpeedX*=-1;
+				ballX = canvas.width/2;
+				ballY = canvas.height/2;
+
+
+
+		}
+
+		function compAI()
+		{
+			var compYCenter = compY + (PADDLE_HEIGHT/2);
+			if(compYCenter<ballY)
+			{
+				compY+=6;
+			}
+			else if(compYCenter > ballY+35)
+			{
+				compY-=6;
+			}
+		}
+
 		function logic()
 		{
+			if(hasEnded)
+			{
+				return;
+			}
+
+			compAI();
 			ballX+=ballSpeedX;
 			ballY+=ballSpeedY;
 
 			if(ballX>canvas.width)
 			{
-				ballSpeedX*=-1;
+				if(ballY > compY && ballY<compY+PADDLE_HEIGHT)
+				{
+					ballSpeedX*=-1;
+					var deltaY = ballY - (compY+PADDLE_HEIGHT/2);
+					ballSpeedY = deltaY *0.35;
+				}
+				else
+				{
+					playerScore++;
+					ballReset();
+					
+				}
 			}
 			else if(ballX<0)
 			{
-				ballSpeedX*=-1;
+				if(ballY > playerY && ballY<playerY+PADDLE_HEIGHT)
+				{
+					ballSpeedX*=-1;
+					var deltaY = ballY - (playerY+PADDLE_HEIGHT/2);
+					ballSpeedY = deltaY *0.35;
+				}
+				else
+				{
+					compScore++;
+					ballReset();
+				}
+				
+			
 			}
 
 			if(ballY>canvas.height)
@@ -80,22 +157,51 @@
 
 		}
 
+
+
+		function renderNet()
+		{
+			for(var i=0;i<canvas.height; i+=40)
+			{
+				colorRect(canvas.width/2,i,2,20,'white');
+			}
+		}
 		function render()
 		{
-			console.log("Rendering");
 
 		
-			console.log(ballX);
 
 			//Canvas background
 			colorRect(0,0,canvas.width,canvas.height,'black');
 
+			if(hasEnded)
+			{	
+				canvasContext.fillStyle = 'white';
 
+				if(playerScore >= WIN_CONDITION )
+				{
+					canvasContext.fillText("You Won!",350,200);
+				}
+				else
+				{
+					canvasContext.fillText("The AI Won!",350,200);
+				}
+				canvasContext.fillText("Click to play Again",350,400);
+
+				return;
+			}
+			renderNet();
 			//White Rectangle player paddle
-			colorRect(0,playerY,10,100,'white');
+			colorRect(0,playerY,PADDLE_THICKNESS,PADDLE_HEIGHT,'white');
+
+			//White Rectangle comp paddle
+			colorRect(canvas.width-PADDLE_THICKNESS,compY,PADDLE_THICKNESS,PADDLE_HEIGHT,'white');
 
 			//White  ball
 			drawCircle(ballX,ballY,10,'white');
+
+			canvasContext.fillText(playerScore,100,100);
+			canvasContext.fillText(compScore,canvas.width-100,100);
 			
 		}
 
