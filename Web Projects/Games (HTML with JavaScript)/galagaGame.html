@@ -1,10 +1,86 @@
 <html>
-<TITLE>GALAGA</TITLE>
+	<TITLE>GALAGA</TITLE>
+
+	<canvas id = "galagaCanvas" width = 600 height=800> </canvas>
+
 	<body>
+
 		<script>
 
+			const FPS = 60;
+
+			var curKey;
+			
+			var playerLives = 3;
+			var playerX = 300;
+
+			var isInMenu = true;
+			var isRunning = false;
+			var isDead = true;
+
+			window.onload = function()
+			{
+				canvas = document.getElementById('galagaCanvas');
+				canvasContext = canvas.getContext('2d');
+
+				setInterval(function()
+					{
+						update();
+						render();
+					});
+
+				window.addEventListener('keydown',function(evt)
+				{
+					curKey = evt.keyCode;
+				});
+
+				window.addEventListener('keyup',function(evt)
+				{
+					curKey = false;
+				});
+			}
+
+			function update()
+			{
+
+			}
+			function render()
+			{
+				canvasContext.fillStyle = 'black';
+				canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
+				//testing what keys work with what code
+				if(curKey == 37) //left
+				{
+					canvasContext.fillStyle = 'green';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+				}
+
+				if(curKey == 38) //up
+				{
+					canvasContext.fillStyle = 'red';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+				}
+
+				if(curKey == 39) //right
+				{
+					canvasContext.fillStyle = 'blue';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+				}
+
+				if(curKey == 40) //up
+				{
+					canvasContext.fillStyle = 'yellow';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+				}
+
+			}
+
 		</script>
+
 	</body>
+
 	<br>
 	<a href ="../../HTMLProjects.html"> Back To Projects </a>
+
 </html>
