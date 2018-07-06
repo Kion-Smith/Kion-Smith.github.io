@@ -9,6 +9,7 @@
 
 			const FPS = 60;
 
+			var keyState;
 			var curKey;
 			
 			var playerLives = 3;
@@ -18,11 +19,30 @@
 			var playerHeight = 30;
 			var moveSpeed = 5;
 
+			var mouseX;
+			var mouseY;
+
 			var isInMenu = true;
 			var isRunning = false;
 			var isDead = true;
 
 
+			function getMousePos(evt)
+			{
+				var rect = canvas.getBoundingClientRect();
+				var root = document.documentElement;
+				var tempX = evt.clientX - rect.left - root.scrollLeft;
+				var tempY = evt.clientY - rect.top - root.scrollTop;
+				return{
+					x:tempX,
+					y:tempY
+				};
+			}
+
+			function handleMouseClick(evt)
+			{
+
+			}
 
 			window.onload = function()
 			{
@@ -37,12 +57,22 @@
 
 				window.addEventListener('keydown',function(evt)
 				{
+					keyState = true;
 					curKey = evt.keyCode;
 				});
 
 				window.addEventListener('keyup',function(evt)
 				{
-					curKey = false;
+					keyState = false;
+				});
+
+				window.addEventListener('mousedown',handleMouseClick);
+
+				window.addEventListener('mousemove',function(evt)
+				{
+					var mousePos = getMousePos(evt);
+					mouseY = mousePos.y;
+					mouseX = mousePos.x;
 				});
 			}
 
@@ -53,38 +83,74 @@
 
 			function render()
 			{
-				canvasContext.fillStyle = 'black';
-				canvasContext.fillRect(0,0,canvas.width,canvas.height);
+				if(isInMenu)
+				{
 
-				canvasContext.fillStyle = 'red';
-				canvasContext.fillRect(playerX,playerY,playerWidth,playerHeight);
+					canvasContext.fillStyle = 'black';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
+					
+					canvasContext.font="30px Arial";
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-80);
+					canvasContext.fillText("PLAY",(canvas.width/2)-40,(canvas.height/2)-80);
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-20);
+					canvasContext.fillText("HELP",(canvas.width/2)-40,(canvas.height/2)-20);
+					// if this was not gitpages I could have added a highscore function
+				}
+
+				if(isRunning)
+				{
+
+					canvasContext.fillStyle = 'black';
+					canvasContext.fillRect(0,0,canvas.width,canvas.height);
+					canvasContext.fillStyle = 'red';
+					canvasContext.fillRect(playerX,playerY,playerWidth,playerHeight);
+				}
+
+				if(isDead)
+				{
+
+				}
 
 
 
 			}
-
+			
+			function isHovering(x,y)
+			{
+				if( (y>mouseY && (y-40) <mouseY) && (x<mouseX && (x+40)>mouseX) )
+				{
+					return 'blue';
+				}
+				return 'white';
+			}
+			
 			function checkPlayerMovement()
 			{
 				//dont need up and down for main game,but possibley for a menu system
-				switch(curKey)
+				if(keyState)
 				{
-					case false:
-						break;
-					case 37://left
-						playerX-=moveSpeed;
-						break;
-					case 38: //up
-						playerY-=moveSpeed;
-						break;
-					case 39: //right
-						playerX+=moveSpeed;
-						break;
-					case 40: //down
-						playerY+=moveSpeed;
-						break;
+					switch(curKey)
+					{
+						case false:
+							break;
+						case 37://left
+							playerX-=moveSpeed;
+							break;
+						case 38: //up
+							playerY-=moveSpeed;
+							break;
+						case 39: //right
+							playerX+=moveSpeed;
+							break;
+						case 40: //down
+							playerY+=moveSpeed;
+							isInMenu = false;
+							isRunning = true;
+							break;
 
+					}
 				}
-
 			}
 		</script>
 
