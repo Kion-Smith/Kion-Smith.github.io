@@ -13,10 +13,16 @@
 			
 			var playerLives = 3;
 			var playerX = 300;
+			var playerY = 400;
+			var playerWidth = 30;
+			var playerHeight = 30;
+			var moveSpeed = 5;
 
 			var isInMenu = true;
 			var isRunning = false;
 			var isDead = true;
+
+
 
 			window.onload = function()
 			{
@@ -27,7 +33,7 @@
 					{
 						update();
 						render();
-					});
+					},1000/FPS);
 
 				window.addEventListener('keydown',function(evt)
 				{
@@ -42,40 +48,44 @@
 
 			function update()
 			{
-
+				checkPlayerMovement();
 			}
+
 			function render()
 			{
 				canvasContext.fillStyle = 'black';
 				canvasContext.fillRect(0,0,canvas.width,canvas.height);
 
-				//testing what keys work with what code
-				if(curKey == 37) //left
-				{
-					canvasContext.fillStyle = 'green';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-				}
+				canvasContext.fillStyle = 'red';
+				canvasContext.fillRect(playerX,playerY,playerWidth,playerHeight);
 
-				if(curKey == 38) //up
-				{
-					canvasContext.fillStyle = 'red';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-				}
 
-				if(curKey == 39) //right
-				{
-					canvasContext.fillStyle = 'blue';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-				}
-
-				if(curKey == 40) //up
-				{
-					canvasContext.fillStyle = 'yellow';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-				}
 
 			}
 
+			function checkPlayerMovement()
+			{
+				//dont need up and down for main game,but possibley for a menu system
+				switch(curKey)
+				{
+					case false:
+						break;
+					case 37://left
+						playerX-=moveSpeed;
+						break;
+					case 38: //up
+						playerY-=moveSpeed;
+						break;
+					case 39: //right
+						playerX+=moveSpeed;
+						break;
+					case 40: //down
+						playerY+=moveSpeed;
+						break;
+
+				}
+
+			}
 		</script>
 
 	</body>
