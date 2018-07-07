@@ -23,6 +23,7 @@
 			var mouseY;
 
 			var isInMenu = true;
+			var isInHelp = false;
 			var isRunning = false;
 			var isDead = true;
 
@@ -41,7 +42,17 @@
 
 			function handleMouseClick(evt)
 			{
+				if(isInMenu && isHovering((canvas.width/2)-40,(canvas.height/2)-80).state)
+				{
+					isInMenu = false;
+					isRunning = true;
+				}
 
+				if(isInMenu && isHovering((canvas.width/2)-40,(canvas.height/2)-20).state)
+				{
+					isInMenu = false;
+					isInHelp = true;
+				}
 			}
 
 			window.onload = function()
@@ -83,21 +94,31 @@
 
 			function render()
 			{
+				//!!!after this project need to look into how to control states... could use an array and switch statements intstead of 4 ifs
+
+				//background it almost everything is gonna set background first
+				canvasContext.fillStyle = 'black';
+				canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
 				if(isInMenu)
 				{
 
-					canvasContext.fillStyle = 'black';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-
-					
 					canvasContext.font="30px Arial";
-					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-80);
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-80).color;
 					canvasContext.fillText("PLAY",(canvas.width/2)-40,(canvas.height/2)-80);
-					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-20);
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-20).color;
 					canvasContext.fillText("HELP",(canvas.width/2)-40,(canvas.height/2)-20);
+
 					// if this was not gitpages I could have added a highscore function
 				}
 
+				if(isInHelp)
+				{
+					canvasContext.fillStyle = "white";
+					canvasContext.fillText("Help",(canvas.width/2)-40,(canvas.height/2) -10);
+
+
+				}
 				if(isRunning)
 				{
 
@@ -118,17 +139,24 @@
 			
 			function isHovering(x,y)
 			{
-				if( (y>mouseY && (y-40) <mouseY) && (x<mouseX && (x+40)>mouseX) )
+				if( (y>mouseY && (y-40) <mouseY) && (x-10<mouseX && (x+80)>mouseX) )
 				{
-					return 'blue';
+					return {
+						color:'blue',
+						state:true
+					};
 				}
-				return 'white';
+
+				return {
+					color:'white',
+					state:false
+				};
 			}
 			
 			function checkPlayerMovement()
 			{
 				//dont need up and down for main game,but possibley for a menu system
-				if(keyState)
+				if(keyState && isRunning)
 				{
 					switch(curKey)
 					{
@@ -145,8 +173,6 @@
 							break;
 						case 40: //down
 							playerY+=moveSpeed;
-							isInMenu = false;
-							isRunning = true;
 							break;
 
 					}
