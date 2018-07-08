@@ -1,12 +1,13 @@
 <html>
-	<TITLE>GALAGA</TITLE>
+	<TITLE>Space Invaders</TITLE>
 
 	<canvas id = "spInvaderCanvas" width = 600 height=800> </canvas>
 
 	<body>
 
 		<script>
-
+			//need to add cover
+			//need to add enemies
 			const FPS = 60;
 
 			var keyState;
@@ -21,6 +22,12 @@
 
 			var mouseX;
 			var mouseY;
+
+			var bulletX;
+			var bulletY;
+			
+
+			//not sure how I want to implement cover
 
 			var isInMenu = true;
 			var isInHelp = false;
@@ -135,7 +142,10 @@
 					canvasContext.fillStyle = 'black';
 					canvasContext.fillRect(0,0,canvas.width,canvas.height);
 					canvasContext.fillStyle = 'red';
-					canvasContext.fillRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight);
+					canvasContext.fillRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight); 
+
+					//
+					//draw cover
 				}
 
 				if(isDead)
@@ -178,17 +188,29 @@
 							playerX-=moveSpeed;
 							break;
 						case 38: //up
-							playerY-=moveSpeed;
+							if(isInMenu)
+							{
+								playerY-=moveSpeed;
+							}
 							break;
 						case 39: //right
 							playerX+=moveSpeed;
 							break;
 						case 40: //down
-							playerY+=moveSpeed;
+							if(isInMenu)
+							{
+								playerY+=moveSpeed;
+							}
+							break;
+						case 32:
+							//space for shooting
+
 							break;
 
 					}
 				}
+
+
 			}
 		</script>
 
