@@ -12,6 +12,8 @@
 
 			var keyState;
 			var curKey;
+
+			var score =0;
 			
 			var playerLives = 3;
 			var playerX = 300;
@@ -25,6 +27,9 @@
 
 			var bulletX;
 			var bulletY;
+
+			//need to think of the colors
+			var coverObj = {numOfHits:0,isDestroyed:false};
 			
 
 			//not sure how I want to implement cover
@@ -132,19 +137,16 @@
 				if(isInHelp)
 				{
 					canvasContext.fillStyle = "white";
-					canvasContext.fillText("Help",(canvas.width/2)-40,(canvas.height/2) -10);
+					canvasContext.fillText("Help",(canvas.width/2)-40,100);
+					canvasContext.fillText("Click in the game to continue",(canvas.width/2)-200,550);
 
 
 				}
 				if(isRunning)
 				{
 
-					canvasContext.fillStyle = 'black';
-					canvasContext.fillRect(0,0,canvas.width,canvas.height);
-					canvasContext.fillStyle = 'red';
-					canvasContext.fillRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight); 
-
-					//
+					drawRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight,'red');
+					
 					//draw cover
 				}
 
@@ -159,6 +161,13 @@
 
 			}
 			
+			//use this for cover,player and 
+			function drawRect(x,y,width,height,color)
+			{
+					canvasContext.fillStyle = color;
+					canvasContext.fillRect(x,y,width,height,color); 
+			}
+
 			function isHovering(x,y)
 			{
 				if( (y>mouseY && (y-40) <mouseY) && (x-10<mouseX && (x+80)>mouseX) )
