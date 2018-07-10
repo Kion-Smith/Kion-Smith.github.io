@@ -160,6 +160,29 @@ p
 }
 
 
+.listMenu
+{
+	border-color: white; 
+	border-style:  solid;
+	background: rgba(67,70,82,.70);
+	text-align: left;
+	padding:  10px;
+
+}
+
+.listMenu a
+{
+	color:#8a8ea8;
+	font-size: 24px;
+	text-underline-position: 
+}
+
+.listMenu a:visited 
+{
+	color:#8a8ea8;
+	font-size: 24px;
+}
+
 .bgImage:after
 {
 
