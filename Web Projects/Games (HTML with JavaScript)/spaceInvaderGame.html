@@ -10,6 +10,7 @@
 			//need to add enemies
 			const FPS = 60;
 
+			var keys;
 			var keyState;
 			var curKey;
 
@@ -90,13 +91,19 @@
 
 				window.addEventListener('keydown',function(evt)
 				{
+					keys = (keys || []);
+					keys[evt.keyCode] = (evt.type =="keydown")
+
+					/* OLD KEY HANDLER
 					keyState = true;
 					curKey = evt.keyCode;
+					*/
 				});
 
 				window.addEventListener('keyup',function(evt)
 				{
-					keyState = false;
+					keys[evt.keyCode] = (evt.type == "keydown");
+					//keyState = false;
 				});
 
 				window.addEventListener('mousedown',handleMouseClick);
@@ -186,39 +193,30 @@
 			
 			function checkPlayerMovement()
 			{
-				//dont need up and down for main game,but possibley for a menu system
-				if(keyState && isRunning)
+				if(isRunning && keys)
 				{
-					switch(curKey)
+					if(keys[37]) //left
 					{
-						case false:
-							break;
-						case 37://left
-							playerX-=moveSpeed;
-							break;
-						case 38: //up
-							if(isInMenu)
-							{
-								playerY-=moveSpeed;
-							}
-							break;
-						case 39: //right
-							playerX+=moveSpeed;
-							break;
-						case 40: //down
-							if(isInMenu)
-							{
-								playerY+=moveSpeed;
-							}
-							break;
-						case 32:
-							//space for shooting
-
-							break;
-
+						playerX-=moveSpeed;
 					}
+					if(keys[38] && isInMenu) //up
+					{
+						playerY-=moveSpeed;
+					}
+					if(keys[39]) //right
+					{
+						playerX+=moveSpeed;
+					}
+					if(keys[40] && isInMenu) //down
+					{
+						playerY+=moveSpeed;
+					}
+					if(keys[32]) //space
+					{
+						
+					}
+					
 				}
-
 
 			}
 		</script>
