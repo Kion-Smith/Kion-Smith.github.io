@@ -154,6 +154,11 @@
 
 					drawRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight,'red');
 					
+
+					if(isBulletOnScreen())
+					{
+						renderBullet()
+					}
 					//draw cover
 				}
 
@@ -195,7 +200,7 @@
 			{
 				if(isRunning && keys)
 				{
-					if(keys[37]) //left
+					if(keys[37] && playerX>playerWidth) //left
 					{
 						playerX-=moveSpeed;
 					}
@@ -203,7 +208,7 @@
 					{
 						playerY-=moveSpeed;
 					}
-					if(keys[39]) //right
+					if(keys[39] && playerX<canvas.width) //right
 					{
 						playerX+=moveSpeed;
 					}
@@ -211,13 +216,32 @@
 					{
 						playerY+=moveSpeed;
 					}
-					if(keys[32]) //space
+					if(keys[32] && !isBulletOnScreen()) //space
 					{
 						
 					}
 					
 				}
 
+				function isBulletOnScreen()
+				{
+					if(bulletY<0)
+					{
+						return false;
+					}
+
+					return true;
+				}
+
+				function renderBullet()
+				{
+
+				}
+
+				function updateBullrt()
+				{
+					
+				}
 			}
 		</script>
 
