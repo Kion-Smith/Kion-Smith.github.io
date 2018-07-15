@@ -119,6 +119,10 @@
 			function update()
 			{
 				checkPlayerMovement();
+				if(isBulletOnScreen())
+				{
+					updateBullet();
+				}
 			}
 
 			function render()
@@ -218,7 +222,11 @@
 					}
 					if(keys[32] && !isBulletOnScreen()) //space
 					{
-						
+						shootingBullet = true;
+					}
+					else
+					{
+						shootingBullet=false;
 					}
 					
 				}
@@ -238,9 +246,13 @@
 
 				}
 
-				function updateBullrt()
+				function updateBullet()
 				{
-					
+					if(shootingBullet)
+					{
+						bulletY = playerY;
+						bulletX = playerX;
+					}
 				}
 			}
 		</script>
