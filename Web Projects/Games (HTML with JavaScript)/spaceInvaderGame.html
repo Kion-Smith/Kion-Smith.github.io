@@ -8,13 +8,15 @@
 		<script>
 			//need to add cover
 			//need to add enemies
-			const FPS = 60;
+			
 
 			var keys;
-			var keyState;
-			var curKey;
+			var mouseX;
+			var mouseY;
 
 			var score =0;
+
+			const FPS = 60;
 			
 			var playerLives = 3;
 			var playerX = 300;
@@ -23,17 +25,16 @@
 			var playerHeight = 30;
 			var moveSpeed = 5;
 
-			var mouseX;
-			var mouseY;
+
 
 			var bulletX;
 			var bulletY;
-
-			//need to think of the colors
-			var coverObj = {numOfHits:0,isDestroyed:false};
-			
+			var shootingBullet;
 
 			//not sure how I want to implement cover
+			// Could make cover like this :: var coverObj = {numOfHits:0,isDestroyed:false};
+			// or could do it with multiple constants
+			
 
 			var isInMenu = true;
 			var isInHelp = false;
@@ -94,16 +95,12 @@
 					keys = (keys || []);
 					keys[evt.keyCode] = (evt.type =="keydown")
 
-					/* OLD KEY HANDLER
-					keyState = true;
-					curKey = evt.keyCode;
-					*/
 				});
 
 				window.addEventListener('keyup',function(evt)
 				{
 					keys[evt.keyCode] = (evt.type == "keydown");
-					//keyState = false;
+					
 				});
 
 				window.addEventListener('mousedown',handleMouseClick);
@@ -119,6 +116,7 @@
 			function update()
 			{
 				checkPlayerMovement();
+
 				if(isBulletOnScreen())
 				{
 					updateBullet();
@@ -163,6 +161,7 @@
 					{
 						renderBullet()
 					}
+
 					//draw cover
 				}
 
@@ -177,6 +176,8 @@
 
 			}
 			
+
+
 			//use this for cover,player and 
 			function drawRect(x,y,width,height,color)
 			{
@@ -204,6 +205,7 @@
 			{
 				if(isRunning && keys)
 				{
+					//change this to switch stament
 					if(keys[37] && playerX>playerWidth) //left
 					{
 						playerX-=moveSpeed;
@@ -220,6 +222,7 @@
 					{
 						playerY+=moveSpeed;
 					}
+
 					if(keys[32] && !isBulletOnScreen()) //space
 					{
 						shootingBullet = true;
@@ -231,30 +234,33 @@
 					
 				}
 
-				function isBulletOnScreen()
-				{
-					if(bulletY<0)
-					{
-						return false;
-					}
+			}
 
-					return true;
+			function isBulletOnScreen()
+			{
+				if(bulletY<0)
+				{
+					return false;
 				}
 
-				function renderBullet()
-				{
+				return true;
+			}
 
-				}
+			function renderBullet()
+			{
+				
+				drawRect(bulletX,bulletY,10,10,"yellow");
+			}
 
-				function updateBullet()
+			function updateBullet()
+			{
+				if(shootingBullet)
 				{
-					if(shootingBullet)
-					{
-						bulletY = playerY;
-						bulletX = playerX;
-					}
+					bulletY = playerY;
+					bulletX = playerX;
 				}
 			}
+			
 		</script>
 
 	</body>
