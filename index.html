@@ -1,69 +1,211 @@
 <!DOCTYPE html>
 <html>
-	<link rel="icon"  href="./Resources/Images/icon.png">
-	<TITLE>Kion Smith</TITLE>
-	<meta  charset="UTF-8">
-	<meta name = "description" content= "Kion Smith's Website">
-	<meta name = "keywords" content= "Kion,Smith,Kion-Smith,Kion Smith,programmer,Full stack devloper">
-	<meta name = "author" content= "Kion Smith">
-	<meta name="viewport" content="width=device-width, initial-scale=.3">
-
-<!--Maybe re add script for moblie redirection-->
-
 	<head>
-		<link rel = "stylesheet" href ="style.css">
+		<TITLE> Kion Smith </TITLE>
+		<meta name = "viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" type = "text/css" href="./CSS/style.css">
+		<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+		
 	</head>
 
+	
+
 	<body>
-	
-		<div class = "top">
-			<ul>
-	 		 	<li> <a>HOME</a> </li>
-	 		 	<li> <a href="contact.html">CONTACT</a> </li>
-	  			<li> <a href="about.html">ABOUT ME</a> </li>
+		<video autoplay muted loop id = "background">
+			<source src="./Videos/background.mp4" type="video/mp4">
+			Your browser does not support the Video
+		</video>
 
-			</ul>
-		</div>
-		
-		<div class ="bgImage">
-	
-
-
-			<div class = "textBody">
-				<br>
-				<h1> Welcome to my website</h1>
-				<hr>
-				<h2> UNDER CONSTRUCTION!</h2>
-				<br>
-				<a class = "projectsLink" href="HTMLProjects.html">Web Projects</a> 
-				<br>
-				<br>
-				<a class = "projectsLink" href="https://github.com/Kion-Smith">Check out my Github!</a>
-				<br>
-				<br>
-				<img src="./Resources/Images/Moon.jpeg" alt="Moon" height=" 50%" width="50%">
-				<p> Note this is not my image</p>
-				
-				<br>
-				
-			</div>
-		
-
-
-			<div class="footer">
-				<p>I did not create these icons they are place holders until I make my own</p>
-				<ul class ="contactInfo">
-						<li><a  href = "malito:kion_smith@hotmail.com"> <img  src="./Resources/Images/emailPlace.png" title = "Email" alt ="Email" width="50px" height="50"> </a></li>
-						<li><a  href = "https://github.com/Kion-Smith"> <img  src="./Resources/Images/githubPlace.png" title = "Github" alt ="Github" width="50" height="50"> </a></li>
-						<li><a  href = "https://twitter.com/KionLSmith"> <img  src="./Resources/Images/twitterPlace.png" title = "Twitter" alt ="Twitter" width="50" height="50"> </a></li>
-						<li><a  href = "https://www.youtube.com/channel/UC0LNB-o3FqDzvK9Ed1QYHVQ"> <img  src="./Resources/Images/youtubePlace.png" title = "Youtube" alt ="Youtube" width="50" height="50"> </a></li>
-						<li><a  href = "https://www.linkedin.com/in/kion-smith-32a29a132/"> <img  src="./Resources/Images/linkedIn.png" title = "LinkedIn" alt ="LinkedIn" width="50" height="50"> </a></li>
-						<li><div class ="footerText">Social Media:</div></li>
+		<div class ="mainContent">
+			<br>
+			<img src ="./Images/kion.png" alt = "Kion Smith" id="aviPicture" >
+			<h1>Kion Smith</h1>
+			<h3>Computer Science Student at University of Texas at Dallas</h3>
+			<hr>
+			
+			
+			<div id = "mainBubble">
+				<ul>
+		 		 	<li id = "aboutBubble"> 
+		 		 		<p> About </p>
+		 		 		<img src = "./Images/about.png" alt = "?" id = "aboutIcon" > 
+		 		 	 </li>
+		 		 	<li id = "projectsBubble"> 
+		 		 		<p> Projects </p> 
+		 		 		<img src = "./Images/projects.png" alt = "Computer" id = "projectsIcon"> 
+		 		 	</li>
+		  			<li id = "contactBuble"> 
+		  				<p> Contact </p> 
+		  				<img src = "./Images/mail.png" alt = "mail" id = "contactIcon"> 
+		  			</li>
 				</ul>
 			</div>
 
+			<p><i>Follow me!</i></p>
+			<div id = "socialMedia">
+				<ul>
+					<li><a href="https://twitter.com/KionLSmith"> <img src = "./Images/twitter.png" alt = "Twitter" class = "socialIcons"> </a></li>
+					<li><a href="https://www.youtube.com/channel/UC0LNB-o3FqDzvK9Ed1QYHVQ"><img src = "./Images/youtube.png" alt = "Youtube" class = "socialIcons"></a></li>
+					<li><a href="https://github.com/Kion-Smith"><img src = "./Images/github.png" alt = "Github" class = "socialIcons"></a></li>
+					<li><a href="https://www.linkedin.com/in/kion-smith-32a29a132/"><img src = "./Images/linkedin.png" alt = "Linkedin" class = "socialIcons"></a></li>
+				</ul>
+			</div>
+			<h6> *Note : I do not own these backgrounds or the icons. Icons will be replaced with my own creations later </h6>
 		</div>
 
+		<script>
+			$(document).ready(function()
+			{
+				$("#aviPicture").click(function()
+				{
+					var pic = $("#aviPicture");
+					pic.animate({width: '20%'});
+					pic.animate({width: '17%'});
+					pic.animate({width: '20%'});
+					pic.animate({width: '10%'});
+				});
+
+				$("#aboutBubble").click(function()
+				{
+						
+					$(".mainContent").slideUp();
+
+					$(".popupBox").show();
+					$(".aboutContents").show();
+
+					$(".popupBox").click(function()
+					{
+
+						$(".mainContent").slideDown();
+						$(".popupBox").hide();
+						$(".aboutContents").hide();
+					
+					});
+				});
+
+				$("#projectsBubble").click(function()
+				{
+											
+					
+					$(".mainContent").fadeOut( function()
+						{
+							$(".popupBox").fadeIn();
+							$(".projectsContents").show();
+						});
+
+					
+					$(".popupBox").click(function()
+					{
+
+						$(".mainContent").slideDown();
+						$(".popupBox").hide();
+						$(".projectsContents").hide();
+					
+					});
+				});
+
+				$("#contactBuble").click(function()
+				{
+											
+					$(".mainContent").slideUp();
+					$(".popupBox").show();
+					$(".contactContents").show();
+
+					$(".popupBox").click(function()
+					{
+
+						$(".mainContent").slideDown();
+						$(".popupBox").hide();
+						$(".contactContents").hide();
+					
+					});
+
+				});
+
+
+			});		
+		</script>
+
+		<div class = "popupBox" style="display: none">
+			<img src = "./Images/xButton.png" alt = "X button" class ="xButton">
+
+			<div class="aboutContents" style="display: none">
+				<br>
+				<h2> About Me </h2>
+				<hr>
+				<br>
+				<p> I am an aspiring software engineer who also has interests in all fields of computer science, but some of my favorites would be game programming, cyber security, and software devlopment . </p>
+				<p>I began learning about programming in my sophomore year of high school,however previously I would create modification to gameboy advanced games.  </p>
+				<p>I am also interested in digital art and animation . </p>
+			</div>
+
+			<div class="projectsContents" style="display: none">
+				<br>
+				<h2> Projects </h2>
+				<hr>
+				<br>
+
+				<p> My projects are all on my  Github page, however here are the names of notable ones</p>
+				<br>
+				<table style="width:100%">
+				 	<tr>
+						<th>Project Name</th>
+				    	<th>Date Started</th> 
+				    	<th>Status</th>
+					</tr>
+					<tr>
+				    	<td>This website (latest version)</td>
+				    	<td>12/11/18</td> 
+				    	<td>Always looking to learn more web technologies to add</td>
+					</tr>
+					<tr>
+				    	<td>Windows Programmer Calculator</td>
+				    	<td>10/14/17</td> 
+				    	<td>Finshed: 12/3/17</td>
+					</tr>
+					<tr>
+				    	<td>Chat Bot</td>
+				    	<td>10/28/17</td> 
+				    	<td>Finished: 11/12/17</td>
+					</tr>
+					
+					<tr>
+				    	<td>WinApi RPG</td>
+				    	<td>10/14/17</td> 
+				    	<td>Incomplete/Still in development</td>
+					</tr>
+					<tr>
+				    	<td>To-do Calendar</td>
+				    	<td>8/9/18</td> 
+				    	<td>Still in development</td>
+				  	</tr>
+				</table>
+
+				<h3>Here are links to old web projects</h3>
+				<a href="./oldWebsite/oldIndex.html">Link to Old Website </a>
+				<br>
+				<a href="./oldWebsite/HTMLProjects.html"> Link to old Javascript tests </a>
+
+			</div>
+
+			<div class="contactContents" style="display: none">
+				<br>
+				<h2> Contact</h2>
+				<hr>
+				<br>
+				<p>Email: kion_smith@hotmail.com</p>
+				<a href="./PDF/Resume.pdf" download> My Resume </a>
+
+				
+			</div>
+
+		</div>
+		
+		
 	</body>
 
 </html>
