@@ -1,0 +1,273 @@
+<html>
+	<TITLE>Space Invaders</TITLE>
+
+	<canvas id = "spInvaderCanvas" width = 600 height=800> </canvas>
+
+	<body>
+
+		<script>
+			//need to add cover
+			//need to add enemies
+			
+
+			var keys;
+			var mouseX;
+			var mouseY;
+
+			var score =0;
+
+			const FPS = 60;
+			
+			var playerLives = 3;
+			var playerX = 300;
+			var playerY = 750;
+			var playerWidth = 30;
+			var playerHeight = 30;
+			var moveSpeed = 5;
+
+
+
+			var bulletX;
+			var bulletY;
+			var shootingBullet;
+
+			//not sure how I want to implement cover
+			// Could make cover like this :: var coverObj = {numOfHits:0,isDestroyed:false};
+			// or could do it with multiple constants
+			
+
+			var isInMenu = true;
+			var isInHelp = false;
+			var isRunning = false;
+			var isDead = false;
+
+
+			function getMousePos(evt)
+			{
+				var rect = canvas.getBoundingClientRect();
+				var root = document.documentElement;
+				var tempX = evt.clientX - rect.left - root.scrollLeft;
+				var tempY = evt.clientY - rect.top - root.scrollTop;
+				return{
+					x:tempX,
+					y:tempY
+				};
+			}
+
+			function handleMouseClick(evt)
+			{
+				if(isInMenu && isHovering((canvas.width/2)-40,(canvas.height/2)-80).state)
+				{
+					isInMenu = false;
+					isRunning = true;
+				}
+
+				//need to use an else if because of how quickly calculations are done
+				if(isInMenu && isHovering((canvas.width/2)-40,(canvas.height/2)-20).state)
+				{
+					isInMenu = false;
+					isInHelp = true;
+				}
+				else if (isInHelp)
+				{
+					isInHelp = false;
+					isInMenu = true;
+				}
+
+
+
+
+			}
+
+			window.onload = function()
+			{
+				canvas = document.getElementById('spInvaderCanvas');
+				canvasContext = canvas.getContext('2d');
+
+				setInterval(function()
+					{
+						update();
+						render();
+					},1000/FPS);
+
+				window.addEventListener('keydown',function(evt)
+				{
+					keys = (keys || []);
+					keys[evt.keyCode] = (evt.type =="keydown")
+
+				});
+
+				window.addEventListener('keyup',function(evt)
+				{
+					keys[evt.keyCode] = (evt.type == "keydown");
+					
+				});
+
+				window.addEventListener('mousedown',handleMouseClick);
+
+				window.addEventListener('mousemove',function(evt)
+				{
+					var mousePos = getMousePos(evt);
+					mouseY = mousePos.y;
+					mouseX = mousePos.x;
+				});
+			}
+
+			function update()
+			{
+				checkPlayerMovement();
+
+				if(isBulletOnScreen())
+				{
+					updateBullet();
+				}
+			}
+
+			function render()
+			{
+				//!!!after this project need to look into how to control states... could use an array and switch statements intstead of 4 ifs
+
+				//background it almost everything is gonna set background first
+				canvasContext.fillStyle = 'black';
+				canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
+				if(isInMenu)
+				{
+
+					canvasContext.font="30px Arial";
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-80).color;
+					canvasContext.fillText("PLAY",(canvas.width/2)-40,(canvas.height/2)-80);
+					canvasContext.fillStyle = isHovering((canvas.width/2)-40,(canvas.height/2)-20).color;
+					canvasContext.fillText("HELP",(canvas.width/2)-40,(canvas.height/2)-20);
+
+					// if this was not gitpages I could have added a highscore function
+				}
+
+				if(isInHelp)
+				{
+					canvasContext.fillStyle = "white";
+					canvasContext.fillText("Help",(canvas.width/2)-40,100);
+					canvasContext.fillText("Click in the game to continue",(canvas.width/2)-200,550);
+
+
+				}
+				if(isRunning)
+				{
+
+					drawRect((playerX-playerWidth),(playerY-playerHeight),playerWidth,playerHeight,'red');
+					
+
+					if(isBulletOnScreen())
+					{
+						renderBullet()
+					}
+
+					//draw cover
+				}
+
+				if(isDead)
+				{
+					canvasContext.fillStyle = "white";
+					canvasContext.fillText("GAME OVER",(canvas.width/2)-90,(canvas.height/2) -10);
+
+				}
+
+
+
+			}
+			
+
+
+			//use this for cover,player and 
+			function drawRect(x,y,width,height,color)
+			{
+					canvasContext.fillStyle = color;
+					canvasContext.fillRect(x,y,width,height,color); 
+			}
+
+			function isHovering(x,y)
+			{
+				if( (y>mouseY && (y-40) <mouseY) && (x-10<mouseX && (x+80)>mouseX) )
+				{
+					return {
+						color:'blue',
+						state:true
+					};
+				}
+
+				return {
+					color:'white',
+					state:false
+				};
+			}
+			
+			function checkPlayerMovement()
+			{
+				if(isRunning && keys)
+				{
+					//change this to switch stament
+					if(keys[37] && playerX>playerWidth) //left
+					{
+						playerX-=moveSpeed;
+					}
+					if(keys[38] && isInMenu) //up
+					{
+						playerY-=moveSpeed;
+					}
+					if(keys[39] && playerX<canvas.width) //right
+					{
+						playerX+=moveSpeed;
+					}
+					if(keys[40] && isInMenu) //down
+					{
+						playerY+=moveSpeed;
+					}
+
+					if(keys[32] && !isBulletOnScreen()) //space
+					{
+						shootingBullet = true;
+					}
+					else
+					{
+						shootingBullet=false;
+					}
+					
+				}
+
+			}
+
+			function isBulletOnScreen()
+			{
+				if(bulletY<0)
+				{
+					return false;
+				}
+
+				return true;
+			}
+
+			function renderBullet()
+			{
+				
+				drawRect(bulletX,bulletY,10,10,"yellow");
+			}
+
+			function updateBullet()
+			{
+				if(shootingBullet)
+				{
+					bulletY = playerY;
+					bulletX = playerX;
+				}
+			}
+			
+		</script>
+
+	</body>
+
+	<br>
+	<a href="../../../index.html">NEW WEBSITE</a>
+	<br>
+	<a href ="../../HTMLProjects.html"> Back To Projects (old website) </a>
+	
+</html>
