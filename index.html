@@ -22,7 +22,9 @@
 
 		<div class ="mainContent">
 			<br>
-			<img src ="./Images/upadtedPicture.JPEG" alt = "Kion Smith" id="aviPicture" >
+			<div class = "profileImg">
+				<img src ="./Images/upadtedPicture.JPEG" alt = "Kion Smith" >
+			</div>
 			<h1>Kion Smith</h1>
 			<h3>Computer Science Student at University of Texas at Dallas</h3>
 			<hr>
@@ -60,13 +62,13 @@
 		<script>
 			$(document).ready(function()
 			{
-				$("#aviPicture").click(function()
+				$(".profileImg").click(function()
 				{
-					var pic = $("#aviPicture");
-					pic.animate({width: '20%'});
-					pic.animate({width: '17%'});
-					pic.animate({width: '20%'});
-					pic.animate({width: '10%'});
+					var pic = $(".profileImg");
+					pic.animate({width: '20em', height: '20em'});
+					pic.animate({width: '17em', height: '17em'});
+					pic.animate({width: '20em', height: '20em'});
+					pic.animate({width: '12em', height: '12em'});
 				});
 
 				$("#aboutBubble").click(function()

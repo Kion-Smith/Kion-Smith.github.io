@@ -18,13 +18,25 @@ hr
 	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255,255, 0.90), rgba(255, 255, 255, 0));	
 }
 
-#aviPicture
+
+.profileImg
 {
-	width: 10%;
+	margin:auto;
+	width: 12em;
+	height: 12em;
+	overflow: hidden;
 	border-radius: 50%;
 	border: 2px solid white;
-	
 }
+
+.profileImg img
+{
+	position: center;
+	width: 100%;
+	height: auto;
+}
+
+
 .mainContent
 {
 	
@@ -107,7 +119,7 @@ hr
     list-style-type: none;
 
    
-    overflow: auto;
+    overflow:hidden
 	margin-right: 3%;
 
     	
