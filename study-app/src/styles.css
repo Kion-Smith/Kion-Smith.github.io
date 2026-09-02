@@ -291,7 +291,8 @@ h1, h2, h3 {
 
 .flashcard-face.back {
   transform: rotateY(180deg);
-  background: rgba(61, 139, 221, 0.25);
+  background: #244868;
+  border-color: var(--accent-strong);
 }
 
 .flashcard-face .tag {
