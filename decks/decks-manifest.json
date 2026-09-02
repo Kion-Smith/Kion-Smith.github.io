@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T00:14:58.160Z",
+  "generatedAt": "2026-09-02T00:17:30.183Z",
   "decks": [
     {
       "path": "biology/cell-structure.json",
@@ -108,6 +108,12 @@
       "title": "P4L4: Datacenter Technologies",
       "subject": "cs6200",
       "cardCount": 30
+    },
+    {
+      "path": "history/ww2.json",
+      "title": "World War 2 Basics",
+      "subject": "history",
+      "cardCount": 4
     }
   ]
 }
