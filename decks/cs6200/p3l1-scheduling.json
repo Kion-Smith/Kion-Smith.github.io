@@ -1,0 +1,165 @@
+{
+  "title": "P3L1: Scheduling",
+  "cards": [
+    {
+      "id": "p3l1-001",
+      "question": "What is the role of the CPU scheduler in an operating system?",
+      "answer": "It decides which task (process or thread) in the ready queue gets to run on a CPU next, and dispatches it by performing a context switch onto that CPU."
+    },
+    {
+      "id": "p3l1-002",
+      "question": "Name four events that cause the OS scheduler to run.",
+      "answer": "When the CPU becomes idle (e.g. a running task blocks on I/O), when a new task becomes ready (created, or woken from I/O/interrupt wait), when a higher-importance task may need to preempt the running one, and when a running task's timeslice expires."
+    },
+    {
+      "id": "p3l1-003",
+      "question": "What four metrics are commonly used to compare scheduling algorithms?",
+      "answer": "Throughput (tasks completed per unit time), average completion time, average wait time, and overall CPU utilization."
+    },
+    {
+      "id": "p3l1-004",
+      "question": "Describe First-Come First-Serve (FCFS) scheduling and its main weakness.",
+      "answer": "Tasks are scheduled in the order they arrive, using a simple FIFO run queue; its weakness is poor average wait time when a long task arrives ahead of several short tasks (convoy effect)."
+    },
+    {
+      "id": "p3l1-005",
+      "question": "How does Shortest Job First (SJF) scheduling order tasks, and what run queue structures does it require?",
+      "answer": "It schedules tasks in order of increasing execution time. The run queue must support ordered insertion/removal, e.g., an ordered queue or a tree structure where the leftmost node has the shortest execution time."
+    },
+    {
+      "id": "p3l1-006",
+      "question": "In the classic T1=1s, T2=10s, T3=1s example (all arriving at once), how do FCFS and SJF compare in average wait time?",
+      "answer": "FCFS (order T1,T2,T3) gives average wait time of 4 seconds; SJF (order T1,T3,T2) gives average wait time of only 1 second, since short tasks are run before the long one."
+    },
+    {
+      "id": "p3l1-007",
+      "question": "Since a task's true future execution time is unknown, how do preemptive SJF schedulers estimate it?",
+      "answer": "They use history-based heuristics, such as the task's most recent run time or a windowed average over several past runs, to predict future execution time."
+    },
+    {
+      "id": "p3l1-008",
+      "question": "What is priority scheduling and what run queue design does it typically use?",
+      "answer": "Tasks are assigned priority levels, and the highest-priority runnable task is always run, preempting lower-priority ones; it is typically implemented with multiple run queues, one per priority level, or an ordered tree keyed by priority."
+    },
+    {
+      "id": "p3l1-009",
+      "question": "What is starvation in priority scheduling, and what mechanism prevents it?",
+      "answer": "Starvation occurs when a low-priority task waits indefinitely because higher-priority tasks keep arriving. Priority aging prevents it by increasing a task's effective priority the longer it waits in the run queue, so it eventually becomes highest priority."
+    },
+    {
+      "id": "p3l1-010",
+      "question": "What is priority inversion, and give the example order of execution from the lecture.",
+      "answer": "Priority inversion happens when a high-priority task (T1) blocks waiting on a lock held by a low-priority task (T3), while a medium-priority task (T2) runs freely in between — so the actual completion order becomes T2, T3, T1 instead of the priority order T1, T2, T3."
+    },
+    {
+      "id": "p3l1-011",
+      "question": "What is the standard fix for priority inversion, and why must it be tracked in the mutex data structure?",
+      "answer": "Temporarily boost the priority of the mutex owner (e.g., T3) to that of the highest waiting thread so it finishes and releases the lock quickly, then lower it back after release; this requires the mutex to track its current owner."
+    },
+    {
+      "id": "p3l1-012",
+      "question": "What is Round Robin scheduling?",
+      "answer": "Tasks are picked from the front of the queue like FCFS, but instead of running to completion, each task runs for a bounded time (or until it yields/blocks) before being placed back in the queue, cycling through all tasks in order."
+    },
+    {
+      "id": "p3l1-013",
+      "question": "Define timeslice (time quantum).",
+      "answer": "The maximum amount of uninterrupted time that can be given to a task before it is preempted; a task may run for less if it blocks on I/O, yields, or is preempted by a higher-priority task."
+    },
+    {
+      "id": "p3l1-014",
+      "question": "Why do CPU-bound tasks prefer a longer timeslice?",
+      "answer": "Longer timeslices mean fewer context switches and less overhead, maximizing useful CPU processing time, throughput, and average completion time (wait time is not a concern since users don't perceive CPU-bound task start times)."
+    },
+    {
+      "id": "p3l1-015",
+      "question": "Why do I/O-bound tasks prefer a shorter timeslice?",
+      "answer": "A short timeslice lets I/O-bound tasks run briefly and issue their I/O requests sooner, keeping both the CPU and I/O devices well utilized and making the system feel more responsive to users."
+    },
+    {
+      "id": "p3l1-016",
+      "question": "What tradeoff does the length of a timeslice create relative to context-switch overhead?",
+      "answer": "Shorter timeslices improve responsiveness but increase the fraction of time spent on context-switch/scheduling overhead; the timeslice should be significantly larger than the context-switch time to keep that overhead small."
+    },
+    {
+      "id": "p3l1-017",
+      "question": "What is a multilevel feedback queue (MLFQ), and who won a Turing Award for it?",
+      "answer": "An MLFQ is a run queue made of multiple queues, each with its own timeslice/policy; new tasks start in the top (shortest-timeslice) queue and are pushed down a level each time they use their full timeslice (more CPU-bound), or pushed back up if they yield/block early (more I/O-bound). Fernando Corbato won the Turing Award for this and related time-sharing work."
+    },
+    {
+      "id": "p3l1-018",
+      "question": "What makes the Linux O(1) scheduler achieve constant-time task selection and insertion?",
+      "answer": "It uses two priority-indexed arrays (Active and Expired) of queues; inserting is an array index plus enqueue, and selecting uses a bit-search instruction to find the first non-empty priority level in constant time regardless of the number of tasks."
+    },
+    {
+      "id": "p3l1-019",
+      "question": "Describe the Active/Expired array mechanism in the Linux O(1) scheduler.",
+      "answer": "Tasks run from the Active array; once a task consumes its full timeslice it moves to the Expired array. When Active becomes empty, the two arrays' pointers are swapped, so Expired becomes the new Active — this also serves as an aging mechanism."
+    },
+    {
+      "id": "p3l1-020",
+      "question": "How does the Linux O(1) scheduler assign priorities and timeslices, and what is the 'nice' value?",
+      "answer": "It has 140 priority levels (0-99 real-time, 100-139 time-sharing, default 120); low-priority/CPU-bound tasks get small timeslices, high-priority/interactive tasks get large timeslices; feedback is based on sleep time (longer sleep raises priority by subtracting up to 5, shorter sleep lowers it by adding up to 5). The nice value (-20 to 19) lets users adjust a task's time-sharing priority."
+    },
+    {
+      "id": "p3l1-021",
+      "question": "Why was the O(1) scheduler replaced by the Completely Fair Scheduler (CFS)?",
+      "answer": "Because tasks moved to the expired array had to wait until all active tasks used their full timeslice, causing unpredictable delays for interactive tasks — as workloads (Skype, streaming, gaming) became more interactive, this jitter became unacceptable; O(1) also made no formal fairness guarantees."
+    },
+    {
+      "id": "p3l1-022",
+      "question": "What run queue data structure does CFS use, and what determines a task's position in it?",
+      "answer": "CFS uses a self-balancing red-black tree, ordering tasks by their virtual runtime (vruntime) — accumulated CPU time tracked at nanosecond granularity. The leftmost node (least vruntime) is scheduled next."
+    },
+    {
+      "id": "p3l1-023",
+      "question": "How does CFS account for task priority (niceness) without using separate queues per priority?",
+      "answer": "CFS uses a single tree for all priorities but changes the rate at which a task's virtual runtime progresses: lower-priority tasks accrue vruntime faster (losing the CPU sooner), higher-priority tasks accrue it more slowly (running longer)."
+    },
+    {
+      "id": "p3l1-024",
+      "question": "What are the time complexities of CFS's core run queue operations, and why might this eventually be a limitation?",
+      "answer": "Selecting the next task is O(1) (leftmost tree node); inserting a task is O(log n) in the number of tasks. As systems support ever more tasks, this log(n) insertion cost could eventually motivate replacing CFS."
+    },
+    {
+      "id": "p3l1-025",
+      "question": "What is cache affinity and why does it matter for scheduling on multiprocessors?",
+      "answer": "A thread runs faster on a CPU whose cache already holds its state ('hot' cache) versus a 'cold' cache on another CPU; schedulers try to reschedule a thread on the same CPU it last ran on to preserve this affinity and avoid the performance cost of repopulating caches."
+    },
+    {
+      "id": "p3l1-026",
+      "question": "Describe the hierarchical scheduler architecture used to balance load across multiple CPUs while preserving cache affinity.",
+      "answer": "A top-level load-balancing component distributes tasks across CPUs (e.g., based on per-CPU run queue length or when a CPU goes idle and steals work), while a per-CPU scheduler with its own run queue repeatedly reschedules tasks on the same CPU as much as possible."
+    },
+    {
+      "id": "p3l1-027",
+      "question": "What is a NUMA platform, and what is NUMA-aware scheduling?",
+      "answer": "NUMA (non-uniform memory access) platforms have multiple memory nodes where some CPUs are 'closer' (faster access) to a given memory node than others via an interconnect (e.g., Intel QPI). NUMA-aware scheduling tries to bind tasks to CPUs close to the memory node holding their data."
+    },
+    {
+      "id": "p3l1-028",
+      "question": "What is hyperthreading (SMT), and why is switching between hardware threads so fast?",
+      "answer": "Hyperthreading (simultaneous multithreading) gives a single CPU multiple sets of registers, each holding a separate thread's context; switching between them just changes which register set is active (order of cycles) — no state needs to be saved or restored, unlike a full OS context switch."
+    },
+    {
+      "id": "p3l1-029",
+      "question": "According to Fedorova's paper, why is co-scheduling two CPU-bound threads on the same SMT core bad, and why is co-scheduling two memory-bound threads also bad?",
+      "answer": "Two CPU-bound threads contend for the single processor pipeline, degrading each other's performance roughly by half and leaving the memory system idle. Two memory-bound threads both stall waiting on memory, leaving CPU pipeline cycles wasted/idle."
+    },
+    {
+      "id": "p3l1-030",
+      "question": "What scheduling strategy does Fedorova's paper recommend for hyperthreaded (SMT) platforms, and why?",
+      "answer": "Co-schedule a mix of CPU-intensive and memory-intensive threads on the hardware contexts of a core; while one thread stalls on a memory access, the other keeps the pipeline busy, so both the CPU pipeline and memory system stay well utilized with minimal mutual interference."
+    },
+    {
+      "id": "p3l1-031",
+      "question": "Why can't sleep time (used for I/O-bound vs CPU-bound classification) be used to distinguish memory-bound from CPU-bound threads for SMT scheduling?",
+      "answer": "A thread waiting on a memory reference is not sleeping on a software queue — it's stalled in the processor pipeline — and tracking this via software would be far too slow given that hardware context switches happen in mere cycles; hardware counters are needed instead."
+    },
+    {
+      "id": "p3l1-032",
+      "question": "What metric did Fedorova propose for detecting CPU-bound vs memory-bound threads, and what was the ultimate finding about its usefulness?",
+      "answer": "She proposed cycles per instruction (CPI): CPU-bound threads have low CPI (near 1), memory-bound threads have high CPI. While a synthetic workload with widely spread CPI values (1, 6, 11, 16) showed CPI-aware scheduling worked well, profiling real benchmark suites showed real applications' CPI values cluster closely together, so CPI turned out not to be a practically useful scheduling metric."
+    }
+  ]
+}

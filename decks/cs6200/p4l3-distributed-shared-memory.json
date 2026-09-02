@@ -1,0 +1,145 @@
+{
+  "title": "P4L3: Distributed Shared Memory",
+  "cards": [
+    {
+      "id": "p4l3-001",
+      "question": "What is Distributed Shared Memory (DSM)?",
+      "answer": "A service that manages physical memory spread across multiple nodes so that applications running on top have the illusion of running on a single shared-memory machine (like an SMP), with reads/writes possibly originating from any node."
+    },
+    {
+      "id": "p4l3-002",
+      "question": "Why is DSM valuable given the cost curve of physical memory?",
+      "answer": "Machines with very large amounts of memory get disproportionately expensive (into the half-million-dollar range), so instead of adding memory to one machine, DSM lets you add nodes and achieve large shared memory at much lower cost, at the expense of slower remote accesses."
+    },
+    {
+      "id": "p4l3-003",
+      "question": "Why is DSM becoming more practical/relevant today?",
+      "answer": "Commodity data-center interconnects now offer low-latency RDMA (Remote Direct Memory Access) interfaces, which greatly reduce the cost of accessing remote memory compared to older interconnection technology."
+    },
+    {
+      "id": "p4l3-004",
+      "question": "How does a 'peer' distributed application (e.g., Google search, Facebook, YouTube) differ from the client/server model used in distributed file systems?",
+      "answer": "Every node both owns/stores a portion of the state and provides access to it, while also issuing requests to other nodes to access their state -- there is no clean client vs. server distinction, though some centralized control/management nodes may still exist."
+    },
+    {
+      "id": "p4l3-005",
+      "question": "What are the three major design decisions for managing shared resources in a distributed environment (using the toy-shop analogy)?",
+      "answer": "(1) Placement -- where to put resources; (2) Movement -- how and when to move resources between nodes; (3) Sharing rules -- policies for how long a resource can be held and when/how its availability is communicated to others."
+    },
+    {
+      "id": "p4l3-006",
+      "question": "What is the difference between hardware-supported and software-supported DSM?",
+      "answer": "Hardware DSM relies on specialized high-end interconnects/NICs that translate memory accesses into messages and handle consistency and atomics in hardware (expensive, used in supercomputers). Software DSM detects local vs. remote accesses and handles messaging/consistency in software, at the OS level or via a programming language runtime."
+    },
+    {
+      "id": "p4l3-007",
+      "question": "According to the DSM survey paper discussed in the quiz, what software task is commonly implemented even in hybrid hardware+software DSM systems?",
+      "answer": "Prefetching pages -- address translation and triggering invalidations are more concretely defined and easier to implement in hardware, but prefetching benefits from software's ability to reason about application-specific access patterns."
+    },
+    {
+      "id": "p4l3-008",
+      "question": "Why can't DSM systems use cache-line granularity sharing like SMP hardware does?",
+      "answer": "Sending a network message for every cache-line-sized write would be far too expensive/slow over a distributed network, so DSM systems use larger granularities such as pages or objects instead."
+    },
+    {
+      "id": "p4l3-009",
+      "question": "What are the main options for DSM sharing granularity, and which is most common at the OS level?",
+      "answer": "Options include individual variables, pages of virtual memory, or higher-level language objects. Page-based sharing is most common at the OS level because the OS only understands pages, not variables or objects; larger page sizes also help amortize remote-access costs."
+    },
+    {
+      "id": "p4l3-010",
+      "question": "What is false sharing in a DSM system, and why does it hurt performance?",
+      "answer": "False sharing occurs when two unrelated variables (e.g., x and y) happen to reside on the same shared page/object and are modified independently by processes on different nodes; the DSM system only tracks sharing at page granularity, so it triggers unnecessary coherence traffic (invalidations/updates) even though neither process cares about the other's variable."
+    },
+    {
+      "id": "p4l3-011",
+      "question": "How can false sharing be mitigated?",
+      "answer": "Careful programmer-controlled data layout/allocation so unrelated variables aren't packed on the same page/object, or a smart compiler that recognizes truly shared state and separates it from unrelated data."
+    },
+    {
+      "id": "p4l3-012",
+      "question": "What access algorithm patterns does DSM need to support, and which is the focus of this lesson?",
+      "answer": "Single-reader/single-writer (simplest, no real consistency challenges), multiple-reader/single-writer, and multiple-reader/multiple-writer (most general). The lesson focuses on multiple-reader/multiple-writer since single/multiple-writer cases are special cases of it."
+    },
+    {
+      "id": "p4l3-013",
+      "question": "What is the difference between migration and replication as DSM state-placement techniques?",
+      "answer": "Migration copies/moves the entire state to the node currently accessing it (good for single-reader/single-writer, since only one node needs it at a time); replication keeps copies of the state on multiple nodes simultaneously, suited to multiple-reader/multiple-writer scenarios, but requires consistency management."
+    },
+    {
+      "id": "p4l3-014",
+      "question": "Why is migration a poor choice for multiple-reader/multiple-writer workloads?",
+      "answer": "The page would have to keep flipping back and forth between the multiple nodes accessing it, which can actually increase latency rather than reduce it."
+    },
+    {
+      "id": "p4l3-015",
+      "question": "If access latency is the primary performance concern, which DSM techniques help, and what's the catch?",
+      "answer": "Caching and replication both improve latency by bringing data closer to where it's accessed (migration only helps in the single-reader/single-writer case). However, with multiple concurrent writers, caching/replication can incur high consistency-management overhead -- similar to how the Sprite file system disabled caching when concurrent writers were detected."
+    },
+    {
+      "id": "p4l3-016",
+      "question": "What are the two basic coherence propagation strategies discussed for DSM (and what other term-pairs describe them)?",
+      "answer": "Push (server proactively sends invalidation messages when data is written) vs. Pull (nodes request/check for modified state periodically or on demand). These correspond to eager vs. lazy and pessimistic vs. optimistic approaches."
+    },
+    {
+      "id": "p4l3-017",
+      "question": "In a page-based DSM architecture, what is a page's 'home node' and how is a page address structured?",
+      "answer": "A page's address is identified by a node identifier plus a page frame number; the node identified is called the home node (or manager node) for that page, and it is responsible for driving coherence operations and tracking readers/writers/modifications for that page."
+    },
+    {
+      "id": "p4l3-018",
+      "question": "What is the difference between a page's 'home node' and its 'owner' in DSM architecture?",
+      "answer": "The home node is the fixed manager that tracks metadata (who owns the page, access state) for that page. The owner is the node currently holding exclusive write access/control of the page and can change over time as different processes access it; the home node keeps track of who the current owner is."
+    },
+    {
+      "id": "p4l3-019",
+      "question": "Besides on-demand caching, why might a DSM system explicitly create page replicas?",
+      "answer": "For load balancing, hot-spot avoidance, and reliability (e.g., in a data center, triplicating shared state across the original machine, a nearby machine/rack, and a remote machine/data center so content survives node failures)."
+    },
+    {
+      "id": "p4l3-020",
+      "question": "How does a DSM system locate the manager/home node for a given page or object (the 'global map')?",
+      "answer": "A global map, replicated on every node, translates an object/page identifier to its manager node -- either directly via bits embedded in the address, or more flexibly via a mapping table indexed by (a hash of) the object id, which allows the manager assignment to change without changing object identifiers."
+    },
+    {
+      "id": "p4l3-021",
+      "question": "How can a DSM implementation transparently intercept and detect local vs. remote memory accesses?",
+      "answer": "By leveraging the hardware MMU: an access to an address with no valid page table mapping (remote page) triggers a trap into the OS, which passes control to the DSM layer to send a remote message; similarly, writing to a write-protected cached page triggers a trap so the DSM layer can issue coherence operations."
+    },
+    {
+      "id": "p4l3-022",
+      "question": "What is a 'consistency model' in the context of distributed shared state?",
+      "answer": "A guarantee about how and in what order state changes/accesses will be observed, provided that the software follows certain rules (e.g., using specific synchronization APIs); it tells programmers what ordering and visibility of memory operations they can rely on."
+    },
+    {
+      "id": "p4l3-023",
+      "question": "What does Strict Consistency guarantee, and why is it impractical?",
+      "answer": "Strict consistency requires that every write be instantaneously and identically visible to all nodes, in real-time order. It's impractical because even single shared-memory multiprocessors don't guarantee this without synchronization primitives, and network latency, message loss, and reordering make it effectively impossible to enforce in distributed systems."
+    },
+    {
+      "id": "p4l3-024",
+      "question": "What does Sequential Consistency guarantee?",
+      "answer": "All processes must observe the same interleaving/order of all writes in the system (though this order need not match real time), and updates from a single processor must always appear in the order that processor issued them."
+    },
+    {
+      "id": "p4l3-025",
+      "question": "What does Causal Consistency guarantee, and how does it relate to sequential consistency?",
+      "answer": "It only enforces ordering for writes that are causally related (e.g., a write that depends on a previously read value must be seen in that order by everyone); writes with no causal relationship (concurrent writes) can be observed in different orders on different processors. This is weaker/more relaxed than sequential consistency, which forces a single global order for all writes regardless of causal relationship."
+    },
+    {
+      "id": "p4l3-026",
+      "question": "What is Weak Consistency, and what mechanism does it introduce beyond plain reads/writes?",
+      "answer": "Weak consistency introduces explicit synchronization points/operations. Updates made before a sync become visible to others only once both the writer and reader have performed synchronization; without synchronization, there are no ordering guarantees at all."
+    },
+    {
+      "id": "p4l3-027",
+      "question": "In weak/release consistency, what is the difference between an 'entry' and an 'exit' synchronization operation?",
+      "answer": "Entry (acquire) is when a process synchronizes to pull in all updates made by others; exit (release) is when a process pushes/releases its own updates to be visible to others -- separating these lets the system finely control which updates propagate and when, reducing coherence overhead at the cost of extra bookkeeping."
+    },
+    {
+      "id": "p4l3-028",
+      "question": "Why do weak/causal consistency models exist instead of always using sequential consistency?",
+      "answer": "Forcing every process to observe the exact same total order on all updates (sequential consistency) can be overkill, especially for unrelated/independent updates -- causal and weak consistency relax ordering requirements to reduce coherence overhead while still giving programmers a reasonable, understandable memory model to program against."
+    }
+  ]
+}
