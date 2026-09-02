@@ -1,0 +1,11 @@
+{
+  "title": "Cell Structure",
+  "cards": [
+    { "id": "cs-001", "question": "What organelle produces ATP?", "answer": "The mitochondria" },
+    { "id": "cs-002", "question": "What organelle contains the cell's DNA?", "answer": "The nucleus" },
+    { "id": "cs-003", "question": "What structure controls what enters and exits the cell?", "answer": "The cell membrane" },
+    { "id": "cs-004", "question": "What organelle synthesizes proteins?", "answer": "The ribosome" },
+    { "id": "cs-005", "question": "What organelle modifies, sorts, and packages proteins?", "answer": "The Golgi apparatus" },
+    { "id": "cs-006", "question": "What structure gives plant cells their rigid shape?", "answer": "The cell wall" }
+  ]
+}

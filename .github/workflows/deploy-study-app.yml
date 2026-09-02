@@ -1,0 +1,63 @@
+name: Build & deploy study app
+
+# Rebuilds the React study-cards app and regenerates the deck manifest
+# whenever deck content or app source changes, then commits the built
+# output into /study at the repo root so GitHub Pages' existing
+# deploy-from-branch setup picks it up automatically - no Pages
+# settings changes needed.
+on:
+  push:
+    branches: [master]
+    # Ignore pushes that only touch this workflow's own output, so its
+    # commit back to master doesn't retrigger itself in a loop.
+    paths-ignore:
+      - 'study/**'
+      - 'decks/decks-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-study-app
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: study-app
+        run: npm ci
+
+      - name: Regenerate deck manifest
+        working-directory: study-app
+        run: node scripts/generate-manifest.mjs
+
+      - name: Build app
+        working-directory: study-app
+        run: npm run build
+
+      - name: Copy build output into /study
+        run: |
+          rm -rf study
+          mkdir -p study
+          cp -r study-app/dist/. study/
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add study decks/decks-manifest.json
+          if git diff --staged --quiet; then
+            echo "Nothing changed, skipping commit."
+          else
+            git commit -m "chore: rebuild study app"
+            git push
+          fi

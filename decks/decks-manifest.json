@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-09-01T23:47:30.282Z",
+  "decks": [
+    {
+      "path": "biology/cell-structure.json",
+      "title": "Cell Structure",
+      "subject": "biology",
+      "cardCount": 6
+    },
+    {
+      "path": "history/ww2.json",
+      "title": "World War 2 Basics",
+      "subject": "history",
+      "cardCount": 4
+    }
+  ]
+}

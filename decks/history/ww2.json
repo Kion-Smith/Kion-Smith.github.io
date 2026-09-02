@@ -1,0 +1,9 @@
+{
+  "title": "World War 2 Basics",
+  "cards": [
+    { "id": "ww2-001", "question": "In what year did World War 2 begin?", "answer": "1939" },
+    { "id": "ww2-002", "question": "In what year did World War 2 end?", "answer": "1945" },
+    { "id": "ww2-003", "question": "What event brought the United States into the war?", "answer": "The attack on Pearl Harbor" },
+    { "id": "ww2-004", "question": "What was the codename for the Allied invasion of Normandy?", "answer": "Operation Overlord" }
+  ]
+}
