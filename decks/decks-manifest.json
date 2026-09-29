@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-29T12:56:55.486Z",
+  "generatedAt": "2026-09-29T13:20:15.818Z",
   "decks": [
     {
       "path": "biology/cell-structure.json",
@@ -8,22 +8,28 @@
       "cardCount": 6
     },
     {
+      "path": "cs6200/midterm-review-p1l2-p2l5.json",
+      "title": "Midterm Review: P1L2–P2L5",
+      "subject": "cs6200",
+      "cardCount": 206
+    },
+    {
       "path": "cs6200/p1l2-introduction-to-operating-systems.json",
       "title": "P1L2: Introduction to Operating Systems",
       "subject": "cs6200",
-      "cardCount": 46
+      "cardCount": 61
     },
     {
       "path": "cs6200/p2l1-processes-and-process-management.json",
       "title": "P2L1: Processes and Process Management",
       "subject": "cs6200",
-      "cardCount": 49
+      "cardCount": 69
     },
     {
       "path": "cs6200/p2l2-threads-and-concurrency.json",
       "title": "P2L2: Threads and Concurrency",
       "subject": "cs6200",
-      "cardCount": 84
+      "cardCount": 109
     },
     {
       "path": "cs6200/p2l3-threads-case-study-pthreads.json",

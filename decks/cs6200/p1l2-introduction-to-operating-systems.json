@@ -1,51 +1,325 @@
 {
   "title": "P1L2: Introduction to Operating Systems",
   "cards": [
-    { "id": "p1l2-001", "question": "In one phrase, what does an operating system do?", "answer": "Abstracts and arbitrates the underlying hardware." },
-    { "id": "p1l2-002", "question": "What does \"abstract\" mean in the context of an OS?", "answer": "Simplify what the hardware looks like to applications." },
-    { "id": "p1l2-003", "question": "What does \"arbitrate\" mean in the context of an OS?", "answer": "Manage/control access to shared hardware." },
-    { "id": "p1l2-004", "question": "In the toy-shop analogy for an OS, what 3 things does the manager do?", "answer": "Directs resources, enforces policies, mitigates complexity." },
-    { "id": "p1l2-005", "question": "Which OS abstraction hides storage-device complexity (sectors/blocks)?", "answer": "The file abstraction (read/write ops)." },
-    { "id": "p1l2-006", "question": "Which OS abstraction hides networking complexity (bits/packets)?", "answer": "The socket abstraction (send/receive ops)." },
-    { "id": "p1l2-007", "question": "Why must an OS isolate applications from each other, even on old \"single-app\" devices like early phones?", "answer": "Multiple apps still co-run and must not corrupt/read each other's data." },
-    { "id": "p1l2-008", "question": "How does an OS enforce memory isolation between applications?", "answer": "Allocates separate physical memory regions per app; blocks unintended cross-app access." },
-    { "id": "p1l2-009", "question": "Why is the file system considered part of the OS?", "answer": "Hides storage hardware behind the file abstraction." },
-    { "id": "p1l2-010", "question": "Why is a device driver considered part of the OS?", "answer": "Manages a specific hardware device on the OS's behalf." },
-    { "id": "p1l2-011", "question": "Why is the scheduler considered part of the OS?", "answer": "Distributes CPU access among applications." },
-    { "id": "p1l2-012", "question": "Is cache memory managed by the OS?", "answer": "No — hardware manages the cache itself, even though the OS and apps benefit from it." },
-    { "id": "p1l2-013", "question": "Why are a file editor and web browser NOT part of the OS?", "answer": "They're user-facing apps that don't directly manage hardware." },
-    { "id": "p1l2-014", "question": "Is distributing memory between processes an OS abstraction or arbitration?", "answer": "Arbitration." },
-    { "id": "p1l2-015", "question": "Is letting apps use different speakers/disks interchangeably an OS abstraction or arbitration?", "answer": "Abstraction — same interface regardless of underlying hardware." },
-    { "id": "p1l2-016", "question": "What 3 core elements does an OS use to manage any resource (e.g. memory)?", "answer": "Abstraction, mechanism, policy." },
-    { "id": "p1l2-017", "question": "For OS memory management, what \"abstraction\" represents a chunk of memory?", "answer": "A memory page — a fixed-size addressable region (e.g. 4KB)." },
-    { "id": "p1l2-018", "question": "For OS memory management, what \"mechanisms\" operate on a memory page?", "answer": "Allocate it in DRAM, map it into a process's address space, move/swap it." },
-    { "id": "p1l2-019", "question": "For OS memory management, what \"policy\" decides which pages to evict from RAM?", "answer": "e.g. LRU (least recently used)." },
-    { "id": "p1l2-020", "question": "Which OS design principle says \"build flexible mechanisms, not one hardcoded policy\"?", "answer": "Separation of mechanism and policy." },
-    { "id": "p1l2-021", "question": "Give an example of \"separation of mechanism and policy\" in memory management.", "answer": "One page-access-tracking mechanism supports LRU, LFU, or random eviction policies." },
-    { "id": "p1l2-022", "question": "Which OS design principle says \"design based on actual expected hardware/workload\"?", "answer": "Optimize for the common case." },
-    { "id": "p1l2-023", "question": "What are the 2 CPU privilege modes an OS relies on?", "answer": "Kernel (privileged) mode and user (unprivileged) mode." },
-    { "id": "p1l2-024", "question": "Which privilege mode does the OS kernel run in, and why?", "answer": "Kernel mode — only it may directly access hardware." },
-    { "id": "p1l2-025", "question": "What happens when a user-mode app attempts a privileged operation?", "answer": "Hardware triggers a trap → control switches to the OS, which grants access or terminates the process." },
-    { "id": "p1l2-026", "question": "What is a system call?", "answer": "An app's explicit request to the OS's exported interface for a privileged service." },
-    { "id": "p1l2-027", "question": "Name 3 example system calls and what each is for.", "answer": "open (file access), send (socket access), malloc (memory allocation)." },
-    { "id": "p1l2-028", "question": "What are the basic steps of making a system call?", "answer": "App writes args to a fixed location → invokes by call number → context switches to kernel → OS performs the op → switches back with results." },
-    { "id": "p1l2-029", "question": "Why are user/kernel mode transitions considered \"expensive\"?", "answer": "~50–100ns real overhead (2GHz Linux) + they evict app data from CPU cache." },
-    { "id": "p1l2-030", "question": "In OS terms, what is a \"signal\"?", "answer": "A mechanism for the OS to push notifications into an application." },
-    { "id": "p1l2-031", "question": "On 64-bit Linux, which system call sends a signal to a process?", "answer": "kill" },
-    { "id": "p1l2-032", "question": "On 64-bit Linux, which system call sets a process's group ID?", "answer": "setgid" },
-    { "id": "p1l2-033", "question": "On 64-bit Linux, which system call mounts a file system?", "answer": "mount" },
-    { "id": "p1l2-034", "question": "On 64-bit Linux, which system call reads/writes kernel system parameters?", "answer": "sysctl" },
-    { "id": "p1l2-035", "question": "What is a monolithic OS design?", "answer": "Every possible service (all file systems, drivers, etc.) built directly into the kernel." },
-    { "id": "p1l2-036", "question": "What's the main benefit of a monolithic OS design?", "answer": "Everything bundled together enables compile-time optimizations." },
-    { "id": "p1l2-037", "question": "What's the main downside of a monolithic OS design?", "answer": "Huge codebase — hard to maintain; large memory footprint hurts performance." },
-    { "id": "p1l2-038", "question": "What is a modular OS design (e.g. Linux)?", "answer": "Core services + defined interfaces let functionality (file systems, schedulers) be added/swapped as modules." },
-    { "id": "p1l2-039", "question": "What's the main benefit of a modular OS design?", "answer": "Easier to maintain/upgrade; smaller, less resource-intensive." },
-    { "id": "p1l2-040", "question": "What's the main downside of a modular OS design?", "answer": "Interface layer limits some optimizations; disparate module code still causes bugs." },
-    { "id": "p1l2-041", "question": "What is a microkernel OS design?", "answer": "Only bare primitives (address spaces, threads) stay in the kernel; everything else runs as user-level processes via IPC." },
-    { "id": "p1l2-042", "question": "What's the main benefit of a microkernel design?", "answer": "Small size → low overhead, easy to verify/test (good for embedded/control systems)." },
-    { "id": "p1l2-043", "question": "What's the main downside of a microkernel design?", "answer": "Poor portability, added complexity, frequent costly user/kernel crossings from heavy IPC." },
-    { "id": "p1l2-044", "question": "In the Linux OS architecture, what are the layers from hardware up to applications?", "answer": "Hardware → kernel → standard libraries (syscall interfaces) → utility programs → user apps." },
-    { "id": "p1l2-045", "question": "What's at the core of the Mac OS X architecture?", "answer": "The Mach microkernel (memory mgmt, thread scheduling, IPC/RPC)." },
-    { "id": "p1l2-046", "question": "What does the BSD layer add on top of Mac OS X's Mach microkernel?", "answer": "Unix interoperability — BSD CLI, POSIX API, network I/O." }
+    {
+      "id": "p1l2-001",
+      "question": "In one phrase, what does an operating system do?",
+      "answer": "Abstracts and arbitrates the underlying hardware."
+    },
+    {
+      "id": "p1l2-002",
+      "question": "What does \"abstract\" mean in the context of an OS?",
+      "answer": "Simplify what the hardware looks like to applications."
+    },
+    {
+      "id": "p1l2-003",
+      "question": "What does \"arbitrate\" mean in the context of an OS?",
+      "answer": "Manage/control access to shared hardware."
+    },
+    {
+      "id": "p1l2-004",
+      "question": "In the toy-shop analogy for an OS, what 3 things does the manager do?",
+      "answer": "Directs resources, enforces policies, mitigates complexity."
+    },
+    {
+      "id": "p1l2-005",
+      "question": "Which OS abstraction hides storage-device complexity (sectors/blocks)?",
+      "answer": "The file abstraction (read/write ops)."
+    },
+    {
+      "id": "p1l2-006",
+      "question": "Which OS abstraction hides networking complexity (bits/packets)?",
+      "answer": "The socket abstraction (send/receive ops)."
+    },
+    {
+      "id": "p1l2-007",
+      "question": "Why must an OS isolate applications from each other, even on old \"single-app\" devices like early phones?",
+      "answer": "Multiple apps still co-run and must not corrupt/read each other's data."
+    },
+    {
+      "id": "p1l2-008",
+      "question": "How does an OS enforce memory isolation between applications?",
+      "answer": "Allocates separate physical memory regions per app; blocks unintended cross-app access."
+    },
+    {
+      "id": "p1l2-009",
+      "question": "Why is the file system considered part of the OS?",
+      "answer": "Hides storage hardware behind the file abstraction."
+    },
+    {
+      "id": "p1l2-010",
+      "question": "Why is a device driver considered part of the OS?",
+      "answer": "Manages a specific hardware device on the OS's behalf."
+    },
+    {
+      "id": "p1l2-011",
+      "question": "Why is the scheduler considered part of the OS?",
+      "answer": "Distributes CPU access among applications."
+    },
+    {
+      "id": "p1l2-012",
+      "question": "Is cache memory managed by the OS?",
+      "answer": "No — hardware manages the cache itself, even though the OS and apps benefit from it."
+    },
+    {
+      "id": "p1l2-013",
+      "question": "Why are a file editor and web browser NOT part of the OS?",
+      "answer": "They're user-facing apps that don't directly manage hardware."
+    },
+    {
+      "id": "p1l2-014",
+      "question": "Is distributing memory between processes an OS abstraction or arbitration?",
+      "answer": "Arbitration."
+    },
+    {
+      "id": "p1l2-015",
+      "question": "Is letting apps use different speakers/disks interchangeably an OS abstraction or arbitration?",
+      "answer": "Abstraction — same interface regardless of underlying hardware."
+    },
+    {
+      "id": "p1l2-016",
+      "question": "What 3 core elements does an OS use to manage any resource (e.g. memory)?",
+      "answer": "Abstraction, mechanism, policy."
+    },
+    {
+      "id": "p1l2-017",
+      "question": "For OS memory management, what \"abstraction\" represents a chunk of memory?",
+      "answer": "A memory page — a fixed-size addressable region (e.g. 4KB)."
+    },
+    {
+      "id": "p1l2-018",
+      "question": "For OS memory management, what \"mechanisms\" operate on a memory page?",
+      "answer": "Allocate it in DRAM, map it into a process's address space, move/swap it."
+    },
+    {
+      "id": "p1l2-019",
+      "question": "For OS memory management, what \"policy\" decides which pages to evict from RAM?",
+      "answer": "e.g. LRU (least recently used)."
+    },
+    {
+      "id": "p1l2-020",
+      "question": "Which OS design principle says \"build flexible mechanisms, not one hardcoded policy\"?",
+      "answer": "Separation of mechanism and policy."
+    },
+    {
+      "id": "p1l2-021",
+      "question": "Give an example of \"separation of mechanism and policy\" in memory management.",
+      "answer": "One page-access-tracking mechanism supports LRU, LFU, or random eviction policies."
+    },
+    {
+      "id": "p1l2-022",
+      "question": "Which OS design principle says \"design based on actual expected hardware/workload\"?",
+      "answer": "Optimize for the common case."
+    },
+    {
+      "id": "p1l2-023",
+      "question": "What are the 2 CPU privilege modes an OS relies on?",
+      "answer": "Kernel (privileged) mode and user (unprivileged) mode."
+    },
+    {
+      "id": "p1l2-024",
+      "question": "Which privilege mode does the OS kernel run in, and why?",
+      "answer": "Kernel mode — only it may directly access hardware."
+    },
+    {
+      "id": "p1l2-025",
+      "question": "What happens when a user-mode app attempts a privileged operation?",
+      "answer": "Hardware triggers a trap → control switches to the OS, which grants access or terminates the process."
+    },
+    {
+      "id": "p1l2-026",
+      "question": "What is a system call?",
+      "answer": "An app's explicit request to the OS's exported interface for a privileged service."
+    },
+    {
+      "id": "p1l2-027",
+      "question": "Name 3 example system calls and what each is for.",
+      "answer": "open (file access), send (socket access), malloc (memory allocation)."
+    },
+    {
+      "id": "p1l2-028",
+      "question": "What are the basic steps of making a system call?",
+      "answer": "App writes args to a fixed location → invokes by call number → context switches to kernel → OS performs the op → switches back with results."
+    },
+    {
+      "id": "p1l2-029",
+      "question": "Why are user/kernel mode transitions considered \"expensive\"?",
+      "answer": "~50–100ns real overhead (2GHz Linux) + they evict app data from CPU cache."
+    },
+    {
+      "id": "p1l2-030",
+      "question": "In OS terms, what is a \"signal\"?",
+      "answer": "A mechanism for the OS to push notifications into an application."
+    },
+    {
+      "id": "p1l2-031",
+      "question": "On 64-bit Linux, which system call sends a signal to a process?",
+      "answer": "kill"
+    },
+    {
+      "id": "p1l2-032",
+      "question": "On 64-bit Linux, which system call sets a process's group ID?",
+      "answer": "setgid"
+    },
+    {
+      "id": "p1l2-033",
+      "question": "On 64-bit Linux, which system call mounts a file system?",
+      "answer": "mount"
+    },
+    {
+      "id": "p1l2-034",
+      "question": "On 64-bit Linux, which system call reads/writes kernel system parameters?",
+      "answer": "sysctl"
+    },
+    {
+      "id": "p1l2-035",
+      "question": "What is a monolithic OS design?",
+      "answer": "Every possible service (all file systems, drivers, etc.) built directly into the kernel."
+    },
+    {
+      "id": "p1l2-036",
+      "question": "What's the main benefit of a monolithic OS design?",
+      "answer": "Everything bundled together enables compile-time optimizations."
+    },
+    {
+      "id": "p1l2-037",
+      "question": "What's the main downside of a monolithic OS design?",
+      "answer": "Huge codebase — hard to maintain; large memory footprint hurts performance."
+    },
+    {
+      "id": "p1l2-038",
+      "question": "What is a modular OS design (e.g. Linux)?",
+      "answer": "Core services + defined interfaces let functionality (file systems, schedulers) be added/swapped as modules."
+    },
+    {
+      "id": "p1l2-039",
+      "question": "What's the main benefit of a modular OS design?",
+      "answer": "Easier to maintain/upgrade; smaller, less resource-intensive."
+    },
+    {
+      "id": "p1l2-040",
+      "question": "What's the main downside of a modular OS design?",
+      "answer": "Interface layer limits some optimizations; disparate module code still causes bugs."
+    },
+    {
+      "id": "p1l2-041",
+      "question": "What is a microkernel OS design?",
+      "answer": "Only bare primitives (address spaces, threads) stay in the kernel; everything else runs as user-level processes via IPC."
+    },
+    {
+      "id": "p1l2-042",
+      "question": "What's the main benefit of a microkernel design?",
+      "answer": "Small size → low overhead, easy to verify/test (good for embedded/control systems)."
+    },
+    {
+      "id": "p1l2-043",
+      "question": "What's the main downside of a microkernel design?",
+      "answer": "Poor portability, added complexity, frequent costly user/kernel crossings from heavy IPC."
+    },
+    {
+      "id": "p1l2-044",
+      "question": "In the Linux OS architecture, what are the layers from hardware up to applications?",
+      "answer": "Hardware → kernel → standard libraries (syscall interfaces) → utility programs → user apps."
+    },
+    {
+      "id": "p1l2-045",
+      "question": "What's at the core of the Mac OS X architecture?",
+      "answer": "The Mach microkernel (memory mgmt, thread scheduling, IPC/RPC)."
+    },
+    {
+      "id": "p1l2-046",
+      "question": "What does the BSD layer add on top of Mac OS X's Mach microkernel?",
+      "answer": "Unix interoperability — BSD CLI, POSIX API, network I/O."
+    },
+    {
+      "id": "p1l2-gap-001",
+      "question": "Name 2 desktop/server OS families.",
+      "answer": "Microsoft Windows, and UNIX-based (Linux, Mac OS X).",
+      "memory": "UNIX was born at Bell Labs in the late 1960s."
+    },
+    {
+      "id": "p1l2-gap-002",
+      "question": "Which UNIX variant does Mac OS X extend?",
+      "answer": "BSD (Berkeley Software Distribution).",
+      "memory": "Mac = Mach microkernel + BSD."
+    },
+    {
+      "id": "p1l2-gap-003",
+      "question": "Name 2 embedded/mobile OSes.",
+      "answer": "Android (embedded Linux) and iOS.",
+      "memory": "Android versions have dessert names: KitKat, Ice Cream Sandwich."
+    },
+    {
+      "id": "p1l2-gap-004",
+      "question": "Which OS does this course use for most examples?",
+      "answer": "Linux",
+      "memory": "CS6200 speaks Linux."
+    },
+    {
+      "id": "p1l2-gap-005",
+      "question": "Give an example of an OS resource-limit policy.",
+      "answer": "A maximum number of open files (or sockets) per process.",
+      "memory": "Policy = a rule, often a limit."
+    },
+    {
+      "id": "p1l2-gap-006",
+      "question": "What does the OS do with memory pages it rarely uses?",
+      "answer": "Swaps them to disk to free up DRAM.",
+      "memory": "Swap = move the dusty box to the garage."
+    },
+    {
+      "id": "p1l2-gap-007",
+      "question": "Which OS service manages CPU access?",
+      "answer": "The scheduler.",
+      "memory": "One OS service per piece of hardware."
+    },
+    {
+      "id": "p1l2-gap-007b",
+      "question": "Which OS service manages physical memory?",
+      "answer": "The memory manager.",
+      "memory": "It also keeps apps out of each other's memory."
+    },
+    {
+      "id": "p1l2-gap-007c",
+      "question": "Which OS service manages disk access?",
+      "answer": "The block device driver.",
+      "memory": "Driver = the device's translator."
+    },
+    {
+      "id": "p1l2-gap-008",
+      "question": "Name a higher-level OS service not tied to one device.",
+      "answer": "The file system (the file abstraction).",
+      "memory": "File = an idea built on top of disks."
+    },
+    {
+      "id": "p1l2-gap-009",
+      "question": "How are system-call arguments passed to the kernel?",
+      "answer": "Directly, or indirectly by passing their address.",
+      "memory": "By value, or \"it's over there.\""
+    },
+    {
+      "id": "p1l2-gap-010",
+      "question": "By default, does a process wait for its system call to finish?",
+      "answer": "Yes. Syscalls are synchronous by default.",
+      "memory": "Asynchronous syscalls come later in the course."
+    },
+    {
+      "id": "p1l2-gap-011",
+      "question": "What does the syscall return path involve?",
+      "answer": "Switch back to user mode, copy results, jump to right after the call.",
+      "memory": "Return = undo every step of the entry."
+    },
+    {
+      "id": "p1l2-gap-012",
+      "question": "Are Windows and UNIX syscall sets very different?",
+      "answer": "No. Both offer similar process, file, and device calls.",
+      "memory": "e.g., CreateProcess ≈ fork."
+    },
+    {
+      "id": "p1l2-gap-013",
+      "question": "Where does the CPU know it's in kernel mode?",
+      "answer": "A special privilege bit in the CPU is set.",
+      "memory": "Bit on = kernel; bit off = user."
+    }
   ]
 }

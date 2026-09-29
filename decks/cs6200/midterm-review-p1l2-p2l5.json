@@ -1,0 +1,1240 @@
+{
+  "title": "Midterm Review: P1L2–P2L5",
+  "cards": [
+    {
+      "id": "mid-001",
+      "question": "An OS ____ the hardware and ____ its use.",
+      "answer": "Abstracts; arbitrates.",
+      "memory": "\"A & A\": Abstract (simplify) + Arbitrate (referee)."
+    },
+    {
+      "id": "mid-002",
+      "question": "What does \"abstract\" mean for an OS?",
+      "answer": "Hide hardware complexity behind simpler concepts (file, socket).",
+      "memory": "You save a \"file,\" not \"disk sector 8812.\""
+    },
+    {
+      "id": "mid-003",
+      "question": "What does \"arbitrate\" mean for an OS?",
+      "answer": "Decide who gets which hardware, and when.",
+      "memory": "The OS is the referee for CPU, memory, and devices."
+    },
+    {
+      "id": "mid-004",
+      "question": "Which OS role keeps apps from reading or overwriting each other's memory?",
+      "answer": "Isolation and protection.",
+      "memory": "Separate memory regions per app, like separate lockers."
+    },
+    {
+      "id": "mid-005",
+      "question": "What is an OS abstraction?",
+      "answer": "A simplified entity the OS presents in place of raw hardware.",
+      "memory": "Abstraction = the WHAT (a noun: file, page, process)."
+    },
+    {
+      "id": "mid-006",
+      "question": "What is an OS mechanism?",
+      "answer": "An operation that acts on an abstraction.",
+      "memory": "Mechanism = the HOW (a verb: allocate, map, open)."
+    },
+    {
+      "id": "mid-007",
+      "question": "What is an OS policy?",
+      "answer": "A rule for how or when mechanisms are used.",
+      "memory": "Policy = the WHICH/WHEN (LRU, max open files)."
+    },
+    {
+      "id": "mid-008",
+      "question": "Memory management: what is the abstraction?",
+      "answer": "A memory page.",
+      "memory": "Page → allocate/map/swap → LRU (abstraction → mechanism → policy)."
+    },
+    {
+      "id": "mid-009",
+      "question": "Memory management: name one mechanism.",
+      "answer": "Allocate a page in DRAM (or map it, or swap it to disk).",
+      "memory": "Mechanisms are verbs: allocate, map, swap."
+    },
+    {
+      "id": "mid-010",
+      "question": "Memory management: what is a common policy?",
+      "answer": "LRU: evict the least recently used page.",
+      "memory": "Unused lately → probably unused soon."
+    },
+    {
+      "id": "mid-011",
+      "question": "What does \"separation of mechanism and policy\" mean?",
+      "answer": "Build flexible mechanisms that support many policies.",
+      "memory": "One page-tracking mechanism → LRU, LFU, or random."
+    },
+    {
+      "id": "mid-012",
+      "question": "Why separate mechanism from policy?",
+      "answer": "Different workloads need different policies.",
+      "memory": "Swap the policy, keep the machinery."
+    },
+    {
+      "id": "mid-013",
+      "question": "What does \"optimize for the common case\" mean?",
+      "answer": "Make the typical workload's path fast.",
+      "memory": "Design for Monday morning, not the rare holiday."
+    },
+    {
+      "id": "mid-014",
+      "question": "What must you know before you can optimize for the common case?",
+      "answer": "The machine, its users, and the workload."
+    },
+    {
+      "id": "mid-015",
+      "question": "Example of \"optimize for the common case\" from the Solaris papers?",
+      "answer": "Interrupts as threads: interrupts cost +40 instructions, mutex ops save 12.",
+      "memory": "Mutex ops are far more frequent than interrupts."
+    },
+    {
+      "id": "mid-016",
+      "question": "What CPU feature distinguishes kernel mode from user mode?",
+      "answer": "A privilege bit: set = kernel mode.",
+      "memory": "Bit set → privileged instructions allowed."
+    },
+    {
+      "id": "mid-017",
+      "question": "What happens if user mode tries a privileged instruction?",
+      "answer": "The hardware traps to the OS.",
+      "memory": "Like touching a store's back-room door: the alarm (trap) calls the manager (OS)."
+    },
+    {
+      "id": "mid-018",
+      "question": "User→kernel crossing reason #1?",
+      "answer": "A system call (an explicit request).",
+      "memory": "Syscall = you ask politely."
+    },
+    {
+      "id": "mid-019",
+      "question": "User→kernel crossing reason #2?",
+      "answer": "A trap (a privileged or illegal operation).",
+      "memory": "Trap = you broke a rule."
+    },
+    {
+      "id": "mid-020",
+      "question": "User→kernel crossing reason #3?",
+      "answer": "An interrupt (device or timer).",
+      "memory": "\"SIT\": Syscall, Interrupt, Trap."
+    },
+    {
+      "id": "mid-021",
+      "question": "What is the direct cost of a user↔kernel crossing?",
+      "answer": "Switch instructions: ~50–100 ns (2 GHz Linux).",
+      "memory": "~100 ns ≈ hundreds of instructions you didn't run."
+    },
+    {
+      "id": "mid-022",
+      "question": "What is the indirect cost of a user↔kernel crossing?",
+      "answer": "The kernel's data pollutes the app's cache.",
+      "memory": "The kernel \"borrows\" cache space and doesn't give it back."
+    },
+    {
+      "id": "mid-023",
+      "question": "What is a kernel trap?",
+      "answer": "The hardware forcing control to the OS on a privileged or illegal operation.",
+      "memory": "Trap = a tripwire the hardware sets."
+    },
+    {
+      "id": "mid-024",
+      "question": "Trap step 1?",
+      "answer": "The app attempts a privileged or illegal operation.",
+      "memory": "Trap = Try → Trip → Transfer → Test → Treat."
+    },
+    {
+      "id": "mid-025",
+      "question": "Trap step 2?",
+      "answer": "The hardware sets kernel mode and jumps to the OS trap handler.",
+      "memory": "Trip → Transfer: the privilege bit flips, and the PC jumps to the handler."
+    },
+    {
+      "id": "mid-026",
+      "question": "Trap step 3?",
+      "answer": "The OS checks what caused the trap.",
+      "memory": "Test: the OS asks, \"Why did we get here?\""
+    },
+    {
+      "id": "mid-027",
+      "question": "Trap step 4?",
+      "answer": "The OS grants/handles it, or terminates the process.",
+      "memory": "Treat: allow it, or kill the process."
+    },
+    {
+      "id": "mid-028",
+      "question": "What is a system call?",
+      "answer": "An app's explicit request for a privileged OS service.",
+      "memory": "Examples: open (file), send (socket), malloc (memory)."
+    },
+    {
+      "id": "mid-029",
+      "question": "Syscall step 1?",
+      "answer": "Write the arguments to a well-defined location.",
+      "memory": "Syscall = \"Args → Number → Trap → Work → Return.\""
+    },
+    {
+      "id": "mid-030",
+      "question": "Syscall step 2?",
+      "answer": "Invoke the system call by its number.",
+      "memory": "Like dialing an extension: the number says which service."
+    },
+    {
+      "id": "mid-031",
+      "question": "Syscall step 3?",
+      "answer": "The CPU switches to kernel mode and jumps into kernel code.",
+      "memory": "Trap into the kernel via the syscall instruction."
+    },
+    {
+      "id": "mid-032",
+      "question": "Syscall step 4?",
+      "answer": "The kernel performs the operation.",
+      "memory": "The OS works on your behalf with full privileges."
+    },
+    {
+      "id": "mid-033",
+      "question": "Syscall step 5?",
+      "answer": "Results are returned, and the CPU switches back to user mode.",
+      "memory": "Return = mode switch back + jump to right after the call."
+    },
+    {
+      "id": "mid-034",
+      "question": "Why does the kernel need a syscall number and a fixed argument location?",
+      "answer": "To know which call it is, and how many arguments to fetch and from where.",
+      "memory": "Number = which form. Location = where the filled-in form is."
+    },
+    {
+      "id": "mid-035",
+      "question": "How can syscall arguments be passed?",
+      "answer": "Directly, or indirectly by address.",
+      "memory": "By value (in the message) or by address (\"it's over there\")."
+    },
+    {
+      "id": "mid-036",
+      "question": "What does the process do during a synchronous syscall?",
+      "answer": "It waits until the call completes.",
+      "memory": "Synchronous = you wait at the counter until it's done."
+    },
+    {
+      "id": "mid-037",
+      "question": "Trap vs system call: what is the difference?",
+      "answer": "A syscall is intentional; a trap is an unintended violation.",
+      "memory": "Syscall = knocking on the door. Trap = setting off the alarm."
+    },
+    {
+      "id": "mid-038",
+      "question": "What is a monolithic OS?",
+      "answer": "Every service (all file systems and drivers) is built into the kernel.",
+      "memory": "Monolith = one giant stone block."
+    },
+    {
+      "id": "mid-039",
+      "question": "What is the benefit of a monolithic OS?",
+      "answer": "Compile-time optimization across everything.",
+      "memory": "One big box = easy to optimize, hard to carry."
+    },
+    {
+      "id": "mid-040",
+      "question": "What is the downside of a monolithic OS?",
+      "answer": "Huge code base: hard to maintain, with a big memory footprint.",
+      "memory": "Everything included = everything to debug."
+    },
+    {
+      "id": "mid-041",
+      "question": "What is a modular OS?",
+      "answer": "Core kernel plus modules added through defined interfaces (e.g., Linux).",
+      "memory": "Linux = modular: load a module for the job."
+    },
+    {
+      "id": "mid-042",
+      "question": "What is the benefit of a modular OS?",
+      "answer": "Easier to maintain, with a smaller footprint.",
+      "memory": "LEGO: snap in the file system you need."
+    },
+    {
+      "id": "mid-043",
+      "question": "What is the downside of a modular OS?",
+      "answer": "The interface layer blocks some optimizations.",
+      "memory": "Every interface is a small detour."
+    },
+    {
+      "id": "mid-044",
+      "question": "What is a microkernel?",
+      "answer": "A kernel with only the basics (address spaces, threads, IPC); services run at user level.",
+      "memory": "Micro = do almost nothing in the kernel."
+    },
+    {
+      "id": "mid-045",
+      "question": "What is the benefit of a microkernel?",
+      "answer": "Small and easy to verify (embedded, control systems).",
+      "memory": "Micro = tiny kernel, lots of messaging."
+    },
+    {
+      "id": "mid-046",
+      "question": "What is the main downside of a microkernel?",
+      "answer": "Frequent, costly user↔kernel crossings for IPC.",
+      "memory": "File system in user space → every file op crosses the border."
+    },
+    {
+      "id": "mid-047",
+      "question": "Besides crossings, what other downside does a microkernel have?",
+      "answer": "Poor portability (it's specialized to the hardware).",
+      "memory": "Tailored to one platform: hard to reuse elsewhere."
+    },
+    {
+      "id": "mid-048",
+      "question": "Which OS design needs the most user↔kernel crossings?",
+      "answer": "The microkernel.",
+      "memory": "Monolithic → modular → micro: smaller kernel, more crossings."
+    },
+    {
+      "id": "mid-049",
+      "question": "What does a process have that its threads share?",
+      "answer": "The virtual address space (code, data, files).",
+      "memory": "Threads = roommates sharing one house (the address space)."
+    },
+    {
+      "id": "mid-050",
+      "question": "What does each thread have to itself?",
+      "answer": "PC, registers, stack pointer, and stack.",
+      "memory": "Threads share the house; each has its own notebook (stack)."
+    },
+    {
+      "id": "mid-051",
+      "question": "Process context switch: what extra work happens?",
+      "answer": "The address-space mappings change (new page table).",
+      "memory": "New process = new map (page table), and the TLB is flushed."
+    },
+    {
+      "id": "mid-052",
+      "question": "Why is a process context switch more costly for the cache?",
+      "answer": "The new process's data evicts the old one's, so the cache goes cold.",
+      "memory": "Cold cache = the next memory accesses are slow misses."
+    },
+    {
+      "id": "mid-053",
+      "question": "Why is a thread context switch cheaper?",
+      "answer": "Same address space: no remapping, and a warmer cache.",
+      "memory": "Thread switch = swap notebooks. Process switch = move houses."
+    },
+    {
+      "id": "mid-054",
+      "question": "What are the 5 process states?",
+      "answer": "New, ready, running, waiting, terminated.",
+      "memory": "\"New Recruits Run, Wait, Terminate.\""
+    },
+    {
+      "id": "mid-055",
+      "question": "What happens in the \"new\" state?",
+      "answer": "Admission control; the PCB and initial resources are created.",
+      "memory": "New = the bouncer checks if there's room (admission control)."
+    },
+    {
+      "id": "mid-056",
+      "question": "What moves a process from ready to running?",
+      "answer": "The scheduler dispatches it.",
+      "memory": "Ready → Running = the scheduler calls your number."
+    },
+    {
+      "id": "mid-057",
+      "question": "What moves a process from running back to ready?",
+      "answer": "Preemption (interrupt or timeslice expiry).",
+      "memory": "Timer went off; back of the line."
+    },
+    {
+      "id": "mid-058",
+      "question": "What moves a process from running to waiting?",
+      "answer": "It starts I/O or waits for an event.",
+      "memory": "Waiting = stepped away to wait for the disk/keyboard."
+    },
+    {
+      "id": "mid-059",
+      "question": "What moves a process from waiting to ready?",
+      "answer": "The I/O or event completes.",
+      "memory": "Waiting → Ready → Running. Never skip Ready."
+    },
+    {
+      "id": "mid-060",
+      "question": "Waiting→running step 1?",
+      "answer": "The I/O or event completes, usually signaled by an interrupt.",
+      "memory": "Done: the disk rings the doorbell (interrupt)."
+    },
+    {
+      "id": "mid-061",
+      "question": "Waiting→running step 2?",
+      "answer": "The OS moves the process from the I/O queue to the ready queue.",
+      "memory": "Queue: from the I/O line to the ready line."
+    },
+    {
+      "id": "mid-062",
+      "question": "Waiting→running step 3?",
+      "answer": "The scheduler selects it from the ready queue.",
+      "memory": "Pick: the scheduler chooses it."
+    },
+    {
+      "id": "mid-063",
+      "question": "Waiting→running step 4?",
+      "answer": "Context switch: restore its PCB (registers, PC, mappings).",
+      "memory": "Restore: load its PCB back into the CPU."
+    },
+    {
+      "id": "mid-064",
+      "question": "Waiting→running step 5?",
+      "answer": "Dispatch: switch to user mode and resume at the saved PC.",
+      "memory": "\"Done → Queue → Pick → Restore → Resume.\""
+    },
+    {
+      "id": "mid-065",
+      "question": "Thread lifetime: how does a thread begin?",
+      "answer": "Created by fork/pthread_create, then it's runnable.",
+      "memory": "Birth: fork(proc, args) / pthread_create."
+    },
+    {
+      "id": "mid-066",
+      "question": "Thread lifetime: what can pause a running thread?",
+      "answer": "Blocking on a mutex, condition variable, or I/O (or preemption).",
+      "memory": "Blocked = waiting on a lock, a condition, or I/O."
+    },
+    {
+      "id": "mid-067",
+      "question": "Thread lifetime: what happens after a thread finishes?",
+      "answer": "The parent joins it (collecting the result), unless it's detached.",
+      "memory": "Joinable = someone picks you up. Detached = you walk home alone."
+    },
+    {
+      "id": "mid-068",
+      "question": "What happens if a parent exits without joining a joinable thread?",
+      "answer": "The child can become a zombie.",
+      "memory": "Zombie = finished but never cleaned up."
+    },
+    {
+      "id": "mid-069",
+      "question": "What is the pro of message-based IPC?",
+      "answer": "Simple: the OS manages the channel with standard APIs.",
+      "memory": "Message IPC = the post office handles delivery."
+    },
+    {
+      "id": "mid-070",
+      "question": "What is the con of message-based IPC?",
+      "answer": "Every message is copied through the kernel (syscalls + copies).",
+      "memory": "4 copies + 4 crossings per request/response."
+    },
+    {
+      "id": "mid-071",
+      "question": "What is the pro of shared-memory IPC?",
+      "answer": "No kernel on the data path after setup.",
+      "memory": "Shared memory = a shared whiteboard; you write your own rules."
+    },
+    {
+      "id": "mid-072",
+      "question": "What are the 2 cons of shared-memory IPC?",
+      "answer": "Expensive mapping setup, and you must write your own synchronization.",
+      "memory": "Setup is pricey; the rules are yours to write."
+    },
+    {
+      "id": "mid-073",
+      "question": "Is shared memory always faster than message passing?",
+      "answer": "It depends: the setup cost must be amortized over many messages.",
+      "memory": "Only worth it if you send enough messages to amortize setup."
+    },
+    {
+      "id": "mid-074",
+      "question": "How does multithreading give a speedup?",
+      "answer": "Threads run in parallel on multiple CPUs.",
+      "memory": "4 cores, 4 threads, ~4× faster (ideally)."
+    },
+    {
+      "id": "mid-075",
+      "question": "How does specializing threads help performance?",
+      "answer": "Each thread touches less state, so it runs with a hotter cache.",
+      "memory": "Specialist = their tools are always on their desk."
+    },
+    {
+      "id": "mid-076",
+      "question": "Why do threads use less memory than processes?",
+      "answer": "They share one address space.",
+      "memory": "One address space, N stacks, instead of N full copies."
+    },
+    {
+      "id": "mid-077",
+      "question": "Why do threads communicate more cheaply than processes?",
+      "answer": "Through shared variables, not IPC.",
+      "memory": "Shared variables, not mailing letters through the kernel."
+    },
+    {
+      "id": "mid-078",
+      "question": "Why are threads useful on a single CPU?",
+      "answer": "They hide I/O latency by running other work while one thread waits.",
+      "memory": "While one waits on the disk, another computes."
+    },
+    {
+      "id": "mid-079",
+      "question": "When is switching threads worth it during a wait?",
+      "answer": "When t_idle > 2 × t_context_switch.",
+      "memory": "\"2×\": switch away and back again."
+    },
+    {
+      "id": "mid-080",
+      "question": "When does adding threads help throughput?",
+      "answer": "When there's waiting to hide or idle cores to use.",
+      "memory": "Something must be idle (a CPU or waiting time) to fill."
+    },
+    {
+      "id": "mid-081",
+      "question": "When is adding threads pure overhead?",
+      "answer": "CPU-bound work with threads > cores.",
+      "memory": "8 CPU-bound threads on 4 cores = just more switching."
+    },
+    {
+      "id": "mid-082",
+      "question": "Why don't extra threads help when all of them hit one bottleneck?",
+      "answer": "They just queue on the same lock or disk.",
+      "memory": "10 people, 1 bathroom key: the line just gets longer."
+    },
+    {
+      "id": "mid-083",
+      "question": "Multithreading overhead source: creation?",
+      "answer": "Allocating and initializing thread structures and stacks.",
+      "memory": "Creating threads costs time (hence thread pools)."
+    },
+    {
+      "id": "mid-084",
+      "question": "Multithreading overhead source: context switching?",
+      "answer": "Saving and restoring registers each time the CPU changes thread.",
+      "memory": "Every switch is time not spent on real work."
+    },
+    {
+      "id": "mid-085",
+      "question": "Multithreading overhead source: synchronization?",
+      "answer": "Lock contention and wait/signal costs.",
+      "memory": "Waiting on locks = serialization."
+    },
+    {
+      "id": "mid-086",
+      "question": "Multithreading overhead source: cache?",
+      "answer": "Threads evict each other's data (interference).",
+      "memory": "Overheads: \"CCSC\": Create, Context switch, Sync, Cache."
+    },
+    {
+      "id": "mid-087",
+      "question": "What is the boss-worker pattern?",
+      "answer": "A boss accepts requests; workers each do the whole task.",
+      "memory": "Restaurant host seats you; any waiter serves the whole meal."
+    },
+    {
+      "id": "mid-088",
+      "question": "In boss-worker, what limits throughput?",
+      "answer": "The boss's time per request.",
+      "memory": "Throughput ∝ 1 / boss time."
+    },
+    {
+      "id": "mid-089",
+      "question": "Boss-worker: why use a shared queue instead of a handshake?",
+      "answer": "The boss doesn't wait for or track workers, so it's faster per request.",
+      "memory": "Drop orders in a tray instead of handing them to each worker."
+    },
+    {
+      "id": "mid-090",
+      "question": "Boss-worker handshake (boss hands off directly): pro?",
+      "answer": "Workers need no synchronization with each other.",
+      "memory": "Each worker gets its own direct order: no tray fights."
+    },
+    {
+      "id": "mid-091",
+      "question": "Boss-worker handshake: con?",
+      "answer": "The boss tracks and waits on workers, so throughput drops.",
+      "memory": "The boss becomes a babysitter, slowing throughput."
+    },
+    {
+      "id": "mid-092",
+      "question": "Boss-worker: why a dynamic thread pool?",
+      "answer": "Avoids creation delay without over-provisioning.",
+      "memory": "Pre-hire a team; hire in batches when the line grows."
+    },
+    {
+      "id": "mid-093",
+      "question": "Boss-worker: how do you raise throughput?",
+      "answer": "Keep the boss's per-request work minimal.",
+      "memory": "A faster boss = more orders per second."
+    },
+    {
+      "id": "mid-094",
+      "question": "Boss-worker: how do you cut response time?",
+      "answer": "Add workers so requests don't wait in the queue.",
+      "memory": "More waiters = shorter wait for a table."
+    },
+    {
+      "id": "mid-095",
+      "question": "What does the specialized boss-worker variant gain?",
+      "answer": "Locality (hotter caches) and quality-of-service control.",
+      "memory": "Specialists keep their tools (data) in cache."
+    },
+    {
+      "id": "mid-096",
+      "question": "What does the specialized boss-worker variant cost?",
+      "answer": "Harder load balancing, plus more boss work per request.",
+      "memory": "How many of each specialist? A hard balance."
+    },
+    {
+      "id": "mid-097",
+      "question": "What is the main weakness of plain boss-worker?",
+      "answer": "It ignores locality.",
+      "memory": "Any worker gets any job, so no warm cache."
+    },
+    {
+      "id": "mid-098",
+      "question": "Boss-worker completion time formula?",
+      "answer": "⌈N / W⌉ × T",
+      "memory": "6 threads → 1 boss + 5 workers (W = 5)."
+    },
+    {
+      "id": "mid-099",
+      "question": "What is the pipeline pattern?",
+      "answer": "The task is split into stages, one thread (or pool) per stage.",
+      "memory": "An assembly line."
+    },
+    {
+      "id": "mid-100",
+      "question": "In a pipeline, what limits throughput?",
+      "answer": "The slowest stage.",
+      "memory": "A chain is as strong as its weakest link."
+    },
+    {
+      "id": "mid-101",
+      "question": "Pipeline: how do you fix a slow stage?",
+      "answer": "Give it more threads.",
+      "memory": "Stage takes 3× longer → give it 3 threads."
+    },
+    {
+      "id": "mid-102",
+      "question": "Pipeline: how should stages pass work?",
+      "answer": "Shared buffers (queues) between stages.",
+      "memory": "Leave parts on the table for the next worker."
+    },
+    {
+      "id": "mid-103",
+      "question": "Pipeline: what is the biggest limit on improving it?",
+      "answer": "Keeping it balanced as the workload changes.",
+      "memory": "Change the workload → rebalance every stage."
+    },
+    {
+      "id": "mid-104",
+      "question": "Pipeline: what is the minimum latency for one item?",
+      "answer": "The sum of all stage times.",
+      "memory": "One toy still goes through all 6 stations."
+    },
+    {
+      "id": "mid-105",
+      "question": "Pipeline completion time formula?",
+      "answer": "S × t + (N − 1) × t",
+      "memory": "First item fills the pipe; each one after adds 1 stage time."
+    },
+    {
+      "id": "mid-106",
+      "question": "Toy quiz (6 threads, 120 ms/toy vs 6 × 20 ms): boss-worker time for 10 toys?",
+      "answer": "240 ms (2 rounds of 5)",
+      "memory": "⌈10/5⌉ × 120 = 240"
+    },
+    {
+      "id": "mid-107",
+      "question": "Toy quiz: pipeline time for 10 toys?",
+      "answer": "300 ms (120 + 9 × 20)",
+      "memory": "6 × 20 + 9 × 20 = 300"
+    },
+    {
+      "id": "mid-108",
+      "question": "Toy quiz: boss-worker time for 11 toys?",
+      "answer": "360 ms (3 rounds)",
+      "memory": "⌈11/5⌉ = 3 rounds × 120 = 360"
+    },
+    {
+      "id": "mid-109",
+      "question": "Toy quiz: pipeline time for 11 toys?",
+      "answer": "320 ms (120 + 10 × 20)",
+      "memory": "10 toys → boss-worker wins; 11 → pipeline wins."
+    },
+    {
+      "id": "mid-110",
+      "question": "Toy quiz, 11 toys: which pattern has the lower average completion time?",
+      "answer": "Boss-worker (196 ms vs 220 ms).",
+      "memory": "(5×120 + 5×240 + 360)/11 ≈ 196 vs (120+140+…+320)/11 = 220"
+    },
+    {
+      "id": "mid-111",
+      "question": "What is the layered pattern?",
+      "answer": "Groups of related stages, one per layer; work passes up and down.",
+      "memory": "Floors in a building: requests ride up and down."
+    },
+    {
+      "id": "mid-112",
+      "question": "What is the benefit of the layered pattern over a pipeline?",
+      "answer": "It's coarser, so choosing thread counts is easier.",
+      "memory": "Fewer, bigger groups = fewer sizing decisions."
+    },
+    {
+      "id": "mid-113",
+      "question": "What is a mutex?",
+      "answer": "A lock allowing one thread at a time into a critical section.",
+      "memory": "Mutex = a bathroom key."
+    },
+    {
+      "id": "mid-114",
+      "question": "What 3 things does a mutex track?",
+      "answer": "Locked/free status, blocked threads, and the owner.",
+      "memory": "Status, waiters, owner."
+    },
+    {
+      "id": "mid-115",
+      "question": "Are threads waiting on a mutex granted it in FIFO order?",
+      "answer": "No. Any waiter, or even a newly arriving thread, may get it.",
+      "memory": "Mutex quiz: T2, T4, or T5 could win."
+    },
+    {
+      "id": "mid-116",
+      "question": "What is a condition variable?",
+      "answer": "A wait queue for threads waiting on a condition.",
+      "memory": "Waiting room + buzzer."
+    },
+    {
+      "id": "mid-117",
+      "question": "What does a condition variable store?",
+      "answer": "A list of waiting threads and a reference to its mutex.",
+      "memory": "Waiters + which mutex to release and reacquire."
+    },
+    {
+      "id": "mid-118",
+      "question": "What does wait(m, cv) do to the mutex?",
+      "answer": "Releases it while sleeping; reacquires it before returning.",
+      "memory": "Hand back the key while you nap; grab it again on waking."
+    },
+    {
+      "id": "mid-119",
+      "question": "signal vs broadcast?",
+      "answer": "signal wakes one waiter; broadcast wakes all.",
+      "memory": "signal = tap one shoulder. broadcast = ring the fire bell."
+    },
+    {
+      "id": "mid-120",
+      "question": "After a broadcast, can all woken threads proceed at once?",
+      "answer": "No. They reacquire the mutex one at a time.",
+      "memory": "Everyone wakes, but there's still one key."
+    },
+    {
+      "id": "mid-121",
+      "question": "What problem does a CV fix in producer/consumer?",
+      "answer": "The consumer busy-waits (lock, check, unlock, repeat).",
+      "memory": "Consumer: \"Is it full yet? Now?\" → just wait to be buzzed."
+    },
+    {
+      "id": "mid-122",
+      "question": "Critical section entry: what is the order?",
+      "answer": "lock → while (!pred) wait → update state → unlock",
+      "memory": "\"Lock, Loop, Leave.\""
+    },
+    {
+      "id": "mid-123",
+      "question": "Critical section exit: what is the order?",
+      "answer": "lock → update state → signal/broadcast → unlock",
+      "memory": "\"Lock, Change, Tell, Leave.\""
+    },
+    {
+      "id": "mid-124",
+      "question": "Readers/writer: what is the proxy variable, and why use it?",
+      "answer": "resource_counter: lock the counter, not the file, so readers can overlap.",
+      "memory": "0 = free, N = readers, −1 = writer."
+    },
+    {
+      "id": "mid-125",
+      "question": "Readers/writer: reader entry code?",
+      "answer": "lock → while (counter == −1) wait(read_phase) → counter++ → unlock",
+      "memory": "A reader only waits if a writer is inside (−1)."
+    },
+    {
+      "id": "mid-126",
+      "question": "Readers/writer: reader exit code?",
+      "answer": "lock → counter-- → if (counter == 0) signal(write_phase) → unlock",
+      "memory": "The last reader out turns on the writer's light."
+    },
+    {
+      "id": "mid-127",
+      "question": "Readers/writer: writer entry code?",
+      "answer": "lock → while (counter != 0) wait(write_phase) → counter = −1 → unlock",
+      "memory": "A writer waits until the room is completely empty (0)."
+    },
+    {
+      "id": "mid-128",
+      "question": "Readers/writer: writer exit code?",
+      "answer": "lock → counter = 0 → broadcast(read_phase) → signal(write_phase) → unlock",
+      "memory": "Empty the room; wake all readers and one writer."
+    },
+    {
+      "id": "mid-129",
+      "question": "Why broadcast read_phase but only signal write_phase?",
+      "answer": "Many readers can go at once; only one writer can.",
+      "memory": "Readers are a crowd; writers go single file."
+    },
+    {
+      "id": "mid-130",
+      "question": "Does calling broadcast before signal give readers priority?",
+      "answer": "No. Signal order doesn't control which thread runs first.",
+      "memory": "The scheduler, not your code order, decides who runs."
+    },
+    {
+      "id": "mid-131",
+      "question": "Which side does the basic readers/writer solution favor?",
+      "answer": "Readers. Writers can starve.",
+      "memory": "A steady stream of readers keeps the counter > 0 forever."
+    },
+    {
+      "id": "mid-132",
+      "question": "Writer priority: what extra variable do you need?",
+      "answer": "A count of waiting writers.",
+      "memory": "waiting_writers++ before waiting, -- after."
+    },
+    {
+      "id": "mid-133",
+      "question": "Writer priority: when must readers wait?",
+      "answer": "while (counter == −1 || waiting_writers > 0)",
+      "memory": "A writer in line blocks new readers."
+    },
+    {
+      "id": "mid-134",
+      "question": "Writer priority: what does an exiting writer wake?",
+      "answer": "The next writer if any are waiting; otherwise broadcast to readers.",
+      "memory": "Writers first, then readers."
+    },
+    {
+      "id": "mid-135",
+      "question": "Why check the predicate in a while loop, not an if?",
+      "answer": "The state can change before you reacquire the mutex.",
+      "memory": "Wake-up means \"maybe\"; the while loop checks again."
+    },
+    {
+      "id": "mid-136",
+      "question": "Name one reason the state can change after a wake-up.",
+      "answer": "Another thread grabs the mutex first and changes the state.",
+      "memory": "Woken ≠ first in line for the mutex."
+    },
+    {
+      "id": "mid-137",
+      "question": "Toy shop quiz: what is the correct new-order predicate?",
+      "answer": "while (new_order == 3 || (new_order == 1 && old_order > 0)) wait",
+      "memory": "With if instead of while, it's wrong."
+    },
+    {
+      "id": "mid-138",
+      "question": "What is a spurious wake-up?",
+      "answer": "Waking a thread that must immediately block again on the mutex.",
+      "memory": "Waking someone up just to make them wait in another line."
+    },
+    {
+      "id": "mid-139",
+      "question": "Does a spurious wake-up break correctness?",
+      "answer": "No. It only wastes cycles.",
+      "memory": "Wasted trip, correct result."
+    },
+    {
+      "id": "mid-140",
+      "question": "How do you avoid spurious wake-ups?",
+      "answer": "Unlock before signaling/broadcasting.",
+      "memory": "Release the key, THEN ring the bell."
+    },
+    {
+      "id": "mid-141",
+      "question": "Why can't you always unlock before signaling?",
+      "answer": "The signal may depend on shared state (e.g., if (counter == 0)).",
+      "memory": "You can't read counter safely after unlocking."
+    },
+    {
+      "id": "mid-142",
+      "question": "Is using broadcast when signal would do dangerous?",
+      "answer": "No, it's just slower.",
+      "memory": "Extra wake-ups just go back to sleep (the while loop)."
+    },
+    {
+      "id": "mid-143",
+      "question": "Is using signal when broadcast was needed dangerous?",
+      "answer": "Yes. Other waiters may never wake.",
+      "memory": "Too many wake-ups = slow. Too few = stuck."
+    },
+    {
+      "id": "mid-144",
+      "question": "What is a deadlock?",
+      "answer": "Threads each wait for a resource another holds, so none proceed.",
+      "memory": "Two workers: one grabs the soldering iron, the other the wire."
+    },
+    {
+      "id": "mid-145",
+      "question": "What is the necessary and sufficient condition for deadlock?",
+      "answer": "A cycle in the wait-for graph.",
+      "memory": "T1 → T2 → T1: a circle of waiting."
+    },
+    {
+      "id": "mid-146",
+      "question": "What is the simplest foolproof deadlock prevention?",
+      "answer": "Lock mutexes in one global order.",
+      "memory": "Everyone grabs A before B, so no one can hold B and want A."
+    },
+    {
+      "id": "mid-147",
+      "question": "Why does lock ordering prevent deadlock?",
+      "answer": "No cycle can form in the wait-for graph.",
+      "memory": "Holding A means no one else can be holding B while waiting for A."
+    },
+    {
+      "id": "mid-148",
+      "question": "Why doesn't \"unlock A before locking B\" fix the A/B deadlock?",
+      "answer": "The code needs both locks at once.",
+      "memory": "Fine-grained only works if you need one lock at a time."
+    },
+    {
+      "id": "mid-149",
+      "question": "What is the downside of one mega-lock for A and B?",
+      "answer": "It kills parallelism.",
+      "memory": "One giant lock = one thread at a time."
+    },
+    {
+      "id": "mid-150",
+      "question": "What is the downside of deadlock detection with rollback?",
+      "answer": "Expensive, and external I/O can't be undone.",
+      "memory": "You can't un-send a network packet."
+    },
+    {
+      "id": "mid-151",
+      "question": "What is the \"ostrich algorithm\"?",
+      "answer": "Ignore deadlocks and reboot if one happens.",
+      "memory": "Head in the sand."
+    },
+    {
+      "id": "mid-152",
+      "question": "What must happen before a user-level thread can run?",
+      "answer": "It must be mapped to a kernel-level thread that the OS schedules.",
+      "memory": "A ULT is a passenger; it needs a KLT to drive."
+    },
+    {
+      "id": "mid-153",
+      "question": "One-to-one model: pro?",
+      "answer": "The kernel sees every thread (scheduling, sync, blocking).",
+      "memory": "1:1 = the kernel knows every thread by name."
+    },
+    {
+      "id": "mid-154",
+      "question": "One-to-one model: con?",
+      "answer": "Every thread operation is a syscall (costly).",
+      "memory": "Every lock or create = a trip to the kernel."
+    },
+    {
+      "id": "mid-155",
+      "question": "One-to-one model: second con?",
+      "answer": "Bound by the kernel's policies and thread limits (less portable).",
+      "memory": "The kernel's rules are your rules."
+    },
+    {
+      "id": "mid-156",
+      "question": "Many-to-one model: pro?",
+      "answer": "Portable and fast: no syscalls for thread operations.",
+      "memory": "All in the library: no kernel trips."
+    },
+    {
+      "id": "mid-157",
+      "question": "Many-to-one model: con?",
+      "answer": "One blocking I/O call blocks the whole process.",
+      "memory": "One car for everyone: if it breaks down, nobody moves."
+    },
+    {
+      "id": "mid-158",
+      "question": "Many-to-many model: pro?",
+      "answer": "A blocked thread doesn't stall the others, and bound threads are allowed.",
+      "memory": "Several cars: one breaks down, the others keep driving."
+    },
+    {
+      "id": "mid-159",
+      "question": "Many-to-many model: con?",
+      "answer": "The user and kernel thread managers must coordinate.",
+      "memory": "Two dispatchers must keep talking."
+    },
+    {
+      "id": "mid-160",
+      "question": "What is process-scope threading?",
+      "answer": "A user library schedules threads within one process only.",
+      "memory": "Process scope: 2 apps → 50/50, regardless of thread count."
+    },
+    {
+      "id": "mid-161",
+      "question": "What is system-scope threading?",
+      "answer": "The kernel schedules all threads system-wide.",
+      "memory": "System scope: the app with more threads gets more CPU."
+    },
+    {
+      "id": "mid-162",
+      "question": "M:N: who schedules the user-level threads?",
+      "answer": "The user-level library.",
+      "memory": "Library = the user-level scheduler."
+    },
+    {
+      "id": "mid-163",
+      "question": "M:N: who schedules the kernel-level threads?",
+      "answer": "The kernel.",
+      "memory": "Two schedulers, neither sees the whole picture."
+    },
+    {
+      "id": "mid-164",
+      "question": "M:N visibility problem: a lock holder is preempted.",
+      "answer": "The kernel preempts a KLT whose ULT holds a lock, so the other ULTs stall.",
+      "memory": "The kernel doesn't know that ULT holds a lock."
+    },
+    {
+      "id": "mid-165",
+      "question": "M:N visibility problem: blocking I/O.",
+      "answer": "All KLTs block, and the runnable ULTs can't run.",
+      "memory": "The library didn't know the KLTs were about to block."
+    },
+    {
+      "id": "mid-166",
+      "question": "What is the Solaris fix for the blocking I/O problem?",
+      "answer": "The library asks for more KLTs/LWPs (set_concurrency or a kernel signal).",
+      "memory": "Ask for another LWP before everyone is stuck."
+    },
+    {
+      "id": "mid-167",
+      "question": "M:N signaling: what does the library install?",
+      "answer": "A wrapper handler that checks the ULTs' signal masks.",
+      "memory": "The library intercepts every signal first."
+    },
+    {
+      "id": "mid-168",
+      "question": "Linux threading model?",
+      "answer": "NPTL, one-to-one.",
+      "memory": "NPTL = one kernel task per thread."
+    },
+    {
+      "id": "mid-169",
+      "question": "Why doesn't Linux need LWPs or set_concurrency?",
+      "answer": "With 1:1, the kernel sees every thread directly.",
+      "memory": "1:1 → nothing hidden from the kernel."
+    },
+    {
+      "id": "mid-170",
+      "question": "What changed to make 1:1 practical?",
+      "answer": "Cheaper kernel crossings, and more memory for kernel threads.",
+      "memory": "The Solaris tricks dodged costly crossings, which aren't costly anymore."
+    },
+    {
+      "id": "mid-171",
+      "question": "What is an interrupt?",
+      "answer": "An asynchronous hardware event from outside the CPU.",
+      "memory": "Interrupt = from outside (a doorbell)."
+    },
+    {
+      "id": "mid-172",
+      "question": "What is a signal?",
+      "answer": "A software notification from the OS to a process.",
+      "memory": "Signal = from inside (a low-battery warning)."
+    },
+    {
+      "id": "mid-173",
+      "question": "Are interrupts sync or async? Signals?",
+      "answer": "Interrupts are async; signals can be either.",
+      "memory": "SIGSEGV = sync (you caused it); kill = async."
+    },
+    {
+      "id": "mid-174",
+      "question": "How does the OS find the handler for interrupt N?",
+      "answer": "Look up N in the interrupt handler table and jump there.",
+      "memory": "Table lookup: N → handler address → PC."
+    },
+    {
+      "id": "mid-175",
+      "question": "How does the OS find the handler for signal N?",
+      "answer": "Look up N in the process's signal handler table.",
+      "memory": "Same idea, but the table belongs to the process."
+    },
+    {
+      "id": "mid-176",
+      "question": "Where does a handler run by default?",
+      "answer": "On the interrupted thread's stack.",
+      "memory": "The handler borrows the interrupted thread's stack."
+    },
+    {
+      "id": "mid-177",
+      "question": "Can each process set its own signal handlers?",
+      "answer": "Yes, except for uncatchable signals.",
+      "memory": "SIGKILL can't be caught."
+    },
+    {
+      "id": "mid-178",
+      "question": "Can each thread have its own signal handler?",
+      "answer": "No. Handlers are per-process; masks are per-thread.",
+      "memory": "One rulebook per house; each person has their own \"do not disturb\" sign."
+    },
+    {
+      "id": "mid-179",
+      "question": "Why can a handler that locks a mutex deadlock?",
+      "answer": "The interrupted thread may hold it, and it can't resume until the handler ends.",
+      "memory": "The handler waits on the thread; the thread waits on the handler."
+    },
+    {
+      "id": "mid-180",
+      "question": "What is the mask fix for handler deadlock?",
+      "answer": "Disable the signal before locking; re-enable it after unlocking.",
+      "memory": "\"Do not disturb\" sign while holding the lock."
+    },
+    {
+      "id": "mid-181",
+      "question": "What is the Solaris fix for handler deadlock?",
+      "answer": "Run a potentially blocking handler as its own (pre-created) thread.",
+      "memory": "Linux version: top half (fast) + bottom half (a thread)."
+    },
+    {
+      "id": "mid-182",
+      "question": "Multi-process web server: main pro?",
+      "answer": "Simple to write.",
+      "memory": "Write one process correctly, run many copies."
+    },
+    {
+      "id": "mid-183",
+      "question": "Multi-process web server: main con?",
+      "answer": "High memory use and costly context switches.",
+      "memory": "N processes = N address spaces."
+    },
+    {
+      "id": "mid-184",
+      "question": "Multi-process web server: extra con?",
+      "answer": "Sharing state across processes is costly (IPC).",
+      "memory": "Processes can't just share a variable."
+    },
+    {
+      "id": "mid-185",
+      "question": "Multithreaded web server: main pro?",
+      "answer": "Shared address space: cheaper switches, less memory.",
+      "memory": "One address space shared by all workers."
+    },
+    {
+      "id": "mid-186",
+      "question": "Multithreaded web server: main con?",
+      "answer": "Needs explicit synchronization.",
+      "memory": "Shared memory = you must lock."
+    },
+    {
+      "id": "mid-187",
+      "question": "Multithreaded web server: con at the time of the Flash paper?",
+      "answer": "Needs kernel thread support.",
+      "memory": "In 1999 some kernels weren't multithreaded."
+    },
+    {
+      "id": "mid-188",
+      "question": "Event-driven over MT/MP, benefit #1?",
+      "answer": "No context switches.",
+      "memory": "One thread → nothing to switch."
+    },
+    {
+      "id": "mid-189",
+      "question": "Event-driven over MT/MP, benefit #2?",
+      "answer": "No locking needed (one thread).",
+      "memory": "One thread → no races."
+    },
+    {
+      "id": "mid-190",
+      "question": "Event-driven over MT/MP, benefit #3?",
+      "answer": "Smallest footprint, so more memory for cache.",
+      "memory": "One chef juggling many orders, no hand-offs."
+    },
+    {
+      "id": "mid-191",
+      "question": "Event-driven limit #1?",
+      "answer": "One blocking I/O stalls everything.",
+      "memory": "The one chef steps out, and the whole kitchen stops."
+    },
+    {
+      "id": "mid-192",
+      "question": "Event-driven limit #2?",
+      "answer": "It only fits server-style apps.",
+      "memory": "Great for request/response servers, awkward elsewhere."
+    },
+    {
+      "id": "mid-193",
+      "question": "Event-driven limit #3?",
+      "answer": "Routing events across multiple CPUs is complex.",
+      "memory": "Which CPU's loop should get this event?"
+    },
+    {
+      "id": "mid-194",
+      "question": "How does AMPED fix blocking I/O?",
+      "answer": "Helper processes do the blocking disk reads.",
+      "memory": "Asymmetric: helpers only do the slow disk work."
+    },
+    {
+      "id": "mid-195",
+      "question": "How would AMTED compare to AMPED?",
+      "answer": "Likely equal or better: helper threads share memory and communicate cheaply.",
+      "memory": "Threads today are cheap; processes were only needed for old kernels."
+    },
+    {
+      "id": "mid-196",
+      "question": "Flash single-file test: what question did it ask?",
+      "answer": "What does each architecture cost with no disk I/O?",
+      "memory": "Best case: everything cached."
+    },
+    {
+      "id": "mid-197",
+      "question": "Flash single-file test: result?",
+      "answer": "SPED ≈ Flash > MT > MP > Apache.",
+      "memory": "Flash pays a little for the mincore check."
+    },
+    {
+      "id": "mid-198",
+      "question": "Owlnet vs CS traces: what question did they ask?",
+      "answer": "How does each design behave when data fits in cache vs doesn't?",
+      "memory": "Owlnet = small (fits in cache). CS = big (disk-bound)."
+    },
+    {
+      "id": "mid-199",
+      "question": "CS trace: why did SPED collapse?",
+      "answer": "Disk-bound data blocks its only thread.",
+      "memory": "SPED has no helpers → it blocks on disk."
+    },
+    {
+      "id": "mid-200",
+      "question": "CS trace: why did Flash win?",
+      "answer": "Helpers avoid blocking, and the small footprint leaves more cache.",
+      "memory": "Never blocks + most memory for cache."
+    },
+    {
+      "id": "mid-201",
+      "question": "Why did Flash give MP/MT/SPED the same optimizations?",
+      "answer": "To isolate the architecture (apples to apples).",
+      "memory": "Change one variable at a time."
+    },
+    {
+      "id": "mid-202",
+      "question": "Why vary file size in the Flash experiments?",
+      "answer": "Bigger files raise bandwidth but lower connections per second.",
+      "memory": "Big file: more bytes per connection, fewer connections/sec."
+    },
+    {
+      "id": "mid-203",
+      "question": "Optimization experiment: what question did it ask?",
+      "answer": "How much does each cache optimization help?",
+      "memory": "Path cache → + mmap → + header cache: each step helped."
+    },
+    {
+      "id": "mid-204",
+      "question": "Project server, 1 hot file: throughput as threads grow?",
+      "answer": "Rises until the cores saturate, then flat, then slightly down.",
+      "memory": "Sketch: steep rise → plateau → gentle dip."
+    },
+    {
+      "id": "mid-205",
+      "question": "Project server, random huge files: throughput as threads grow?",
+      "answer": "A small rise, then an early low plateau (disk-bound).",
+      "memory": "Sketch: short rise → low, flat line."
+    },
+    {
+      "id": "mid-206",
+      "question": "Why is the random-large-files curve lower?",
+      "answer": "Data doesn't fit in cache, so every request waits on the disk.",
+      "memory": "More threads can't make the disk spin faster."
+    }
+  ]
+}
