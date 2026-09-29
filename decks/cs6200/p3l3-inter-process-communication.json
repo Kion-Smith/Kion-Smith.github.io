@@ -1,31 +1,320 @@
 {
   "title": "P3L3: Inter Process Communication",
   "cards": [
-    { "id": "p3l3-001", "question": "What is inter-process communication (IPC)?", "answer": "A set of mechanisms the operating system must support to permit multiple processes to interact with each other - to synchronize, coordinate, and communicate." },
-    { "id": "p3l3-002", "question": "What are the two broad categories of IPC mechanisms?", "answer": "Message-based (e.g., sockets, pipes, message queues) and memory-based (e.g., shared memory, memory-mapped files)." },
-    { "id": "p3l3-003", "question": "What is remote procedure call (RPC) and how does it differ from a basic IPC channel?", "answer": "RPC is a higher-level IPC mechanism that prescribes additional details beyond a simple communication channel, such as protocols, data formatting, and how data will be exchanged." },
-    { "id": "p3l3-004", "question": "In message-based IPC, what role does the OS kernel play?", "answer": "The kernel creates and maintains the communication channel (a buffer/FIFO-like structure) and must perform every IPC operation - both establishing the channel and executing every send/receive." },
-    { "id": "p3l3-005", "question": "Why does a simple request-response exchange between two processes using message passing require four user-kernel crossings and four data copies?", "answer": "Each send and receive requires a system call (user-kernel crossing) plus a data copy (into the channel for send, out of the channel for receive) - so a request plus a response means 2 sends + 2 receives = 4 crossings and 4 copies total." },
-    { "id": "p3l3-006", "question": "What is the main advantage of message-passing IPC, per the lecture?", "answer": "Relative simplicity - the OS kernel handles channel management and synchronization, ensuring data isn't overwritten or corrupted during concurrent sends/receives." },
-    { "id": "p3l3-007", "question": "What are pipes, and what is their key limitation?", "answer": "The simplest POSIX message-passing IPC mechanism - an unstructured byte stream (no message boundaries) between exactly two endpoints, so only two processes can communicate; commonly used to connect one process's output to another's input." },
-    { "id": "p3l3-008", "question": "How do message queues differ from pipes?", "answer": "Message queues understand discrete, properly formatted messages (rather than a raw byte stream) and support features like message priorities and delivery scheduling; available via POSIX and System V APIs on Unix." },
-    { "id": "p3l3-009", "question": "What kernel-level object does the socket API create, and what extra processing can be attached to it?", "answer": "The socket() call creates a kernel-level socket buffer, which can have associated kernel-level protocol processing, e.g., a full TCP/IP protocol stack for a TCP/IP socket." },
-    { "id": "p3l3-010", "question": "Does the OS execute the full network protocol stack when two communicating processes are on the same machine using sockets?", "answer": "No - the OS detects same-machine communication and bypasses much of the protocol stack processing, transparently to the programmer (though detectable via performance measurement)." },
-    { "id": "p3l3-011", "question": "In shared memory IPC, what does the operating system actually do to set up communication?", "answer": "It maps certain physical pages of memory into the virtual address spaces of both processes; the virtual addresses need not match between processes, and the backing physical memory need not be contiguous." },
-    { "id": "p3l3-012", "question": "What is the main benefit of shared memory IPC once the mapping is established?", "answer": "The OS is 'out of the way' - system calls are needed only during setup, and subsequent reads/writes require no kernel involvement, unlike message passing where every operation needs a system call." },
-    { "id": "p3l3-013", "question": "What are the two main drawbacks of shared memory IPC mentioned in the lecture?", "answer": "(1) Concurrent access requires explicit synchronization by the developer (like threads sharing an address space), and (2) the developer is responsible for the communication protocol - message formatting, delimiting, headers, and buffer allocation." },
-    { "id": "p3l3-014", "question": "According to the IPC comparison quiz, which performs better: message-passing or shared-memory IPC?", "answer": "It depends - message passing incurs data-copy and system-call overhead on every operation, while shared memory incurs costly upfront overhead to establish valid address-space mappings; each has different tradeoffs." },
-    { "id": "p3l3-015", "question": "In the 'Copy vs. Map' comparison, when does memory mapping tend to outperform copying, even for one-time use?", "answer": "When moving large amounts of data - the CPU time to copy the data can greatly exceed the CPU time to perform the map operation, so mapping wins for large transfers even without reuse." },
-    { "id": "p3l3-016", "question": "What is Windows' Local Procedure Call (LPC) mechanism, and how does it combine copy and map strategies?", "answer": "LPC copies small data (below a threshold) through a port-like channel, but for larger data it copies the data once into a page-aligned area and then maps that area into the target process's address space - leveraging the fact that mapping beats copying for large transfers." },
-    { "id": "p3l3-017", "question": "In System V shared memory, what is a segment's 'key' and how is it typically generated?", "answer": "A key is a unique identifier for a shared memory segment; it's not generated by the OS but supplied by the application, typically via ftok(), which acts like a hash function - the same arguments always produce the same key, letting independent processes agree on it." },
-    { "id": "p3l3-018", "question": "What do 'attach' and 'detach' mean for a System V shared memory segment, and does detaching destroy it?", "answer": "Attach establishes valid virtual-to-physical mappings for a process; detach invalidates those page table mappings for that process. Detaching does not destroy the segment - it persists (like a file) until explicitly removed or the system reboots." },
-    { "id": "p3l3-019", "question": "Name the four core System V shared memory API calls and their purposes.", "answer": "shmget (create/open a segment), shmat (attach a segment into a process's address space), shmdt (detach a segment), and shmctl (control operations, e.g., IPC_RMID to remove a segment)." },
-    { "id": "p3l3-020", "question": "How does the POSIX shared memory API's abstraction differ from System V's?", "answer": "POSIX shared memory uses a file-like abstraction (backed by tmpfs, an in-memory-only filesystem) instead of segments/keys; segments are referenced by file descriptors, and mapping is done via mmap/munmap, with unlink() needed to actually free the memory." },
-    { "id": "p3l3-021", "question": "Why must synchronization variables (mutexes/condition variables) used for shared-memory IPC be allocated inside the shared memory region itself?", "answer": "Because the synchronization construct must be visible/shared among all communicating processes, just as it must be global/visible to all threads in a multithreaded program - allocating it in the shared segment is the only way separate processes can access the same mutex/condition variable." },
-    { "id": "p3l3-022", "question": "What pthreads attribute must be set to allow a mutex or condition variable to be used across processes rather than just threads?", "answer": "PTHREAD_PROCESS_SHARED, set on the mutex/condition-variable attribute object before initializing it." },
-    { "id": "p3l3-023", "question": "Besides pthreads process-shared mutexes/condition variables, what other OS-level mechanisms can synchronize shared memory access across processes, and why are they needed?", "answer": "Message queues (e.g., using ready/OK handshake messages) and semaphores - needed because PTHREAD_PROCESS_SHARED support isn't guaranteed on every platform." },
-    { "id": "p3l3-024", "question": "How does a binary semaphore work to provide mutual exclusion?", "answer": "It holds value 0 or 1; a process trying to proceed decrements the semaphore - if it was 1, it becomes 0 and the process proceeds (equivalent to obtaining a lock); if it was already 0, the process blocks until it changes." },
-    { "id": "p3l3-025", "question": "When designing a shared-memory-based application with multiple communicating thread pairs, what are the tradeoffs between using one large segment versus many small segments?", "answer": "One large segment requires building a custom memory manager to allocate/free portions of it; many small (pre-allocated) segments avoid per-communication creation overhead but require a mechanism (e.g., a queue of segment identifiers) for threads to pick an available segment." },
-    { "id": "p3l3-026", "question": "What design problem arises when segment size is fixed and data to be transferred exceeds it?", "answer": "The data must be transferred in rounds - portions are written and consumed incrementally - requiring the programmer to add a protocol (e.g., flags in the shared structure) to track progress through the rounds." }
+    {
+      "id": "p3l3-v2-001",
+      "question": "What is IPC?",
+      "answer": "OS mechanisms that let processes communicate, coordinate, and synchronize."
+    },
+    {
+      "id": "p3l3-v2-002",
+      "question": "What are the 2 broad categories of IPC?",
+      "answer": "Message-based and memory-based.",
+      "memory": "Messages = mailing letters. Memory = a shared whiteboard."
+    },
+    {
+      "id": "p3l3-v2-003",
+      "question": "Name 3 message-based IPC mechanisms.",
+      "answer": "Sockets, pipes, and message queues."
+    },
+    {
+      "id": "p3l3-v2-004",
+      "question": "Name 2 memory-based IPC mechanisms.",
+      "answer": "Shared physical pages and memory-mapped files."
+    },
+    {
+      "id": "p3l3-v2-005",
+      "question": "What makes RPC \"higher-level\" IPC?",
+      "answer": "It also defines the protocol, data format, and exchange rules, not just a channel."
+    },
+    {
+      "id": "p3l3-v2-006",
+      "question": "Why do synchronization primitives count as IPC?",
+      "answer": "Synchronizing also tells the other process where you are in execution."
+    },
+    {
+      "id": "p3l3-v2-007",
+      "question": "In the toy shop analogy, what are the 3 IPC forms?",
+      "answer": "Shared work areas (shared memory), calling each other (messages), and synchronization."
+    },
+    {
+      "id": "p3l3-v2-008",
+      "question": "In message passing, what does the OS provide?",
+      "answer": "The channel (a buffer/FIFO) plus ports and a send/recv interface."
+    },
+    {
+      "id": "p3l3-v2-009",
+      "question": "Message passing: how many user/kernel crossings and copies does one request+response take?",
+      "answer": "4 crossings and 4 data copies.",
+      "memory": "send = 1 syscall + 1 copy in; recv = 1 syscall + 1 copy out. ×2 for the reply."
+    },
+    {
+      "id": "p3l3-v2-010",
+      "question": "What is the main downside of message-based IPC?",
+      "answer": "Overhead of kernel crossings and data copies."
+    },
+    {
+      "id": "p3l3-v2-011",
+      "question": "What is the main upside of message-based IPC?",
+      "answer": "Simplicity: the kernel handles channel management and synchronization."
+    },
+    {
+      "id": "p3l3-v2-012",
+      "question": "How many endpoints does a pipe have?",
+      "answer": "2 (only two processes can communicate)."
+    },
+    {
+      "id": "p3l3-v2-013",
+      "question": "Does a pipe carry messages?",
+      "answer": "No. It carries an unstructured byte stream."
+    },
+    {
+      "id": "p3l3-v2-014",
+      "question": "What is a common use of a pipe?",
+      "answer": "Connecting one process's output to another's input.",
+      "memory": "cat file | grep foo"
+    },
+    {
+      "id": "p3l3-v2-015",
+      "question": "How do message queues differ from pipes?",
+      "answer": "They carry formatted messages and support priorities and delivery scheduling."
+    },
+    {
+      "id": "p3l3-v2-016",
+      "question": "Name the 2 UNIX message queue APIs.",
+      "answer": "POSIX and System V"
+    },
+    {
+      "id": "p3l3-v2-017",
+      "question": "What does the socket() call create in the kernel?",
+      "answer": "A kernel socket buffer plus its protocol processing (e.g., the TCP/IP stack)."
+    },
+    {
+      "id": "p3l3-v2-018",
+      "question": "Sockets between two processes on the same machine: what does the OS do?",
+      "answer": "It bypasses much of the full network protocol stack."
+    },
+    {
+      "id": "p3l3-v2-019",
+      "question": "In shared-memory IPC, what does the OS set up?",
+      "answer": "It maps the same physical pages into both processes' virtual address spaces."
+    },
+    {
+      "id": "p3l3-v2-020",
+      "question": "Must the shared region have the same virtual address in both processes?",
+      "answer": "No."
+    },
+    {
+      "id": "p3l3-v2-021",
+      "question": "Must shared-memory physical pages be contiguous?",
+      "answer": "No."
+    },
+    {
+      "id": "p3l3-v2-022",
+      "question": "What is the main benefit of shared-memory IPC?",
+      "answer": "After setup, the OS is out of the way: no syscalls to exchange data.",
+      "memory": "Set up the whiteboard once; after that, no kernel middleman."
+    },
+    {
+      "id": "p3l3-v2-023",
+      "question": "Does shared memory always eliminate data copies?",
+      "answer": "No. Data not allocated in the shared region still has to be copied in."
+    },
+    {
+      "id": "p3l3-v2-024",
+      "question": "Name 2 downsides of shared-memory IPC.",
+      "answer": "Processes must synchronize explicitly, and the developer must define the protocol and buffer management."
+    },
+    {
+      "id": "p3l3-v2-025",
+      "question": "What is Android's shared-memory IPC called?",
+      "answer": "Ashmem"
+    },
+    {
+      "id": "p3l3-v2-026",
+      "question": "Which performs better: message-passing or shared-memory IPC?",
+      "answer": "It depends. Copy costs vs mapping costs."
+    },
+    {
+      "id": "p3l3-v2-027",
+      "question": "Copy vs map: when does mapping (shared memory) win?",
+      "answer": "When the channel is reused many times, or the data is large.",
+      "memory": "Mapping is expensive once; copying costs every time and grows with size."
+    },
+    {
+      "id": "p3l3-v2-028",
+      "question": "What is Windows LPC?",
+      "answer": "Local Procedure Calls: small data is copied through a port; large data is mapped."
+    },
+    {
+      "id": "p3l3-v2-029",
+      "question": "SysV shared memory: what is the unit of sharing?",
+      "answer": "A segment (not necessarily contiguous physical pages)."
+    },
+    {
+      "id": "p3l3-v2-030",
+      "question": "SysV shared memory: are there system-wide limits on segments?",
+      "answer": "Yes, e.g., a limit on count (4000 in current Linux) and total size."
+    },
+    {
+      "id": "p3l3-v2-031",
+      "question": "How do processes identify a SysV shared memory segment?",
+      "answer": "By a unique key."
+    },
+    {
+      "id": "p3l3-v2-032",
+      "question": "What does attaching a SysV segment do?",
+      "answer": "Maps the segment's physical pages into the process's virtual address space."
+    },
+    {
+      "id": "p3l3-v2-033",
+      "question": "What does detaching a SysV segment do?",
+      "answer": "Invalidates that process's mappings (PTEs). The segment itself still exists."
+    },
+    {
+      "id": "p3l3-v2-034",
+      "question": "When is a SysV shared memory segment destroyed?",
+      "answer": "Only on explicit removal or a reboot.",
+      "memory": "Like a file: it persists after the processes exit."
+    },
+    {
+      "id": "p3l3-v2-035",
+      "question": "SysV call to create or open a shared memory segment?",
+      "answer": "shmget(key, size, flags)",
+      "memory": "SysV shm lifecycle: ftok → shmget → shmat → shmdt → shmctl(IPC_RMID)"
+    },
+    {
+      "id": "p3l3-v2-036",
+      "question": "What SysV function generates a key from a path and an int?",
+      "answer": "ftok() (same args → same key)"
+    },
+    {
+      "id": "p3l3-v2-037",
+      "question": "SysV call to attach a segment?",
+      "answer": "shmat() (pass NULL to let the OS pick the address)"
+    },
+    {
+      "id": "p3l3-v2-038",
+      "question": "SysV call to detach a segment?",
+      "answer": "shmdt()"
+    },
+    {
+      "id": "p3l3-v2-039",
+      "question": "SysV call and command to destroy a segment?",
+      "answer": "shmctl() with IPC_RMID"
+    },
+    {
+      "id": "p3l3-v2-040",
+      "question": "What is the key difference in the POSIX shared memory API?",
+      "answer": "It uses \"files\" in tmpfs instead of segments and keys.",
+      "memory": "POSIX shm lifecycle: shm_open → mmap → munmap → close → shm_unlink"
+    },
+    {
+      "id": "p3l3-v2-041",
+      "question": "What is tmpfs?",
+      "answer": "A memory-backed pseudo file system; its \"files\" are just pages in RAM."
+    },
+    {
+      "id": "p3l3-v2-042",
+      "question": "POSIX shared memory: open and close calls?",
+      "answer": "shm_open() / close()"
+    },
+    {
+      "id": "p3l3-v2-043",
+      "question": "POSIX shared memory: attach and detach calls?",
+      "answer": "mmap() / munmap()"
+    },
+    {
+      "id": "p3l3-v2-044",
+      "question": "POSIX shared memory: how do you destroy the region?",
+      "answer": "shm_unlink()"
+    },
+    {
+      "id": "p3l3-v2-045",
+      "question": "Since which Linux version is POSIX shared memory supported?",
+      "answer": "2.4"
+    },
+    {
+      "id": "p3l3-v2-046",
+      "question": "Which pthread attribute lets a mutex/CV work across processes?",
+      "answer": "PTHREAD_PROCESS_SHARED"
+    },
+    {
+      "id": "p3l3-v2-047",
+      "question": "Where must a process-shared mutex be allocated?",
+      "answer": "Inside the shared memory region itself.",
+      "memory": "Just like threads need global mutexes, processes need them in shared memory."
+    },
+    {
+      "id": "p3l3-v2-048",
+      "question": "Why use OS IPC for synchronization instead of pthread mutexes?",
+      "answer": "PTHREAD_PROCESS_SHARED isn't supported on every platform."
+    },
+    {
+      "id": "p3l3-v2-049",
+      "question": "How can message queues synchronize shared-memory access?",
+      "answer": "P1 writes data and sends \"ready\"; P2 reads it and replies \"ok\"."
+    },
+    {
+      "id": "p3l3-v2-050",
+      "question": "How does a binary semaphore work?",
+      "answer": "Value 0 → block; value 1 → decrement to 0 and proceed (like taking a lock)."
+    },
+    {
+      "id": "p3l3-v2-051",
+      "question": "Linux syscall to send to a message queue?",
+      "answer": "msgsnd"
+    },
+    {
+      "id": "p3l3-v2-052",
+      "question": "Linux syscall to receive from a message queue?",
+      "answer": "msgrcv"
+    },
+    {
+      "id": "p3l3-v2-053",
+      "question": "Linux syscall for message queue control operations?",
+      "answer": "msgctl"
+    },
+    {
+      "id": "p3l3-v2-054",
+      "question": "Linux syscall to get a message queue identifier?",
+      "answer": "msgget",
+      "memory": "Same pattern as shm: get / ctl / snd / rcv"
+    },
+    {
+      "id": "p3l3-v2-055",
+      "question": "Command to list IPC facilities? Only shared memory?",
+      "answer": "ipcs (ipcs -m for shared memory only)"
+    },
+    {
+      "id": "p3l3-v2-056",
+      "question": "Command to remove a shared memory segment?",
+      "answer": "ipcrm -m <shmid>"
+    },
+    {
+      "id": "p3l3-v2-057",
+      "question": "What does the OS NOT do for you with shared memory?",
+      "answer": "Data-passing and synchronization protocols. Those are up to the programmer."
+    },
+    {
+      "id": "p3l3-v2-058",
+      "question": "One large shared segment: what extra work does it need?",
+      "answer": "Your own memory manager to allocate and free parts of it."
+    },
+    {
+      "id": "p3l3-v2-059",
+      "question": "Many small segments: what is a good practice?",
+      "answer": "Pre-allocate a pool and hand out IDs through a queue."
+    },
+    {
+      "id": "p3l3-v2-060",
+      "question": "How does a thread learn which segment a peer picked from the pool?",
+      "answer": "Send the segment ID over another IPC channel (e.g., a message queue)."
+    },
+    {
+      "id": "p3l3-v2-061",
+      "question": "How do you send data larger than the maximum segment size?",
+      "answer": "Transfer it in rounds, with a protocol (flags, sync) to track progress."
+    }
   ]
 }

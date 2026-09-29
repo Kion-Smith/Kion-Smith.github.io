@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T02:00:34.507Z",
+  "generatedAt": "2026-09-29T12:56:55.486Z",
   "decks": [
     {
       "path": "biology/cell-structure.json",
@@ -29,79 +29,79 @@
       "path": "cs6200/p2l3-threads-case-study-pthreads.json",
       "title": "P2L3: Threads Case Study: PThreads",
       "subject": "cs6200",
-      "cardCount": 20
+      "cardCount": 51
     },
     {
       "path": "cs6200/p2l4-thread-design-considerations.json",
       "title": "P2L4: Thread Design Considerations",
       "subject": "cs6200",
-      "cardCount": 24
+      "cardCount": 98
     },
     {
       "path": "cs6200/p2l5-thread-performance-considerations.json",
       "title": "P2L5: Thread Performance Considerations",
       "subject": "cs6200",
-      "cardCount": 28
+      "cardCount": 86
     },
     {
       "path": "cs6200/p3l1-scheduling.json",
       "title": "P3L1: Scheduling",
       "subject": "cs6200",
-      "cardCount": 32
+      "cardCount": 100
     },
     {
       "path": "cs6200/p3l2-memory-management.json",
       "title": "P3L2: Memory Management",
       "subject": "cs6200",
-      "cardCount": 22
+      "cardCount": 91
     },
     {
       "path": "cs6200/p3l3-inter-process-communication.json",
       "title": "P3L3: Inter Process Communication",
       "subject": "cs6200",
-      "cardCount": 26
+      "cardCount": 61
     },
     {
       "path": "cs6200/p3l4-synchronization-constructs.json",
       "title": "P3L4: Synchronization Constructs",
       "subject": "cs6200",
-      "cardCount": 31
+      "cardCount": 81
     },
     {
       "path": "cs6200/p3l5-io-management.json",
       "title": "P3L5: IO Management",
       "subject": "cs6200",
-      "cardCount": 24
+      "cardCount": 85
     },
     {
       "path": "cs6200/p3l6-virtualization.json",
       "title": "P3L6: Virtualization",
       "subject": "cs6200",
-      "cardCount": 28
+      "cardCount": 79
     },
     {
       "path": "cs6200/p4l1-remote-procedure-calls.json",
       "title": "P4L1: Remote Procedure Calls",
       "subject": "cs6200",
-      "cardCount": 36
+      "cardCount": 81
     },
     {
       "path": "cs6200/p4l2-distributed-file-systems.json",
       "title": "P4L2: Distributed File Systems",
       "subject": "cs6200",
-      "cardCount": 25
+      "cardCount": 68
     },
     {
       "path": "cs6200/p4l3-distributed-shared-memory.json",
       "title": "P4L3: Distributed Shared Memory",
       "subject": "cs6200",
-      "cardCount": 28
+      "cardCount": 65
     },
     {
       "path": "cs6200/p4l4-datacenter-technologies.json",
       "title": "P4L4: Datacenter Technologies",
       "subject": "cs6200",
-      "cardCount": 30
+      "cardCount": 68
     },
     {
       "path": "history/ww2.json",

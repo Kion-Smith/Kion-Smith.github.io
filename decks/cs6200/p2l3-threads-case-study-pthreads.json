@@ -1,25 +1,273 @@
 {
   "title": "P2L3: Threads Case Study: PThreads",
   "cards": [
-    { "id": "p2l3-001", "question": "What does PThreads stand for, and what is POSIX?", "answer": "PThreads stands for POSIX Threads. POSIX (Portable Operating Systems Interface) describes the system call interface operating systems should support to increase interoperability among OSes; PThreads is the part of POSIX describing the thread API." },
-    { "id": "p2l3-002", "question": "What data type does PThreads use to represent a thread, and what does it contain?", "answer": "The pthread_t data type. It holds an ID, execution state, and other thread-relevant information, mostly maintained internally by the pthreads library rather than directly manipulated by the developer." },
-    { "id": "p2l3-003", "question": "What are the PThreads equivalents of Birrell's fork and join operations?", "answer": "pthread_create is the equivalent of fork (takes a start routine and arguments, returns a pthread_t and a status), and pthread_join is the equivalent of join (takes the thread structure and a status variable to capture return results)." },
-    { "id": "p2l3-004", "question": "What arguments does pthread_create take?", "answer": "A pointer to a pthread_t (to be populated), a pthread attribute structure (or NULL for defaults), the start routine function, and the argument to pass to that routine. It returns a status indicating success or failure." },
-    { "id": "p2l3-005", "question": "What is the pthread attribute (pthread_attr_t) data structure used for, and what happens if NULL is passed to pthread_create for it?", "answer": "It lets you configure thread features like stack size, scheduling policy/priority, scope (system vs. process), attribute inheritance, and joinability. Passing NULL uses PThreads' default values for all attributes." },
-    { "id": "p2l3-006", "question": "What functions manage pthread attribute objects?", "answer": "pthread_attr_init and pthread_attr_destroy create/initialize and destroy the attribute structure; pthread_attr_set*/get* functions set or read individual attribute fields." },
-    { "id": "p2l3-007", "question": "What is the difference between joinable and detached threads in PThreads?", "answer": "Joinable threads (the default) require the parent to call pthread_join and wait for children to complete, or the children can become zombies if the parent exits early. Detached threads cannot be joined; if the parent exits, detached children are free to keep running independently." },
-    { "id": "p2l3-008", "question": "How do you make a thread detached in PThreads?", "answer": "Either call pthread_detach() on an existing thread, or set the DETACHSTATE attribute to PTHREAD_CREATE_DETACHED (via pthread_attr_setdetachstate) before creating the thread with pthread_create." },
-    { "id": "p2l3-009", "question": "What must you include and link to compile a PThreads program?", "answer": "Include the pthread.h header, and link with the pthreads library using the -lpthread flag (or better, -pthread on some platforms, which also configures compilation for threading). Without linking, compile errors may not surface but the program will still fail." },
-    { "id": "p2l3-010", "question": "In the PThread creation example that printed 'thread number' with an incrementing loop variable i, why did the output sometimes skip a number (a data race)?", "answer": "The loop variable i was a single global variable whose address was passed to every thread. If the main thread incremented i before a new thread read it, two threads could see the same (updated) value, causing one expected value to never be printed — a data race/race condition." },
-    { "id": "p2l3-011", "question": "How was the data race on the shared loop variable i fixed in the PThread creation example?", "answer": "By copying i into a separate array element (private storage) for each thread and passing the address of that array element instead of the address of the shared i, giving each thread its own copy of the argument that would not change." },
-    { "id": "p2l3-012", "question": "What PThreads data type represents a mutex, and what are the two core operations on it?", "answer": "pthread_mutex_t represents a mutex. The core operations are pthread_mutex_lock and pthread_mutex_unlock, which explicitly bracket the critical section (unlike Birrell's implicit block-scoped lock)." },
-    { "id": "p2l3-013", "question": "What does pthread_mutex_trylock do differently from pthread_mutex_lock?", "answer": "pthread_mutex_lock blocks the calling thread if the mutex is in use. pthread_mutex_trylock instead returns immediately, notifying the caller the mutex is unavailable if it's locked, or successfully locking it if it's free — it never blocks the caller." },
-    { "id": "p2l3-014", "question": "How is mutex initialization performed in PThreads, and what does the mutex attribute argument control?", "answer": "Mutexes must be explicitly initialized (e.g., via pthread_mutex_init), which allocates the data structure. An attribute argument (NULL for default) can specify behavior such as whether the mutex is private to a process (default) or shared across processes." },
-    { "id": "p2l3-015", "question": "What are four best-practice tips given for using PThread mutexes?", "answer": "Always access shared data through a single mutex; declare mutexes as global variables visible to all threads (never thread-local); establish a global lock ordering across mutexes to avoid deadlocks; and always remember to unlock the correct mutex you locked." },
-    { "id": "p2l3-016", "question": "What PThreads functions correspond to Birrell's condition variable wait, signal, and broadcast operations?", "answer": "pthread_cond_wait (takes a condition variable and a mutex), pthread_cond_signal (wakes one waiting thread), and pthread_cond_broadcast (wakes all waiting threads) — the pthread_cond_t type represents the condition variable." },
-    { "id": "p2l3-017", "question": "What happens internally when a thread calls pthread_cond_wait?", "answer": "The thread automatically releases the associated mutex and is placed on the condition variable's wait queue; when woken, it automatically re-acquires the mutex before returning from the wait call — identical semantics to Birrell's wait." },
-    { "id": "p2l3-018", "question": "What advice is given about choosing signal vs. broadcast for condition variables?", "answer": "If in doubt, use broadcast until you're sure of the desired behavior, but note broadcast costs performance since all waiting threads wake and re-check the condition; use signal when you know only one waiter should proceed (e.g., after producing/consuming exactly one item)." },
-    { "id": "p2l3-019", "question": "In the producer-consumer PThreads example, what shared variables track the bounded buffer's state?", "answer": "num (current number of elements in the buffer), add (index for the next insertion), and rem (index for the next removal), all protected by a shared mutex, with add/rem wrapping around modulo buffer size." },
-    { "id": "p2l3-020", "question": "In the producer-consumer example, why is pthread_cond_signal called after unlocking the mutex rather than before?", "answer": "Because the notification isn't conditional on further shared-state checks after the update, releasing the mutex before signaling avoids unnecessarily waking a thread that would immediately block again waiting for the mutex — helping avoid the spurious/wasteful wakeup pattern discussed earlier in the course." }
+    {
+      "id": "p2l3-v2-001",
+      "question": "What does \"PThreads\" stand for?",
+      "answer": "POSIX Threads",
+      "memory": "The de facto thread standard on UNIX systems."
+    },
+    {
+      "id": "p2l3-v2-002",
+      "question": "What does POSIX stand for?",
+      "answer": "Portable Operating System Interface",
+      "memory": "\"Portable\" = its goal is interoperability across OSes."
+    },
+    {
+      "id": "p2l3-v2-003",
+      "question": "What is the goal of the POSIX standard?",
+      "answer": "Define a common system-call interface so programs are portable across OSes."
+    },
+    {
+      "id": "p2l3-v2-004",
+      "question": "What PThreads data type represents a thread?",
+      "answer": "pthread_t"
+    },
+    {
+      "id": "p2l3-v2-005",
+      "question": "What does a pthread_t hold?",
+      "answer": "The thread's ID, execution state, and other info (mostly managed by the library)."
+    },
+    {
+      "id": "p2l3-v2-006",
+      "question": "Birrell's fork ≈ which PThreads call?",
+      "answer": "pthread_create()"
+    },
+    {
+      "id": "p2l3-v2-007",
+      "question": "Birrell's join ≈ which PThreads call?",
+      "answer": "pthread_join()"
+    },
+    {
+      "id": "p2l3-v2-008",
+      "question": "pthread_create(____, attr, start_routine, arg) — what is the first argument?",
+      "answer": "A pointer to the pthread_t that will be filled in for the new thread.",
+      "memory": "Signature: pthread_create(&tid, &attr, func, arg)"
+    },
+    {
+      "id": "p2l3-v2-009",
+      "question": "What does pthread_create() return?",
+      "answer": "A status code: success or failure.",
+      "memory": "Always check it. Non-zero = error."
+    },
+    {
+      "id": "p2l3-v2-010",
+      "question": "What two arguments does pthread_join() take?",
+      "answer": "The thread to join and a pointer to receive its return status/result."
+    },
+    {
+      "id": "p2l3-v2-011",
+      "question": "What does passing NULL as the attr argument to pthread_create() do?",
+      "answer": "Uses PThreads' default attributes."
+    },
+    {
+      "id": "p2l3-v2-012",
+      "question": "Name 3 things you can set with pthread_attr_t.",
+      "answer": "Any 3 of: stack size, scheduling policy/priority, scope, inheritance, joinable/detached."
+    },
+    {
+      "id": "p2l3-v2-013",
+      "question": "Which calls create and free a pthread_attr_t?",
+      "answer": "pthread_attr_init() / pthread_attr_destroy()"
+    },
+    {
+      "id": "p2l3-v2-014",
+      "question": "Which calls read or change a single thread attribute?",
+      "answer": "pthread_attr_set*() / pthread_attr_get*() (e.g., pthread_attr_setdetachstate)"
+    },
+    {
+      "id": "p2l3-v2-015",
+      "question": "By default, are PThreads joinable or detached?",
+      "answer": "Joinable"
+    },
+    {
+      "id": "p2l3-v2-016",
+      "question": "What can happen if a parent thread exits before joining its joinable children?",
+      "answer": "The children can become zombies (finished, but never reaped).",
+      "memory": "Joinable = the parent must stay and \"pick up\" its kids."
+    },
+    {
+      "id": "p2l3-v2-017",
+      "question": "What is a detached thread?",
+      "answer": "A thread that cannot be joined; it keeps running even if its parent exits.",
+      "memory": "Detached = the kid has moved out. No one waits for it."
+    },
+    {
+      "id": "p2l3-v2-018",
+      "question": "Which PThreads mechanism is NOT in Birrell's model?",
+      "answer": "Detached threads"
+    },
+    {
+      "id": "p2l3-v2-019",
+      "question": "How do you detach an already-created thread?",
+      "answer": "pthread_detach(thread)"
+    },
+    {
+      "id": "p2l3-v2-020",
+      "question": "What attribute value makes a thread start out detached?",
+      "answer": "PTHREAD_CREATE_DETACHED (set via pthread_attr_setdetachstate)"
+    },
+    {
+      "id": "p2l3-v2-021",
+      "question": "How does a parent of detached threads exit without killing them?",
+      "answer": "It calls pthread_exit()."
+    },
+    {
+      "id": "p2l3-v2-022",
+      "question": "What does PTHREAD_SCOPE_SYSTEM scope mean for a new thread?",
+      "answer": "It competes equally for CPU with every other thread in the system."
+    },
+    {
+      "id": "p2l3-v2-023",
+      "question": "Which header must a PThreads program include?",
+      "answer": "pthread.h"
+    },
+    {
+      "id": "p2l3-v2-024",
+      "question": "Which compiler flag links the PThreads library?",
+      "answer": "-lpthread (or, better on some platforms, -pthread)",
+      "memory": "-pthread = link the library AND configure compilation for threads."
+    },
+    {
+      "id": "p2l3-v2-025",
+      "question": "What happens if you forget to link the PThreads library?",
+      "answer": "Some errors may not show at compile time, but the program still fails."
+    },
+    {
+      "id": "p2l3-v2-026",
+      "question": "In Example 1, 4 threads each run hello() (prints \"Hello Thread\"). What is the output?",
+      "answer": "\"Hello Thread\" printed 4 times."
+    },
+    {
+      "id": "p2l3-v2-027",
+      "question": "Why might threads print in a different order than they were created?",
+      "answer": "The scheduler, not creation order, decides when each thread runs."
+    },
+    {
+      "id": "p2l3-v2-028",
+      "question": "In Example 2, the loop passes &i to each thread. Why can \"Thread number 1\" go missing?",
+      "answer": "main incremented the shared i before thread 1 read it, so two threads saw i = 2.",
+      "memory": "Every thread gets the SAME address → they see whatever i is at read time."
+    },
+    {
+      "id": "p2l3-v2-029",
+      "question": "What is a data race (race condition)?",
+      "answer": "One thread reads a variable while another thread is modifying it."
+    },
+    {
+      "id": "p2l3-v2-030",
+      "question": "How was the Example 2 race on i fixed?",
+      "answer": "Copy i into tNum[i] and pass &tNum[i], giving each thread its own private copy.",
+      "memory": "Rule: never pass the address of a loop variable to a thread."
+    },
+    {
+      "id": "p2l3-v2-031",
+      "question": "What PThreads type represents a mutex?",
+      "answer": "pthread_mutex_t"
+    },
+    {
+      "id": "p2l3-v2-032",
+      "question": "How does PThreads lock differ from Birrell's lock block?",
+      "answer": "PThreads uses explicit pthread_mutex_lock()/unlock() calls, not a { } block.",
+      "memory": "Birrell: Lock(m) { ... } — the braces unlock for you.\nPThreads: lock(); ...; unlock(); — you must unlock yourself."
+    },
+    {
+      "id": "p2l3-v2-033",
+      "question": "What must you do before using a pthread_mutex_t?",
+      "answer": "Initialize it: pthread_mutex_init() or PTHREAD_MUTEX_INITIALIZER."
+    },
+    {
+      "id": "p2l3-v2-034",
+      "question": "By default, can a PThreads mutex be shared between processes?",
+      "answer": "No. It is private to one process unless you set the attribute to share it."
+    },
+    {
+      "id": "p2l3-v2-035",
+      "question": "How does pthread_mutex_trylock() differ from pthread_mutex_lock()?",
+      "answer": "If the mutex is taken, trylock returns immediately instead of blocking.",
+      "memory": "trylock = knock on the door; don't wait on the porch."
+    },
+    {
+      "id": "p2l3-v2-036",
+      "question": "Which call frees a mutex when you're done?",
+      "answer": "pthread_mutex_destroy()"
+    },
+    {
+      "id": "p2l3-v2-037",
+      "question": "Where must mutexes be declared so every thread can see them?",
+      "answer": "As global variables."
+    },
+    {
+      "id": "p2l3-v2-038",
+      "question": "How do you prevent deadlock when a thread needs several mutexes?",
+      "answer": "All threads lock the mutexes in the same global order."
+    },
+    {
+      "id": "p2l3-v2-039",
+      "question": "Why is a forgotten unlock so easy to miss with PThreads?",
+      "answer": "Lock and unlock are separate calls, and the compiler won't warn you."
+    },
+    {
+      "id": "p2l3-v2-040",
+      "question": "What PThreads type represents a condition variable?",
+      "answer": "pthread_cond_t"
+    },
+    {
+      "id": "p2l3-v2-041",
+      "question": "What two arguments does pthread_cond_wait() take?",
+      "answer": "The condition variable and its mutex."
+    },
+    {
+      "id": "p2l3-v2-042",
+      "question": "What does pthread_cond_wait() do to the mutex?",
+      "answer": "Releases it while waiting and reacquires it before returning.",
+      "memory": "Same semantics as Birrell's Wait(m, c)."
+    },
+    {
+      "id": "p2l3-v2-043",
+      "question": "pthread_cond_signal() vs pthread_cond_broadcast()?",
+      "answer": "signal wakes one waiting thread; broadcast wakes all of them."
+    },
+    {
+      "id": "p2l3-v2-044",
+      "question": "Unsure whether to signal or broadcast? What's the safe default?",
+      "answer": "broadcast (it is correct, but slower)."
+    },
+    {
+      "id": "p2l3-v2-045",
+      "question": "Which calls create and free a condition variable?",
+      "answer": "pthread_cond_init() / pthread_cond_destroy()"
+    },
+    {
+      "id": "p2l3-v2-046",
+      "question": "Why might you signal/broadcast AFTER unlocking the mutex?",
+      "answer": "Signaling doesn't need the mutex, and it avoids spurious wake-ups."
+    },
+    {
+      "id": "p2l3-v2-047",
+      "question": "Producer/consumer: what do num, add, and rem track in the shared buffer?",
+      "answer": "num = item count; add = next slot to write; rem = next slot to read."
+    },
+    {
+      "id": "p2l3-v2-048",
+      "question": "Producer/consumer: when does the producer wait, and on which CV?",
+      "answer": "When num == BUFFER_SIZE (buffer full); it waits on c_prod."
+    },
+    {
+      "id": "p2l3-v2-049",
+      "question": "Producer/consumer: when does the consumer wait, and on which CV?",
+      "answer": "When num == 0 (buffer empty); it waits on c_cons."
+    },
+    {
+      "id": "p2l3-v2-050",
+      "question": "Why does the producer use signal (not broadcast) after adding an item?",
+      "answer": "Only one item was added, so only one consumer can make progress."
+    },
+    {
+      "id": "p2l3-v2-051",
+      "question": "How do add and rem wrap around the fixed-size buffer?",
+      "answer": "Modulo: add = (add + 1) % BUFFER_SIZE",
+      "memory": "Circular buffer."
+    }
   ]
 }

@@ -2,124 +2,441 @@
   "title": "P3L5: IO Management",
   "cards": [
     {
-      "id": "p3l5-001",
-      "question": "What are the three categories of control registers found on an I/O device, and what does each do?",
-      "answer": "Command registers (CPU tells the device what to do), data registers (used to move data in/out of the device), and status registers (CPU reads these to find out what's happening on the device)."
+      "id": "p3l5-v2-001",
+      "question": "Toy shop analogy: what are the 3 parallels between a shipping department and OS I/O management?",
+      "answer": "Protocols (interfaces), dedicated handlers (drivers/interrupt handlers), and details hidden from core work (abstraction)."
     },
     {
-      "id": "p3l5-002",
-      "question": "Besides control registers, what other internal components does a device have?",
-      "answer": "A microcontroller (the device's own CPU that controls what actually happens on the device), some on-device memory, and other device-specific processing logic/chips (e.g. analog-to-digital converters for network media)."
+      "id": "p3l5-v2-002",
+      "question": "Input, output, or both: keyboard and microphone?",
+      "answer": "Input"
     },
     {
-      "id": "p3l5-003",
-      "question": "What is PCI, and how does PCI Express compare to the older PCI/PCI-X standards?",
-      "answer": "PCI (Peripheral Component Interconnect) is a standard interconnect for attaching devices to the CPU complex. PCI Express has more bandwidth, lower access latency, and supports more devices than the original PCI or PCI-X (PCI Extended) buses."
+      "id": "p3l5-v2-003",
+      "question": "Input, output, or both: speaker and display?",
+      "answer": "Output"
     },
     {
-      "id": "p3l5-004",
-      "question": "What is a device driver, and why do operating systems standardize device driver interfaces via a framework?",
-      "answer": "A device driver is a device-specific software component responsible for all aspects of device access, management, and control (passing requests, handling errors/events, device configuration). Standardizing the interface lets manufacturers build drivers independently while achieving device independence (OS isn't tied to one device) and device diversity (adding a new device just means adding a new driver)."
+      "id": "p3l5-v2-004",
+      "question": "Input, output, or both: hard disk, NIC, and flash card?",
+      "answer": "Both"
     },
     {
-      "id": "p3l5-005",
-      "question": "What are the three broad categories devices are grouped into, and how do they differ?",
-      "answer": "Block devices (e.g. disks) transfer data in fixed-size blocks that can be directly/randomly accessed; character devices (e.g. keyboards) support a serial get-a-character/put-a-character interface; network devices are in between, delivering variable-sized chunks of data rather than fixed blocks or single characters."
+      "id": "p3l5-v2-005",
+      "question": "What 3 kinds of control registers does a device expose to the CPU?",
+      "answer": "Command, data, and status registers."
     },
     {
-      "id": "p3l5-006",
-      "question": "How does Unix/Linux represent I/O devices, and where do they appear?",
-      "answer": "Devices are represented using the file abstraction so existing file mechanisms (read/write) can be reused to access them; on Unix-like systems they appear as special files under the /dev directory (backed by special filesystems like devfs/tmpfs rather than the real on-disk filesystem)."
+      "id": "p3l5-v2-006",
+      "question": "What is a device's microcontroller?",
+      "answer": "The device's own \"CPU\": it controls the operations on the device."
     },
     {
-      "id": "p3l5-007",
-      "question": "What do the pseudo-devices /dev/null and /dev/random do?",
-      "answer": "/dev/null accepts and discards all output without producing anything (used to discard a process's output). /dev/random (and the more robust /dev/urandom) produces a variable-length stream of pseudo-random numbers/bytes."
+      "id": "p3l5-v2-007",
+      "question": "How do devices connect to the CPU complex?",
+      "answer": "Through a device controller on a CPU-device interconnect (e.g., PCI)."
     },
     {
-      "id": "p3l5-008",
-      "question": "What is memory-mapped I/O, and what role do Base Address Registers (BARs) play?",
-      "answer": "Memory-mapped I/O maps a device's control registers to specific physical memory addresses, so CPU writes to those addresses are routed by the PCI controller to the device. Base Address Registers configure how much memory and which starting address is reserved for a given device (set up during boot via the PCI configuration protocol)."
+      "id": "p3l5-v2-008",
+      "question": "What does PCI stand for?",
+      "answer": "Peripheral Component Interconnect"
     },
     {
-      "id": "p3l5-009",
-      "question": "What is the I/O port model of device access?",
-      "answer": "An alternative to memory-mapped I/O where the CPU uses special instructions (e.g. x86 in/out) that specify a target I/O port and a value to read from or write to the device."
+      "id": "p3l5-v2-009",
+      "question": "How does PCI Express compare with PCI-X?",
+      "answer": "More bandwidth, lower latency, and more devices; PCI-X stays for backward compatibility."
     },
     {
-      "id": "p3l5-010",
-      "question": "What is the fundamental tradeoff between interrupts and polling for CPU-device communication?",
-      "answer": "Interrupts let the CPU react immediately when the device has data/events but incur overhead from the interrupt handling routine (mask setting/resetting, cache pollution). Polling lets the OS choose convenient times to check status (reducing some overhead) but can add delay in detecting events, and continuous polling wastes CPU cycles; the best choice depends on the device, throughput/latency goals, and load characteristics."
+      "id": "p3l5-v2-010",
+      "question": "Besides PCI, name 2 other buses mentioned.",
+      "answer": "SCSI bus (disks) and a peripheral bus (keyboards)."
     },
     {
-      "id": "p3l5-011",
-      "question": "What is Programmed I/O (PIO), and what is its main cost drawback?",
-      "answer": "PIO is a device access method requiring no extra hardware: the CPU writes commands to command registers and moves data itself through the device's data registers, one CPU store instruction at a time. Its drawback is that if the device's register/bus width is small relative to the data size, many CPU store operations are needed (e.g. ~189 accesses to send a 1500-byte packet over an 8-byte-wide interface)."
+      "id": "p3l5-v2-011",
+      "question": "What is a device driver?",
+      "answer": "Device-specific OS software that handles all access, management, and control of a device."
     },
     {
-      "id": "p3l5-012",
-      "question": "How does DMA (Direct Memory Access) reduce CPU overhead compared to PIO, and what is required for it to work?",
-      "answer": "With DMA, the CPU writes a command to the device and configures a DMA controller with the memory address and size of the data buffer; the DMA controller then moves the data directly between memory and device, requiring only ~2 CPU operations instead of many store instructions. The memory buffer involved must be pinned (non-swappable) in physical memory until the transfer completes, since the DMA controller can only access physical memory."
+      "id": "p3l5-v2-012",
+      "question": "Who writes device drivers?",
+      "answer": "The device manufacturers."
     },
     {
-      "id": "p3l5-013",
-      "question": "When is PIO preferable to DMA, and vice versa?",
-      "answer": "For small transfers (e.g. keyboard keystrokes, small packets), PIO is better because configuring the DMA controller costs more cycles than just doing a few extra store instructions. For larger transfers, DMA is better since the one-time DMA setup cost is outweighed by avoiding many repeated store instructions."
+      "id": "p3l5-v2-013",
+      "question": "What 2 things does the OS's standard driver framework achieve?",
+      "answer": "Device independence and device diversity."
     },
     {
-      "id": "p3l5-014",
-      "question": "What is OS bypass, and what capability must a device have to support it safely with multiple processes?",
-      "answer": "OS bypass lets a user process access a device's registers/memory directly (via a user-level driver/library) without going through the kernel for the actual data path, though the OS still configures the initial mapping and retains coarse-grained control. The device needs enough separate registers so some can be mapped per-process for data movement while others remain reserved for OS control; with multiple processes, the device itself must also perform demultiplexing (e.g. inspecting packet port numbers) to route data to the correct process."
+      "id": "p3l5-v2-014",
+      "question": "What are the 3 main device categories?",
+      "answer": "Block, character, and network."
     },
     {
-      "id": "p3l5-015",
-      "question": "What is the difference between synchronous and asynchronous I/O from the calling thread's perspective?",
-      "answer": "In synchronous I/O, the calling thread is blocked (placed on a device wait queue) until the response is available. In asynchronous I/O, the process continues immediately after issuing the request and later either checks for results or is notified when the operation completes."
+      "id": "p3l5-v2-015",
+      "question": "What makes a block device a block device?",
+      "answer": "Data moves in blocks, and any block can be accessed directly (random access).",
+      "memory": "Block = a book (jump to any page). Character = a stream (one char at a time)."
     },
     {
-      "id": "p3l5-016",
-      "question": "Describe the layered stack a read/write request traverses in the block device (storage) path.",
-      "answer": "Application uses the POSIX API (read/write) -> kernel file system (maps file offset to a specific device and block) -> generic block layer (standardizes block operations and interprets driver-specific errors/responses) -> device driver (speaks the device/protocol-specific commands) -> the physical block device."
+      "id": "p3l5-v2-016",
+      "question": "What interface do character devices support?",
+      "answer": "Get/put a character (a serial stream)."
     },
     {
-      "id": "p3l5-017",
-      "question": "What problem does the Virtual File System (VFS) layer solve, and what API do applications still use above it?",
-      "answer": "VFS hides from applications the details of which underlying file system(s) are in use, whether files span multiple local devices, or are served remotely over the network. Applications still interact through a standard API like POSIX, while VFS defines the abstractions every underlying file system must implement."
+      "id": "p3l5-v2-017",
+      "question": "How are network devices different from block and character devices?",
+      "answer": "They move a stream of variable-size data chunks."
     },
     {
-      "id": "p3l5-018",
-      "question": "What are the four key abstractions maintained by the Virtual File System?",
-      "answer": "File (identified by a file descriptor once opened), inode (persistent per-file structure listing its data blocks plus metadata like permissions/size), dentry (directory entry object, one per path component, cached in the in-memory dentry cache), and superblock (per-filesystem metadata describing layout on the storage device)."
+      "id": "p3l5-v2-018",
+      "question": "How does UNIX represent devices?",
+      "answer": "As special files under /dev."
     },
     {
-      "id": "p3l5-019",
-      "question": "In Unix-like systems, what actually is a directory, and what data structure helps speed up path traversal?",
-      "answer": "A directory is really just a file whose contents map file names to inodes. The dentry (directory entry) cache stores previously resolved path components in memory so repeated lookups don't require re-traversing and re-reading every directory in a path."
+      "id": "p3l5-v2-019",
+      "question": "Which special file systems back /dev in Linux?",
+      "answer": "tmpfs and devfs"
     },
     {
-      "id": "p3l5-020",
-      "question": "In the ext2 file system, what information does the superblock store, and what are the bitmaps used for?",
-      "answer": "The superblock (first block of each block group) stores info like number of inodes, number of disk blocks, and the location of free blocks; the group descriptor adds bitmap locations, free inode/block counts, and directory counts. Bitmaps let allocators quickly determine which inodes/data blocks in a block group are free versus in use."
+      "id": "p3l5-v2-020",
+      "question": "What do \"cat file > /dev/lp0\"-style commands do?",
+      "answer": "Print to the first line printer."
     },
     {
-      "id": "p3l5-021",
-      "question": "Why do inodes use indirect pointers instead of only direct block pointers, and what is the tradeoff?",
-      "answer": "Direct pointers alone (e.g. 32 pointers x 1KB blocks = 32KB) severely limit maximum file size while keeping the inode small. Indirect pointers point to a block full of further pointers (single, double, triple), dramatically increasing addressable file size, but the tradeoff is slower access: e.g. a double-indirect access may require up to 4 disk accesses instead of 2 for a direct pointer."
+      "id": "p3l5-v2-021",
+      "question": "Which pseudo-device discards all output?",
+      "answer": "/dev/null",
+      "memory": "The black hole."
     },
     {
-      "id": "p3l5-022",
-      "question": "What four disk access optimization techniques do file systems commonly use to reduce overhead?",
-      "answer": "(1) Buffer caching in main memory to avoid repeated disk access, with periodic flushing (e.g. via fsync); (2) I/O scheduling, which reorders disk operations to maximize sequential and minimize random (costly) disk-head movement; (3) prefetching additional blocks on the assumption of locality to increase cache hit rate; (4) journaling, which writes updates to a sequential log first (avoiding random writes) before later committing them to their proper on-disk location, protecting against crash data loss."
+      "id": "p3l5-v2-022",
+      "question": "Which pseudo-device produces pseudo-random bytes?",
+      "answer": "/dev/random (and /dev/urandom)"
     },
     {
-      "id": "p3l5-023",
-      "question": "How does an I/O scheduler reduce disk-head movement, using the example of writes to blocks 25 and 17 issued while the head is at position 15?",
-      "answer": "The I/O scheduler reorders pending requests by physical proximity rather than issue order: it would issue the write to block 17 before block 25, since the head is closer to 17, minimizing seek distance and maximizing sequential access."
+      "id": "p3l5-v2-023",
+      "question": "What are hda/sda and tty in /dev?",
+      "answer": "hda/sda = disk drives (HDD, SSD, CD-ROM); tty = terminals."
     },
     {
-      "id": "p3l5-024",
-      "question": "What is the generic block layer, and why was it introduced into the block device stack?",
-      "answer": "The generic block layer sits between the file system and device drivers to provide a standard interface across all types of block devices (SCSI, hard disk, USB, SSD, etc.), masking differences such as how each device reports errors, so the file system doesn't need device-specific logic."
+      "id": "p3l5-v2-024",
+      "question": "What is memory-mapped I/O?",
+      "answer": "Device registers appear as physical memory addresses that the CPU reads and writes.",
+      "memory": "Device registers disguised as memory addresses."
+    },
+    {
+      "id": "p3l5-v2-025",
+      "question": "What configures a device's memory-mapped I/O region?",
+      "answer": "Base Address Registers (BARs), set up at boot via PCI configuration."
+    },
+    {
+      "id": "p3l5-v2-026",
+      "question": "What is the I/O port model?",
+      "answer": "Special CPU instructions (x86 in/out) that name a device port directly."
+    },
+    {
+      "id": "p3l5-v2-027",
+      "question": "What are the 2 ways a device can notify the CPU?",
+      "answer": "Interrupts, or the CPU polling the status register."
+    },
+    {
+      "id": "p3l5-v2-028",
+      "question": "What are the costs of interrupts?",
+      "answer": "Handler overhead (masking, etc.) and cache pollution."
+    },
+    {
+      "id": "p3l5-v2-029",
+      "question": "What is the benefit of interrupts?",
+      "answer": "Immediate notification when the device has something."
+    },
+    {
+      "id": "p3l5-v2-030",
+      "question": "What are the trade-offs of polling?",
+      "answer": "The OS picks convenient times (less cache pollution), but it adds delay; constant polling wastes CPU."
+    },
+    {
+      "id": "p3l5-v2-031",
+      "question": "What is Programmed I/O (PIO)?",
+      "answer": "The CPU writes commands and moves the data itself through device registers."
+    },
+    {
+      "id": "p3l5-v2-032",
+      "question": "What hardware does PIO need?",
+      "answer": "Nothing extra beyond the basic interconnect."
+    },
+    {
+      "id": "p3l5-v2-033",
+      "question": "PIO: sending a 1500 B packet over an 8 B bus takes how many CPU accesses?",
+      "answer": "189: 1 command + ~188 data stores."
+    },
+    {
+      "id": "p3l5-v2-034",
+      "question": "What is DMA?",
+      "answer": "Direct Memory Access: a DMA controller moves the data between memory and the device.",
+      "memory": "PIO = the CPU carries every box. DMA = hire a mover and just give the address."
+    },
+    {
+      "id": "p3l5-v2-035",
+      "question": "DMA: what does the CPU do to send a packet?",
+      "answer": "Write 1 command and configure the DMA controller with the buffer address and size."
+    },
+    {
+      "id": "p3l5-v2-036",
+      "question": "When is PIO better than DMA?",
+      "answer": "For small transfers, because configuring DMA costs more than a few stores."
+    },
+    {
+      "id": "p3l5-v2-037",
+      "question": "What must be true of a DMA buffer?",
+      "answer": "It must be pinned in physical memory (non-swappable) until the transfer completes."
+    },
+    {
+      "id": "p3l5-v2-038",
+      "question": "Quiz (1-cycle store, 5-cycle DMA setup, 8 B bus): best access method for a keyboard?",
+      "answer": "PIO (tiny transfers)"
+    },
+    {
+      "id": "p3l5-v2-039",
+      "question": "Quiz (1-cycle store, 5-cycle DMA setup, 8 B bus): best access method for a NIC?",
+      "answer": "It depends: PIO for packets needing fewer than 5 stores, DMA for larger ones."
+    },
+    {
+      "id": "p3l5-v2-040",
+      "question": "What is the typical path from a process to a device?",
+      "answer": "syscall → kernel stack (e.g., TCP/IP or file system) → device driver → device."
+    },
+    {
+      "id": "p3l5-v2-041",
+      "question": "What is OS bypass?",
+      "answer": "A user process accesses the device directly (via a user-level driver) after the OS maps its registers.",
+      "memory": "The OS sets up the road, then gets out of the way."
+    },
+    {
+      "id": "p3l5-v2-042",
+      "question": "With OS bypass, what control does the OS keep?",
+      "answer": "Coarse-grained control: enable/disable the device, grant permissions."
+    },
+    {
+      "id": "p3l5-v2-043",
+      "question": "What device feature does OS bypass require?",
+      "answer": "Enough registers to give some to user processes while keeping control registers for the OS."
+    },
+    {
+      "id": "p3l5-v2-044",
+      "question": "With OS bypass, who demultiplexes incoming data to processes?",
+      "answer": "The device itself (e.g., the NIC reads packet port numbers)."
+    },
+    {
+      "id": "p3l5-v2-045",
+      "question": "What happens to a thread on synchronous I/O?",
+      "answer": "It blocks on the device's wait queue until the response arrives."
+    },
+    {
+      "id": "p3l5-v2-046",
+      "question": "What happens to a thread on asynchronous I/O?",
+      "answer": "It continues; it later checks for results or is notified when they're ready."
+    },
+    {
+      "id": "p3l5-v2-047",
+      "question": "What abstraction do applications use for block storage?",
+      "answer": "Files"
+    },
+    {
+      "id": "p3l5-v2-048",
+      "question": "What does a file system do?",
+      "answer": "Maps file operations to device blocks, including location and permission checks."
+    },
+    {
+      "id": "p3l5-v2-049",
+      "question": "What standard API do applications use for files?",
+      "answer": "POSIX (open, read, write, …)"
+    },
+    {
+      "id": "p3l5-v2-050",
+      "question": "What does the generic block layer do?",
+      "answer": "Presents one standard interface to all block devices, hiding driver differences (errors, protocols)."
+    },
+    {
+      "id": "p3l5-v2-051",
+      "question": "What does a block-device read travel through?",
+      "answer": "POSIX API → file system → generic block layer → driver → device."
+    },
+    {
+      "id": "p3l5-v2-052",
+      "question": "What is the Virtual File System (VFS)?",
+      "answer": "A layer that hides which underlying file system(s) or devices (local or remote) hold the files."
+    },
+    {
+      "id": "p3l5-v2-053",
+      "question": "Name the 4 key VFS abstractions.",
+      "answer": "File, inode, dentry, superblock."
+    },
+    {
+      "id": "p3l5-v2-054",
+      "question": "How does the OS represent an open file?",
+      "answer": "With a file descriptor, created on open."
+    },
+    {
+      "id": "p3l5-v2-055",
+      "question": "What is an inode?",
+      "answer": "A persistent per-file index: list of data blocks + metadata (permissions, size, lock).",
+      "memory": "inode = index node: a file's table of contents of block addresses."
+    },
+    {
+      "id": "p3l5-v2-056",
+      "question": "Why is the inode needed?",
+      "answer": "A file's blocks needn't be contiguous on disk."
+    },
+    {
+      "id": "p3l5-v2-057",
+      "question": "What is a directory in UNIX?",
+      "answer": "A file whose contents are file names and their inodes."
+    },
+    {
+      "id": "p3l5-v2-058",
+      "question": "What is a dentry?",
+      "answer": "A directory entry: one path component (e.g., /, /users, /users/ada).",
+      "memory": "dentry cache = remembered directions, so you don't re-walk the whole path."
+    },
+    {
+      "id": "p3l5-v2-059",
+      "question": "What is the dentry cache for?",
+      "answer": "Avoid re-walking the path to find files in recently visited directories."
+    },
+    {
+      "id": "p3l5-v2-060",
+      "question": "Is the dentry persistent on disk?",
+      "answer": "No. It is soft state kept only in memory."
+    },
+    {
+      "id": "p3l5-v2-061",
+      "question": "What is the superblock?",
+      "answer": "File-system-specific map of how data, inodes, and free blocks are laid out on the device.",
+      "memory": "Superblock = the map of the whole file system."
+    },
+    {
+      "id": "p3l5-v2-062",
+      "question": "Which VFS structures live on disk?",
+      "answer": "Files, inodes, and the superblock (not dentries)."
+    },
+    {
+      "id": "p3l5-v2-063",
+      "question": "What does ext2 stand for?",
+      "answer": "Second Extended Filesystem"
+    },
+    {
+      "id": "p3l5-v2-064",
+      "question": "What does ext2 block 0 hold?",
+      "answer": "It isn't used by Linux (often boot code)."
+    },
+    {
+      "id": "p3l5-v2-065",
+      "question": "What 5 parts make up an ext2 block group?",
+      "answer": "Superblock, group descriptor, bitmaps, inodes, data blocks."
+    },
+    {
+      "id": "p3l5-v2-066",
+      "question": "What does the ext2 group descriptor contain?",
+      "answer": "Bitmap locations, free-inode count, and directory count."
+    },
+    {
+      "id": "p3l5-v2-067",
+      "question": "What are the ext2 bitmaps for?",
+      "answer": "Quickly finding free inodes and data blocks."
+    },
+    {
+      "id": "p3l5-v2-068",
+      "question": "How big is an ext2 inode?",
+      "answer": "128 bytes"
+    },
+    {
+      "id": "p3l5-v2-069",
+      "question": "How is a file uniquely identified in the VFS?",
+      "answer": "By its inode number."
+    },
+    {
+      "id": "p3l5-v2-070",
+      "question": "Pros of an inode with only a flat list of block pointers?",
+      "answer": "Easy sequential and random access."
+    },
+    {
+      "id": "p3l5-v2-071",
+      "question": "Con of an inode with only a flat list of block pointers?",
+      "answer": "Small maximum file size: 128 B inode, 4 B pointers, 1 KB blocks = 32 KB."
+    },
+    {
+      "id": "p3l5-v2-072",
+      "question": "What is an indirect pointer?",
+      "answer": "A pointer to a block full of block pointers.",
+      "memory": "A pointer to a page full of pointers: an index for your index."
+    },
+    {
+      "id": "p3l5-v2-073",
+      "question": "With 1 KB blocks and 4 B pointers, how much does a single indirect pointer cover?",
+      "answer": "256 KB (256 pointers × 1 KB)"
+    },
+    {
+      "id": "p3l5-v2-074",
+      "question": "With 1 KB blocks and 4 B pointers, how much does a double indirect pointer cover?",
+      "answer": "64 MB (256 × 256 × 1 KB)"
+    },
+    {
+      "id": "p3l5-v2-075",
+      "question": "What is the cost of indirect pointers?",
+      "answer": "More disk accesses: up to 4 with double indirect, vs 2 with direct."
+    },
+    {
+      "id": "p3l5-v2-076",
+      "question": "Quiz: 12 direct + single, double, and triple indirect pointers; 4 B pointers; 1 KB blocks. What is the max file size?",
+      "answer": "≈ 16 GB",
+      "memory": "(12 + 256 + 256² + 256³) × 1 KB"
+    },
+    {
+      "id": "p3l5-v2-077",
+      "question": "Quiz: the same inode with 8 KB blocks. What is the max file size?",
+      "answer": "≈ 64 TB (2K pointers per block)"
+    },
+    {
+      "id": "p3l5-v2-078",
+      "question": "What is the buffer cache?",
+      "answer": "An in-memory cache of file data that reduces disk accesses."
+    },
+    {
+      "id": "p3l5-v2-079",
+      "question": "Which syscall flushes cached file changes to disk?",
+      "answer": "fsync()"
+    },
+    {
+      "id": "p3l5-v2-080",
+      "question": "What does I/O scheduling do?",
+      "answer": "Reorders disk requests to maximize sequential access (e.g., with the head at 15, write 17 before 25)."
+    },
+    {
+      "id": "p3l5-v2-081",
+      "question": "What is prefetching?",
+      "answer": "Reading extra nearby blocks on an access, exploiting locality.",
+      "memory": "You asked for block 5, so blocks 6 and 7 come along too."
+    },
+    {
+      "id": "p3l5-v2-082",
+      "question": "What is the trade-off of prefetching?",
+      "answer": "More disk bandwidth for a higher cache hit rate (lower latency)."
+    },
+    {
+      "id": "p3l5-v2-083",
+      "question": "What is journaling?",
+      "answer": "Writing updates sequentially to a log first, then applying them to their real locations later.",
+      "memory": "Scribble it in a notebook now (fast, sequential); file it properly later."
+    },
+    {
+      "id": "p3l5-v2-084",
+      "question": "Why journal instead of only buffering writes?",
+      "answer": "Buffered writes are lost on a crash; the log persists them with sequential I/O."
+    },
+    {
+      "id": "p3l5-v2-085",
+      "question": "Which Linux file systems use journaling?",
+      "answer": "ext3 and ext4"
     }
   ]
 }

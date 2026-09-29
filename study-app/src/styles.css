@@ -290,6 +290,20 @@ h1, h2, h3 {
 }
 
 .flashcard-face.back {
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.memory {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-dim);
+  white-space: pre-line;
+  max-width: 560px;
+  text-align: center;
+}
+
+.flashcard-face.back {
   transform: rotateY(180deg);
   background: #244868;
   border-color: var(--accent-strong);

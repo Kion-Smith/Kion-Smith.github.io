@@ -1,33 +1,410 @@
 {
   "title": "P3L6: Virtualization",
   "cards": [
-    { "id": "p3l6-001", "question": "According to Popek and Goldberg's 1974 definition, what is a virtual machine?", "answer": "An efficient, isolated duplicate of the real machine." },
-    { "id": "p3l6-002", "question": "What are the three essential characteristics a Virtual Machine Monitor (VMM) must provide, per Popek and Goldberg?", "answer": "Fidelity (an environment essentially identical to the original machine), performance (programs run with at most a minor decrease in speed), and safety/resource control (the VMM is in complete control of system resources)." },
-    { "id": "p3l6-003", "question": "What is the difference between a hypervisor/VMM and a virtual machine (VM)?", "answer": "The VMM (hypervisor) is the virtualization layer that manages physical resources and provides isolation; a VM (also called a guest or domain) is an OS plus its applications running on the virtual resources the VMM presents." },
-    { "id": "p3l6-004", "question": "Why did the quiz answer say VirtualBox is a virtualization technology but the Java Virtual Machine and a GameBoy emulator are not, per the Popek/Goldberg definition?", "answer": "JVM is a language runtime providing portability, very different from the underlying physical machine, and an emulator (like a GameBoy emulator) emulates a different hardware platform than the one it runs on. VirtualBox presents hardware essentially identical to the real underlying platform, satisfying the 'duplicate of the real machine' requirement." },
-    { "id": "p3l6-005", "question": "List at least four benefits of virtualization discussed in the lecture.", "answer": "Consolidation/cost efficiency, easier migration and cloning of VMs (improving availability and reliability), fault/security containment within a VM, a useful platform for OS research, and affordable support for legacy operating systems." },
-    { "id": "p3l6-006", "question": "Why wasn't virtualization widely used from the 1960s through the 1990s despite existing since IBM mainframes?", "answer": "Mainframes weren't ubiquitous, and commodity x86 hardware was cheap, so it was simpler to just buy more machines than to make multiple OSes coexist on shared hardware." },
-    { "id": "p3l6-007", "question": "What data center trends in the early 2000s renewed interest in virtualization?", "answer": "Servers were badly underutilized (10-20% utilization), data centers had grown too large, requiring more system admins, and companies faced high electricity/cooling bills — driving up operating expenses relative to capital expenses." },
-    { "id": "p3l6-008", "question": "What are the two main virtualization models, and what are they also called?", "answer": "Bare-metal (hypervisor-based), also called type 1, where the hypervisor runs directly on hardware; and Hosted, also called type 2, where a full host OS manages hardware and runs a VMM module." },
-    { "id": "p3l6-009", "question": "In the bare-metal (Xen-style) model, how are device drivers typically handled, and what is dom0?", "answer": "Rather than the hypervisor managing every device itself, a privileged service VM (dom0 in Xen) runs a standard OS with full hardware access and runs the device drivers and management tasks; guest VMs are domUs." },
-    { "id": "p3l6-010", "question": "How does KVM implement virtualization, and what role does QEMU play?", "answer": "KVM is a kernel module in a Linux host OS (the hosted/type 2 model) that, combined with the QEMU hardware emulator running in 'virtualizer' mode, lets guest VMs use the real underlying x86 hardware directly, with the KVM module/host OS intervening only on certain critical instructions or I/O." },
-    { "id": "p3l6-011", "question": "What four virtualization requirements were identified in the lecture (all correct answers to the requirements quiz)?", "answer": "Present a virtual platform interface to guest VMs; provide isolation across guest VMs; protect the guest OS from its own applications; and protect the hypervisor/VMM from the guest OS." },
-    { "id": "p3l6-012", "question": "In the classic x86 ring model, which ring has the most privilege and which the least, and where do the OS and applications normally sit natively?", "answer": "Ring 0 has the highest privilege (full hardware/instruction access); ring 3 has the least. Natively, the OS runs in ring 0 and applications run in ring 3." },
-    { "id": "p3l6-013", "question": "In hardware-assisted virtualization with root/non-root modes, where do the hypervisor and guest OS run, and what causes a switch between modes?", "answer": "The hypervisor runs in root mode (ring 0); the guest OS runs in ring 0 of non-root mode with its applications in ring 3. A privileged operation by the guest causes a trap called a VMexit, switching to root mode; the hypervisor returns control via a VMentry." },
-    { "id": "p3l6-014", "question": "What is the trap-and-emulate mechanism for CPU virtualization?", "answer": "Guest instructions run directly on hardware at native speed; only when a privileged instruction is executed does the processor trap to the hypervisor, which decides whether to allow it (emulating the expected hardware behavior) or terminate the VM if illegal." },
-    { "id": "p3l6-015", "question": "Why did trap-and-emulate break down on pre-2005 x86 architectures?", "answer": "x86 had only 4 rings with no root/non-root distinction, and exactly 17 privileged instructions did not trap when issued from a non-privileged ring — they failed silently instead, so the hypervisor never learned the guest wanted a privileged operation performed (e.g., POPF/PUSHF for enabling/disabling interrupts)." },
-    { "id": "p3l6-016", "question": "What is binary translation, and who pioneered/commercialized it?", "answer": "A technique (pioneered at Stanford, commercialized as VMware) that dynamically captures blocks of guest code at runtime, inspects them for the 17 problematic instructions, and rewrites/translates only those instructions into safe equivalents, while safe blocks run natively — enabling unmodified guest OSes (full virtualization)." },
-    { "id": "p3l6-017", "question": "What is paravirtualization, and how does it differ from full virtualization/binary translation?", "answer": "Paravirtualization modifies the guest OS so it knows it's running on a hypervisor; instead of issuing operations that would fail, it makes explicit hypercalls (analogous to system calls) to request privileged operations, avoiding the runtime translation overhead of binary translation but requiring OS source modification. It was popularized by Xen." },
-    { "id": "p3l6-018", "question": "In full virtualization memory management, what three types of addresses are distinguished, and what is a shadow page table?", "answer": "Virtual (used by guest apps), physical (what the guest believes are real physical addresses), and machine (actual hardware addresses). A shadow page table is maintained by the hypervisor to map guest virtual addresses directly to machine addresses, so the hardware MMU/TLB can be used natively without a double translation on every access." },
-    { "id": "p3l6-019", "question": "How does the hypervisor keep a shadow page table in sync with the guest's page table in full virtualization?", "answer": "It write-protects the guest's page tables so any guest update to a mapping causes a trap; the hypervisor then inserts the corresponding validated mapping into the shadow page table used by hardware, transparently to the guest." },
-    { "id": "p3l6-020", "question": "How does memory virtualization differ under paravirtualization compared to full virtualization?", "answer": "The guest explicitly registers its page tables with the hypervisor (no dual/shadow page tables needed), but still lacks write permission to the hardware-used table, so updates trap to the hypervisor. Guests can batch multiple page table updates into a single hypercall to amortize trap overhead." },
-    { "id": "p3l6-021", "question": "Why is device virtualization harder than CPU or memory virtualization?", "answer": "CPU ISAs are highly standardized across vendors, but device interfaces and semantics vary widely with little standardization, making it harder to present a uniform virtual device abstraction." },
-    { "id": "p3l6-022", "question": "Describe the Passthrough (VMM bypass) device virtualization model and its main drawback.", "answer": "The VMM configures access permissions once, then the guest VM accesses the device directly, bypassing the hypervisor entirely for performance. Drawback: the device can't be easily shared among VMs, the guest needs a driver matching the exact physical device, and it breaks VM migration since device state is tightly bound to hardware." },
-    { "id": "p3l6-023", "question": "Describe the Hypervisor Direct device model and its tradeoff.", "answer": "The hypervisor intercepts every device access, translates it into a generic I/O representation, and invokes the real driver on the guest's behalf (used by VMware ESX). This decouples VMs from physical devices (easing sharing/migration) but adds latency and requires the hypervisor to include drivers for all supported devices." },
-    { "id": "p3l6-024", "question": "Describe the Split Device Driver model, including front-end and back-end drivers.", "answer": "A front-end driver in the guest VM packages device requests as messages sent to a back-end driver in the service VM/host OS, which runs the real (unmodified) device driver. This avoids emulation overhead and lets the centralized back-end enforce fairness/priority policies across VMs, but requires a paravirtualized guest with the special front-end driver." },
-    { "id": "p3l6-025", "question": "What hardware changes did AMD Pacifica and Intel VT (~2005) introduce to fix x86 virtualization problems?", "answer": "They made the 17 problematic instructions properly trap, added root/non-root protection modes (each with 4 rings), and introduced a VM Control Structure (VMCS)/VM Control Block that lets hardware track per-VM (VCPU) state and lets the hypervisor specify which operations should or shouldn't trap." },
-    { "id": "p3l6-026", "question": "What are extended page tables and tagged TLBs, and why do they matter for virtualization performance?", "answer": "Extended page tables let hardware page table entries include VM identifier info, and tagged TLBs store the VM ID alongside each TLB entry so the MMU matches both virtual address and VM ID. This avoids flushing/invalidating TLB entries on every VM context switch (world switch), making switches much more efficient." },
-    { "id": "p3l6-027", "question": "What is SR-IOV, and what does it help virtualize?", "answer": "SR-IOV (chipset/device-level technology, part of Intel's VT-d/IOV advances) supports I/O virtualization via mechanisms like multiqueue devices (multiple logical interfaces, one per VM) and better interrupt routing, enabling more direct and efficient device access for VMs." },
-    { "id": "p3l6-028", "question": "Why does the split device driver model remain relevant even after hardware-assisted device virtualization allows near-direct guest access?", "answer": "Because consolidating device requests through a centralized back-end in the service VM still allows better, more flexible sharing policies (fairness, priorities) than relying solely on whatever sharing support the physical device itself provides." }
+    {
+      "id": "p3l6-v2-001",
+      "question": "Where and when did virtualization originate?",
+      "answer": "IBM mainframes in the 1960s."
+    },
+    {
+      "id": "p3l6-v2-002",
+      "question": "What is a virtual machine (VM)?",
+      "answer": "A guest OS plus its applications and virtual resources, believing it owns the hardware."
+    },
+    {
+      "id": "p3l6-v2-003",
+      "question": "What are 2 other names for a VM?",
+      "answer": "Guest, or domain."
+    },
+    {
+      "id": "p3l6-v2-004",
+      "question": "What is the layer that manages VMs called?",
+      "answer": "The virtual machine monitor (VMM), or hypervisor."
+    },
+    {
+      "id": "p3l6-v2-005",
+      "question": "What is Popek & Goldberg's definition of a VM?",
+      "answer": "\"An efficient, isolated duplicate of the real machine.\""
+    },
+    {
+      "id": "p3l6-v2-006",
+      "question": "What are the 3 essential properties of a VMM?",
+      "answer": "Fidelity (an identical environment), performance (near-native), and safety/isolation (full control of resources).",
+      "memory": "\"FPS\": Fidelity, Performance, Safety."
+    },
+    {
+      "id": "p3l6-v2-007",
+      "question": "Does the VMM have to inspect every hardware access?",
+      "answer": "No. It decides who gets access, and VMs can't override those decisions."
+    },
+    {
+      "id": "p3l6-v2-008",
+      "question": "Which is a virtualization technology: VirtualBox, the JVM, or Virtual GameBoy?",
+      "answer": "Only VirtualBox."
+    },
+    {
+      "id": "p3l6-v2-009",
+      "question": "Why isn't the JVM \"virtualization\" in the Popek & Goldberg sense?",
+      "answer": "It's a language runtime, not a duplicate of the real machine."
+    },
+    {
+      "id": "p3l6-v2-010",
+      "question": "Why isn't a GameBoy emulator \"virtualization\"?",
+      "answer": "It emulates different hardware, not the host machine."
+    },
+    {
+      "id": "p3l6-v2-011",
+      "question": "What is consolidation?",
+      "answer": "Running multiple VMs on one physical machine.",
+      "memory": "Leads to lower cost (space, admins, power) and easier management."
+    },
+    {
+      "id": "p3l6-v2-012",
+      "question": "How does virtualization improve availability and reliability?",
+      "answer": "VMs can be migrated or cloned easily (e.g., off a failing host, or to meet load)."
+    },
+    {
+      "id": "p3l6-v2-013",
+      "question": "Name 3 other benefits of virtualization.",
+      "answer": "Security/bug containment, OS research and debugging, and support for legacy OSes."
+    },
+    {
+      "id": "p3l6-v2-014",
+      "question": "Why wasn't virtualization widespread for decades?",
+      "answer": "Mainframes weren't common, and x86 hardware was cheap: just buy another box."
+    },
+    {
+      "id": "p3l6-v2-015",
+      "question": "What made virtualization popular again?",
+      "answer": "Huge, underutilized data centers (10–20% utilization) with rising admin, power, and cooling costs.",
+      "memory": "About 70% of IT budgets went to operating expenses."
+    },
+    {
+      "id": "p3l6-v2-016",
+      "question": "What are the 2 main virtualization models?",
+      "answer": "Bare-metal (Type 1, hypervisor-based) and hosted (Type 2).",
+      "memory": "Type 1 = hypervisor on bare metal. Type 2 = VMM inside a host OS."
+    },
+    {
+      "id": "p3l6-v2-017",
+      "question": "Bare-metal model: what is the challenge with devices?",
+      "answer": "The hypervisor would need drivers for every device."
+    },
+    {
+      "id": "p3l6-v2-018",
+      "question": "How does the bare-metal model solve the device-driver problem?",
+      "answer": "A privileged service VM runs standard device drivers and management tasks."
+    },
+    {
+      "id": "p3l6-v2-019",
+      "question": "In Xen, what is dom0?",
+      "answer": "The privileged service domain; it runs the device drivers."
+    },
+    {
+      "id": "p3l6-v2-020",
+      "question": "In Xen, what are domUs?",
+      "answer": "The guest VMs."
+    },
+    {
+      "id": "p3l6-v2-021",
+      "question": "How does VMware ESX handle device drivers?",
+      "answer": "Its market share lets it require vendors to write ESX drivers."
+    },
+    {
+      "id": "p3l6-v2-022",
+      "question": "Hosted model: what manages the hardware?",
+      "answer": "A full host OS with a VMM module."
+    },
+    {
+      "id": "p3l6-v2-023",
+      "question": "What is the main benefit of the hosted model?",
+      "answer": "It reuses the host OS's existing services and drivers, and native apps still run."
+    },
+    {
+      "id": "p3l6-v2-024",
+      "question": "What does KVM stand for, and what model is it?",
+      "answer": "Kernel-based Virtual Machine; the hosted model (Linux)."
+    },
+    {
+      "id": "p3l6-v2-025",
+      "question": "What are the 2 parts of KVM?",
+      "answer": "The KVM kernel module + QEMU (in virtualizer mode)."
+    },
+    {
+      "id": "p3l6-v2-026",
+      "question": "What does QEMU do in \"virtualizer\" mode?",
+      "answer": "Exposes the real hardware, intervening only on critical operations like I/O."
+    },
+    {
+      "id": "p3l6-v2-027",
+      "question": "What is KVM's big advantage?",
+      "answer": "It benefits from the Linux community's constant improvements (new hardware, security fixes)."
+    },
+    {
+      "id": "p3l6-v2-028",
+      "question": "Hypervisor-based (Type 1) products?",
+      "answer": "VMware ESX, Citrix XenServer, and Microsoft Hyper-V."
+    },
+    {
+      "id": "p3l6-v2-029",
+      "question": "Hosted (Type 2) products?",
+      "answer": "KVM, VMware Fusion, VirtualBox, and VMware Player."
+    },
+    {
+      "id": "p3l6-v2-030",
+      "question": "What are the 4 virtualization requirements?",
+      "answer": "Present a virtual platform, isolate VMs, protect the guest OS from its apps, and protect the VMM from the guest OS."
+    },
+    {
+      "id": "p3l6-v2-031",
+      "question": "How many x86 protection rings are there? Which is most privileged?",
+      "answer": "4 rings (0–3); ring 0 is the most privileged."
+    },
+    {
+      "id": "p3l6-v2-032",
+      "question": "Without hardware VT support, where do the hypervisor, guest OS, and apps run?",
+      "answer": "Hypervisor in ring 0, guest OS in ring 1, apps in ring 3."
+    },
+    {
+      "id": "p3l6-v2-033",
+      "question": "What are the 2 hardware VT protection modes?",
+      "answer": "Root (host, hypervisor) and non-root (guest), each with 4 rings."
+    },
+    {
+      "id": "p3l6-v2-034",
+      "question": "With hardware VT, where does the guest OS run?",
+      "answer": "Non-root ring 0 (apps in non-root ring 3)."
+    },
+    {
+      "id": "p3l6-v2-035",
+      "question": "What is a VMexit?",
+      "answer": "A trap from the guest (non-root) into the hypervisor (root mode)."
+    },
+    {
+      "id": "p3l6-v2-036",
+      "question": "What is a VMentry?",
+      "answer": "Returning control from the hypervisor back to the guest (non-root mode)."
+    },
+    {
+      "id": "p3l6-v2-037",
+      "question": "Does the hypervisor intercept every guest instruction?",
+      "answer": "No. Guest instructions run directly on the hardware."
+    },
+    {
+      "id": "p3l6-v2-038",
+      "question": "What is trap-and-emulate?",
+      "answer": "A privileged instruction traps to the hypervisor, which kills the VM (if illegal) or emulates the effect (if legal).",
+      "memory": "Guest tries something privileged → trap → hypervisor fakes the result."
+    },
+    {
+      "id": "p3l6-v2-039",
+      "question": "Why did trap-and-emulate fail on pre-2005 x86?",
+      "answer": "17 privileged instructions failed silently in ring 1 instead of trapping."
+    },
+    {
+      "id": "p3l6-v2-040",
+      "question": "Give an example of a problematic x86 instruction.",
+      "answer": "POPF/PUSHF (they manipulate the interrupt-enable flag)."
+    },
+    {
+      "id": "p3l6-v2-041",
+      "question": "What goes wrong when POPF/PUSHF fail silently?",
+      "answer": "All of the above: the guest can't enable or disable interrupts, or read their state."
+    },
+    {
+      "id": "p3l6-v2-042",
+      "question": "What is binary translation?",
+      "answer": "Dynamically rewriting guest code blocks to replace the 17 problem instructions.",
+      "memory": "Find and rewrite the 17 bad instructions before they run."
+    },
+    {
+      "id": "p3l6-v2-043",
+      "question": "Who pioneered binary translation, and which company came from it?",
+      "answer": "Mendel Rosenblum (Stanford) → VMware"
+    },
+    {
+      "id": "p3l6-v2-044",
+      "question": "What is full virtualization?",
+      "answer": "Running an unmodified guest OS."
+    },
+    {
+      "id": "p3l6-v2-045",
+      "question": "Why is binary translation done dynamically, not statically?",
+      "answer": "The execution path depends on runtime input."
+    },
+    {
+      "id": "p3l6-v2-046",
+      "question": "How does VMware reduce binary translation overhead?",
+      "answer": "Cache translated blocks, and analyze only kernel code."
+    },
+    {
+      "id": "p3l6-v2-047",
+      "question": "What is paravirtualization?",
+      "answer": "The guest OS is modified to know it's virtualized and calls the hypervisor directly.",
+      "memory": "Full virt = the guest doesn't know. Paravirt = the guest knows and cooperates (hypercalls)."
+    },
+    {
+      "id": "p3l6-v2-048",
+      "question": "What is a hypercall?",
+      "answer": "A paravirtualized guest's explicit call to the hypervisor (like a syscall to the OS)."
+    },
+    {
+      "id": "p3l6-v2-049",
+      "question": "Which hypervisor popularized paravirtualization, and where did it start?",
+      "answer": "Xen, from the University of Cambridge (later XenSource → Citrix)."
+    },
+    {
+      "id": "p3l6-v2-050",
+      "question": "Which event traps to the hypervisor for both binary translation and paravirtualized VMs?",
+      "answer": "Access to a swapped-out page (the MMU faults). PTE updates depend on permissions."
+    },
+    {
+      "id": "p3l6-v2-051",
+      "question": "Full virtualization of memory: what must the guest OS see?",
+      "answer": "Contiguous physical memory starting at address 0."
+    },
+    {
+      "id": "p3l6-v2-052",
+      "question": "What are the 3 address types in memory virtualization?",
+      "answer": "Virtual (guest apps) → physical (guest's view) → machine (real hardware)."
+    },
+    {
+      "id": "p3l6-v2-053",
+      "question": "Why not just do two separate translations (guest table + hypervisor table)?",
+      "answer": "Every memory access would pay a software translation, which is too slow."
+    },
+    {
+      "id": "p3l6-v2-054",
+      "question": "What is a shadow page table?",
+      "answer": "A hypervisor-maintained table mapping guest virtual → machine addresses directly, used by the MMU.",
+      "memory": "Skip the middleman: guest VA → machine address directly."
+    },
+    {
+      "id": "p3l6-v2-055",
+      "question": "How does the hypervisor keep the shadow page table consistent?",
+      "answer": "It write-protects the guest's page tables, so guest updates trap."
+    },
+    {
+      "id": "p3l6-v2-056",
+      "question": "Paravirtualized memory: how are page tables handled?",
+      "answer": "The guest registers its page tables with the hypervisor (no shadow table needed)."
+    },
+    {
+      "id": "p3l6-v2-057",
+      "question": "Paravirtualized memory: how is the cost of page-table updates reduced?",
+      "answer": "Batch many updates into a single hypercall."
+    },
+    {
+      "id": "p3l6-v2-058",
+      "question": "Why is device virtualization harder than CPU virtualization?",
+      "answer": "Devices are very diverse and their interfaces aren't standardized (unlike the ISA)."
+    },
+    {
+      "id": "p3l6-v2-059",
+      "question": "What are the 3 device virtualization models?",
+      "answer": "Passthrough, hypervisor-direct, and split device driver."
+    },
+    {
+      "id": "p3l6-v2-060",
+      "question": "How does the passthrough model work?",
+      "answer": "The VMM grants a guest exclusive, direct access to a device (VMM bypass)."
+    },
+    {
+      "id": "p3l6-v2-061",
+      "question": "Name 3 downsides of the passthrough model.",
+      "answer": "No sharing, the exact device type must exist on the host, and migration is hard."
+    },
+    {
+      "id": "p3l6-v2-062",
+      "question": "How does the hypervisor-direct model work?",
+      "answer": "The hypervisor intercepts each device access, translates it to generic I/O, and runs the real driver."
+    },
+    {
+      "id": "p3l6-v2-063",
+      "question": "Which product used the hypervisor-direct model?",
+      "answer": "VMware ESX"
+    },
+    {
+      "id": "p3l6-v2-064",
+      "question": "Benefits of hypervisor-direct?",
+      "answer": "The VM is decoupled from the device, so sharing and migration are easier."
+    },
+    {
+      "id": "p3l6-v2-065",
+      "question": "Downsides of hypervisor-direct?",
+      "answer": "Added latency from emulation, and the hypervisor must host all drivers (and their bugs)."
+    },
+    {
+      "id": "p3l6-v2-066",
+      "question": "How does the split device driver model work?",
+      "answer": "The guest's front-end driver sends messages to a back-end (real) driver in the service VM or host.",
+      "memory": "Front-end (guest) = the order form. Back-end (service VM) = the real kitchen."
+    },
+    {
+      "id": "p3l6-v2-067",
+      "question": "Split device driver: which part must be modified?",
+      "answer": "The front-end (so it only works for paravirtualized guests)."
+    },
+    {
+      "id": "p3l6-v2-068",
+      "question": "Name 2 benefits of the split device driver model.",
+      "answer": "No device-emulation overhead, and centralized control of sharing (fairness, priorities)."
+    },
+    {
+      "id": "p3l6-v2-069",
+      "question": "With hardware VT support, is the split device driver model still relevant?",
+      "answer": "Yes. Centralized policy control over device sharing."
+    },
+    {
+      "id": "p3l6-v2-070",
+      "question": "What were AMD's and Intel's 2005 virtualization extensions called?",
+      "answer": "AMD Pacifica and Intel Vanderpool (Intel VT)"
+    },
+    {
+      "id": "p3l6-v2-071",
+      "question": "What did hardware VT fix first?",
+      "answer": "The 17 non-virtualizable instructions now trap."
+    },
+    {
+      "id": "p3l6-v2-072",
+      "question": "What is a VMCS?",
+      "answer": "VM Control Structure: per-vCPU state the hardware understands (a VMCB on AMD)."
+    },
+    {
+      "id": "p3l6-v2-073",
+      "question": "What does the VMCS let the hypervisor specify?",
+      "answer": "Which operations (e.g., syscalls) should or shouldn't trap to root mode."
+    },
+    {
+      "id": "p3l6-v2-074",
+      "question": "What are extended page tables?",
+      "answer": "Hardware-supported page tables tagged with VM IDs (no shadow tables needed)."
+    },
+    {
+      "id": "p3l6-v2-075",
+      "question": "What is a tagged TLB?",
+      "answer": "TLB entries tagged by VM ID, so a VM switch (world switch) needn't flush the TLB.",
+      "memory": "Each TLB entry wears a VM name tag, so no flush is needed on a VM switch."
+    },
+    {
+      "id": "p3l6-v2-076",
+      "question": "Name 2 hardware I/O virtualization features.",
+      "answer": "Multi-queue devices (a logical interface per VM) and interrupt routing to the VM's core."
+    },
+    {
+      "id": "p3l6-v2-077",
+      "question": "Intel VT vector 1 (VT-x) covers what?",
+      "answer": "CPU fixes: virtualizable instructions and extended page tables."
+    },
+    {
+      "id": "p3l6-v2-078",
+      "question": "Intel VT vector 2 (VT-d) covers what?",
+      "answer": "Chipset support: SR-IOV, I/O routing, direct device access."
+    },
+    {
+      "id": "p3l6-v2-079",
+      "question": "Intel VT vector 3 (IOV / VMDq) covers what?",
+      "answer": "Device-level support: DMA remapping and multiple device queues per VM."
+    }
   ]
 }

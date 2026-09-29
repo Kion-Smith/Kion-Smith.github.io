@@ -1,27 +1,474 @@
 {
   "title": "P3L2: Memory Management",
   "cards": [
-    { "id": "p3l2-001", "question": "Why do operating systems decouple virtual memory from physical memory?", "answer": "So the size and layout of a process's address space is not limited by the amount of physical memory or by how memory is shared with other processes; virtual addresses are translated to physical addresses at access time." },
-    { "id": "p3l2-002", "question": "What are the two main tasks of OS memory management?", "answer": "Allocation (deciding which physical memory is given to which process and tracking free/used memory) and arbitration (quickly translating and validating each virtual memory access)." },
-    { "id": "p3l2-003", "question": "What is the Memory Management Unit (MMU) and what does it do?", "answer": "A hardware component in the CPU package that translates virtual addresses issued by the CPU into physical addresses, and can generate a fault (exception) if the access is illegal, lacks permission, or the page is not present." },
-    { "id": "p3l2-004", "question": "What is a page table and what does an entry map?", "answer": "A per-process data structure maintained by the OS that maps virtual page numbers to physical frame numbers, letting hardware translate virtual addresses to physical addresses." },
-    { "id": "p3l2-005", "question": "How is a virtual address split for page table translation, and how is the physical address formed?", "answer": "It is split into a virtual page number (VPN), used to index the page table and retrieve a physical frame number, and an offset, which is appended unchanged to the physical frame number to form the full physical address." },
-    { "id": "p3l2-006", "question": "What does the valid/present bit in a page table entry indicate, and what happens if it's zero on access?", "answer": "It indicates whether the virtual page's contents are currently present in physical memory; if it's zero (invalid) and the page is accessed, the MMU raises a fault and traps into the OS." },
-    { "id": "p3l2-007", "question": "What is \"allocation on first touch\"?", "answer": "Physical memory for a virtual address range is only allocated the first time the process actually accesses it, rather than at the time the address space is set up, saving memory for data structures that are never used." },
-    { "id": "p3l2-008", "question": "What do the dirty bit and accessed bit in a page table entry track?", "answer": "The dirty bit is set when a page has been written to (useful for knowing which cached files need to be flushed to disk); the accessed bit tracks whether a page has been read or written at all, used to inform replacement decisions." },
-    { "id": "p3l2-009", "question": "On x86, which register holds the faulting address after a page fault, and which holds the pointer to the active page table?", "answer": "CR2 holds the faulting address; CR3 holds the address of the currently active page table (updated on every context switch)." },
-    { "id": "p3l2-010", "question": "Why does a single-level (flat) page table become impractically large, e.g. on a 64-bit architecture?", "answer": "Because it must have one entry for every possible virtual page number regardless of whether that region is actually used, so table size grows with the full virtual address space — e.g., about 3 petabytes per process for a 64-bit address space with 8-byte entries and 4KB pages." },
-    { "id": "p3l2-011", "question": "How do multi-level (hierarchical) page tables reduce memory usage compared to a flat page table?", "answer": "An outer page table directory holds pointers to inner page tables, and inner page tables are only allocated for virtual memory regions that are actually valid/used, so gaps (holes) in the address space require no inner table entries." },
-    { "id": "p3l2-012", "question": "What is the tradeoff of adding more levels to a page table hierarchy?", "answer": "More levels reduce page table space (since gaps map to smaller granularity and skip more unneeded entries), but increase translation latency because each level requires an additional memory access before the physical address is produced." },
-    { "id": "p3l2-013", "question": "What is a TLB (Translation Lookaside Buffer) and why is it important?", "answer": "A small hardware cache in the MMU that stores recently used virtual-to-physical address translations; on a TLB hit, the multiple memory accesses needed to walk the page table hierarchy are avoided, greatly speeding up translation." },
-    { "id": "p3l2-014", "question": "What is an inverted page table, and what problem does it solve?", "answer": "A table with one entry per physical frame (rather than per virtual page), searched by process ID and virtual address; it keeps table size proportional to physical memory rather than to virtual address space size, but requires a linear (or hashed) search to find a match." },
-    { "id": "p3l2-015", "question": "How does segmentation differ from paging as a memory management approach?", "answer": "Segmentation divides the address space into arbitrarily sized, logically meaningful units (code, heap, data, etc.) described by base and limit registers, rather than fixed-size pages; a segment descriptor plus offset produces a linear address, in contrast to paging's fixed-size virtual-to-physical page mapping." },
-    { "id": "p3l2-016", "question": "What are the tradeoffs of using larger page sizes (e.g., 2MB large pages or 1GB huge pages)?", "answer": "Larger pages need fewer page table entries (smaller page tables) and can improve TLB hit rates, but if a large page isn't densely populated with data it wastes space, causing internal fragmentation." },
-    { "id": "p3l2-017", "question": "What is external fragmentation and how can a memory allocator mitigate it?", "answer": "External fragmentation occurs when free memory becomes broken into small, non-contiguous holes after interleaved allocate/free operations, preventing large contiguous requests from being satisfied even though enough total free memory exists; allocators mitigate it by coalescing adjacent free regions and, when possible, leaving favorable gaps based on expected request sizes." },
-    { "id": "p3l2-018", "question": "How does the Linux buddy allocator work, and what weakness does the slab allocator fix?", "answer": "The buddy allocator recursively splits a power-of-two-sized free region into equal 'buddy' halves until it finds the smallest chunk that fits a request, allowing fast merging on free; because it only allocates in power-of-two sizes, it wastes space on common kernel objects, so the slab allocator builds object caches sized exactly to structures like task_struct on top of contiguous memory slabs, avoiding that internal fragmentation." },
-    { "id": "p3l2-019", "question": "What is demand paging and how does a page fault trigger it?", "answer": "Demand paging moves pages between physical memory and secondary storage (e.g., a disk swap partition) as needed; when a process references a page whose present bit is zero, the MMU raises a page fault, trapping into the OS, which locates the page on disk, issues I/O to fetch it into a free frame, updates the page table, and restarts the faulting instruction." },
-    { "id": "p3l2-020", "question": "What is the LRU (Least Recently Used) page replacement policy, and what does the classic quiz example (11 pages accessed cyclically, 10 physical frames) show about it?", "answer": "LRU evicts the page that has gone longest without being referenced, using the hardware accessed bit; in the cyclic access example, the evicted page is always exactly the next one needed, causing 100% demand paging — showing LRU can perform pathologically on cyclic access patterns." },
-    { "id": "p3l2-021", "question": "What is Copy-on-Write (COW) and when is it commonly used?", "answer": "A technique where, instead of copying a process's address space on creation, the new process's pages are mapped read-only to the same physical pages as the parent; an actual copy is made only when a write occurs (triggering a page fault), saving memory and time for pages that are never modified. It's commonly used on fork()." },
-    { "id": "p3l2-022", "question": "How does hardware memory-management support enable efficient, incremental checkpointing, and what is the frequency tradeoff?", "answer": "The OS write-protects the address space and copies it while the process keeps running; subsequent writes fault and mark pages dirty, so only dirtied pages need copying for an incremental checkpoint. More frequent checkpoints mean faster recovery but higher overhead, since more state and more distinct dirty pages get captured." }
+    {
+      "id": "p3l2-v2-001",
+      "question": "What are the OS's 2 main memory-management jobs?",
+      "answer": "Allocation (who gets which physical memory) and arbitration (translate and validate accesses)."
+    },
+    {
+      "id": "p3l2-v2-002",
+      "question": "Why decouple virtual memory from physical memory?",
+      "answer": "Address-space size and layout aren't limited by physical memory or by sharing with other processes."
+    },
+    {
+      "id": "p3l2-v2-003",
+      "question": "Paging vs segmentation: what is the unit of allocation?",
+      "answer": "Paging uses fixed-size pages; segmentation uses variable-size segments."
+    },
+    {
+      "id": "p3l2-v2-004",
+      "question": "In paging, what do virtual pages map to?",
+      "answer": "Physical page frames of the same size."
+    },
+    {
+      "id": "p3l2-v2-005",
+      "question": "Which method, paging or segmentation, dominates in modern OSes?",
+      "answer": "Paging"
+    },
+    {
+      "id": "p3l2-v2-006",
+      "question": "What does the MMU do?",
+      "answer": "Translates the CPU's virtual addresses to physical addresses, or raises a fault.",
+      "memory": "MMU = the translator between the CPU (virtual) and DRAM (physical)."
+    },
+    {
+      "id": "p3l2-v2-007",
+      "question": "Name 3 reasons the MMU raises a fault.",
+      "answer": "Illegal (unallocated) address, a permission violation (e.g., write-protected), or the page isn't in memory."
+    },
+    {
+      "id": "p3l2-v2-008",
+      "question": "What is the TLB?",
+      "answer": "Translation Lookaside Buffer: the MMU's cache of valid VA→PA translations.",
+      "memory": "TLB = a speed-dial list for address translations."
+    },
+    {
+      "id": "p3l2-v2-009",
+      "question": "Who performs address translation: hardware or the OS?",
+      "answer": "Hardware. The OS just maintains the page tables."
+    },
+    {
+      "id": "p3l2-v2-010",
+      "question": "What does the hardware dictate about memory management?",
+      "answer": "The modes supported (paging and/or segmentation), page sizes, and VA/PA formats."
+    },
+    {
+      "id": "p3l2-v2-011",
+      "question": "Which memory-management parts are designed in software?",
+      "answer": "Allocation and replacement policies."
+    },
+    {
+      "id": "p3l2-v2-012",
+      "question": "A virtual address splits into which 2 parts?",
+      "answer": "Virtual page number (VPN) + offset"
+    },
+    {
+      "id": "p3l2-v2-013",
+      "question": "What does the VPN index produce from the page table?",
+      "answer": "The physical frame number (PFN)"
+    },
+    {
+      "id": "p3l2-v2-014",
+      "question": "How is the final physical address formed?",
+      "answer": "PFN + the same offset.",
+      "memory": "VA = [VPN | offset] → page table → PA = [PFN | offset]"
+    },
+    {
+      "id": "p3l2-v2-015",
+      "question": "Why must pages and frames be the same size?",
+      "answer": "So only the page start needs translating, and offsets carry over unchanged (fewer table entries)."
+    },
+    {
+      "id": "p3l2-v2-016",
+      "question": "What is \"allocation on first touch\"?",
+      "answer": "Physical memory is allocated only when a virtual page is first accessed."
+    },
+    {
+      "id": "p3l2-v2-017",
+      "question": "What PTE bit says whether a page is in physical memory?",
+      "answer": "The valid (present) bit"
+    },
+    {
+      "id": "p3l2-v2-018",
+      "question": "After a page is swapped out and back in, is its physical frame the same?",
+      "answer": "Probably not; the PTE is updated with the new frame."
+    },
+    {
+      "id": "p3l2-v2-019",
+      "question": "How many page tables does the OS keep?",
+      "answer": "One per process."
+    },
+    {
+      "id": "p3l2-v2-020",
+      "question": "Which x86 register points to the active page table?",
+      "answer": "CR3 (updated on each context switch)"
+    },
+    {
+      "id": "p3l2-v2-021",
+      "question": "What does the PTE dirty bit mean?",
+      "answer": "The page has been written to.",
+      "memory": "Dirty = must be written back to disk before eviction."
+    },
+    {
+      "id": "p3l2-v2-022",
+      "question": "What does the PTE accessed bit mean?",
+      "answer": "The page has been read or written."
+    },
+    {
+      "id": "p3l2-v2-023",
+      "question": "x86 PTE: what does the R/W bit mean?",
+      "answer": "0 = read-only, 1 = read/write"
+    },
+    {
+      "id": "p3l2-v2-024",
+      "question": "x86 PTE: what does the U/S bit mean?",
+      "answer": "Whether the page can be accessed from user mode or only supervisor (kernel) mode."
+    },
+    {
+      "id": "p3l2-v2-025",
+      "question": "What happens on a page fault?",
+      "answer": "The CPU pushes an error code on the kernel stack and traps to the kernel's page-fault handler."
+    },
+    {
+      "id": "p3l2-v2-026",
+      "question": "On x86, which register holds the faulting address?",
+      "answer": "CR2",
+      "memory": "CR3 = current page table. CR2 = the address that faulted."
+    },
+    {
+      "id": "p3l2-v2-027",
+      "question": "32-bit addresses, 4 KB pages, 4-byte PTEs: what is the flat page-table size?",
+      "answer": "4 MB per process (2^20 entries × 4 B)"
+    },
+    {
+      "id": "p3l2-v2-028",
+      "question": "64-bit addresses, 4 KB pages, 8-byte PTEs: what is the flat page-table size?",
+      "answer": "About 32 PB per process (lecture says \"3 PB\"). Impractically huge."
+    },
+    {
+      "id": "p3l2-v2-029",
+      "question": "Why are flat page tables wasteful?",
+      "answer": "They need an entry for every VPN, even unused ones."
+    },
+    {
+      "id": "p3l2-v2-030",
+      "question": "What does the outer level of a 2-level page table hold?",
+      "answer": "A page table directory: pointers to inner page tables."
+    },
+    {
+      "id": "p3l2-v2-031",
+      "question": "How do multi-level page tables save memory?",
+      "answer": "Inner tables are allocated only for valid regions; gaps get none."
+    },
+    {
+      "id": "p3l2-v2-032",
+      "question": "2-level table with a 10-bit inner index and 10-bit offset: how much memory does one inner table cover?",
+      "answer": "1 MB (2^10 entries × 2^10 bytes)"
+    },
+    {
+      "id": "p3l2-v2-033",
+      "question": "Why do multi-level tables matter most on 64-bit systems?",
+      "answer": "Address spaces are sparse, with big gaps, so many inner tables are skipped."
+    },
+    {
+      "id": "p3l2-v2-034",
+      "question": "Trade-off of adding more page-table levels?",
+      "answer": "Smaller tables, but more memory accesses per translation (higher latency)."
+    },
+    {
+      "id": "p3l2-v2-035",
+      "question": "Quiz: 12-bit addresses, 6-bit offset, single level. How many PTEs?",
+      "answer": "64 (2^6 VPNs)"
+    },
+    {
+      "id": "p3l2-v2-036",
+      "question": "Quiz: 12-bit addresses, 2-bit outer / 4-bit inner / 6-bit offset; only the first 2 KB and last 1 KB are used. How many inner PTEs?",
+      "answer": "48 (3 inner tables × 16), saving 25%."
+    },
+    {
+      "id": "p3l2-v2-037",
+      "question": "How many memory accesses does a single-level page table need per reference (no TLB)?",
+      "answer": "2: one for the PTE, one for the data."
+    },
+    {
+      "id": "p3l2-v2-038",
+      "question": "How many memory accesses does a 4-level page table need per reference (no TLB)?",
+      "answer": "5: four for the PTEs, one for the data."
+    },
+    {
+      "id": "p3l2-v2-039",
+      "question": "What happens on a TLB hit?",
+      "answer": "The translation comes straight from the TLB, skipping page-table memory accesses."
+    },
+    {
+      "id": "p3l2-v2-040",
+      "question": "Why does a small TLB still get a high hit rate?",
+      "answer": "Memory references have high temporal and spatial locality."
+    },
+    {
+      "id": "p3l2-v2-041",
+      "question": "Intel i7 TLB sizes?",
+      "answer": "Per core: 64-entry data + 128-entry instruction TLB; shared L2 TLB: 512 entries."
+    },
+    {
+      "id": "p3l2-v2-042",
+      "question": "What is an inverted page table?",
+      "answer": "One entry per physical frame, holding (pid, VPN).",
+      "memory": "Normal: VPN → frame. Inverted: frame → (pid, VPN)."
+    },
+    {
+      "id": "p3l2-v2-043",
+      "question": "Why use inverted page tables?",
+      "answer": "The table scales with physical memory (TBs), not virtual memory (PBs)."
+    },
+    {
+      "id": "p3l2-v2-044",
+      "question": "What is the downside of inverted page tables?",
+      "answer": "Lookup needs a linear search, since the entries aren't ordered."
+    },
+    {
+      "id": "p3l2-v2-045",
+      "question": "What speeds up inverted page table lookups?",
+      "answer": "Hashing page tables: hash part of the address to a short linked list of candidates (plus the TLB)."
+    },
+    {
+      "id": "p3l2-v2-046",
+      "question": "With segmentation, what do segments correspond to?",
+      "answer": "Logical parts of the address space (code, heap, stack, …) with arbitrary sizes."
+    },
+    {
+      "id": "p3l2-v2-047",
+      "question": "What does a segmented virtual address contain?",
+      "answer": "A segment selector (descriptor) + offset"
+    },
+    {
+      "id": "p3l2-v2-048",
+      "question": "In pure segmentation, what defines a segment?",
+      "answer": "Base and limit registers (a contiguous region of memory)."
+    },
+    {
+      "id": "p3l2-v2-049",
+      "question": "How are segmentation and paging combined (e.g., on x86)?",
+      "answer": "Segmentation produces a linear address, which paging then translates to a physical address."
+    },
+    {
+      "id": "p3l2-v2-050",
+      "question": "What address mode does 64-bit x86 use by default?",
+      "answer": "Paging only (segmentation remains for backward compatibility)."
+    },
+    {
+      "id": "p3l2-v2-051",
+      "question": "What is the default page size on Linux x86?",
+      "answer": "4 KB"
+    },
+    {
+      "id": "p3l2-v2-052",
+      "question": "What are Linux x86 \"large\" and \"huge\" page sizes?",
+      "answer": "Large = 2 MB (21-bit offset); huge = 1 GB (30-bit offset)."
+    },
+    {
+      "id": "p3l2-v2-053",
+      "question": "By how much does each step up (4 KB → 2 MB → 1 GB) shrink the page table?",
+      "answer": "512× each step."
+    },
+    {
+      "id": "p3l2-v2-054",
+      "question": "Name 2 benefits of larger pages.",
+      "answer": "Smaller page tables and more TLB hits (the TLB covers more memory)."
+    },
+    {
+      "id": "p3l2-v2-055",
+      "question": "What is the downside of larger pages?",
+      "answer": "Internal fragmentation: wasted space inside sparsely used pages.",
+      "memory": "A big box holding one small toy: wasted space inside the box."
+    },
+    {
+      "id": "p3l2-v2-056",
+      "question": "Where do large/huge pages make the most sense?",
+      "answer": "Databases and in-memory data stores."
+    },
+    {
+      "id": "p3l2-v2-057",
+      "question": "What page sizes does Solaris 10 on SPARC offer?",
+      "answer": "8 KB, 4 MB, or 2 GB"
+    },
+    {
+      "id": "p3l2-v2-058",
+      "question": "Quiz: 12-bit architecture, 32-byte pages. How many PTEs?",
+      "answer": "128 (5-bit offset → 7-bit VPN)"
+    },
+    {
+      "id": "p3l2-v2-059",
+      "question": "Quiz: 12-bit architecture, 512-byte pages. How many PTEs?",
+      "answer": "8 (9-bit offset → 3-bit VPN)"
+    },
+    {
+      "id": "p3l2-v2-060",
+      "question": "What are kernel-level memory allocators used for?",
+      "answer": "Kernel state, static process state (code, stack, data), and tracking free memory."
+    },
+    {
+      "id": "p3l2-v2-061",
+      "question": "What are user-level memory allocators used for?",
+      "answer": "Dynamic process state (the heap), via malloc/free."
+    },
+    {
+      "id": "p3l2-v2-062",
+      "question": "After the kernel gives memory to malloc, who manages it?",
+      "answer": "The user-level allocator. The kernel is no longer involved."
+    },
+    {
+      "id": "p3l2-v2-063",
+      "question": "What is external fragmentation?",
+      "answer": "Free memory is split into non-contiguous holes, so large contiguous requests fail.",
+      "memory": "Enough free seats in the theater, but none of them together."
+    },
+    {
+      "id": "p3l2-v2-064",
+      "question": "How can an allocator limit external fragmentation?",
+      "answer": "Place allocations so freed neighbors can be coalesced into larger free areas."
+    },
+    {
+      "id": "p3l2-v2-065",
+      "question": "What 2 allocators does the Linux kernel use?",
+      "answer": "The buddy allocator and the slab allocator."
+    },
+    {
+      "id": "p3l2-v2-066",
+      "question": "How does the buddy allocator split memory?",
+      "answer": "It repeatedly halves power-of-2 regions until it finds the smallest chunk that fits."
+    },
+    {
+      "id": "p3l2-v2-067",
+      "question": "What is the buddy allocator's main strength?",
+      "answer": "Freed buddies are found and coalesced quickly."
+    },
+    {
+      "id": "p3l2-v2-068",
+      "question": "Why are buddy chunks powers of 2?",
+      "answer": "Buddies' addresses differ by just 1 bit, so they're easy to find.",
+      "memory": "8 + 8 → 16 + 16 → 32 …"
+    },
+    {
+      "id": "p3l2-v2-069",
+      "question": "What is the buddy allocator's weakness?",
+      "answer": "Internal fragmentation, because objects aren't power-of-2 sized (e.g., task_struct ≈ 1.7 KB)."
+    },
+    {
+      "id": "p3l2-v2-070",
+      "question": "How does the slab allocator work?",
+      "answer": "Pre-created caches of fixed-size objects (e.g., task_struct) built on contiguous slabs.",
+      "memory": "Slab = egg carton: slots sized exactly for one object type."
+    },
+    {
+      "id": "p3l2-v2-071",
+      "question": "Why does the slab allocator avoid fragmentation?",
+      "answer": "Slots exactly match object size (no internal), and freed slots fit future same-size requests (no external)."
+    },
+    {
+      "id": "p3l2-v2-072",
+      "question": "What is demand paging?",
+      "answer": "Pages are swapped between memory and a swap partition (disk) as needed."
+    },
+    {
+      "id": "p3l2-v2-073",
+      "question": "Besides disk, where can swap space live?",
+      "answer": "Flash, or even another node's memory."
+    },
+    {
+      "id": "p3l2-v2-074",
+      "question": "What happens when a process touches a swapped-out page?",
+      "answer": "Page fault → OS reads the page from disk → finds a free frame → updates the PTE → restarts the instruction."
+    },
+    {
+      "id": "p3l2-v2-075",
+      "question": "What does pinning a page do?",
+      "answer": "Keeps it in memory at a fixed physical address (swapping disabled)."
+    },
+    {
+      "id": "p3l2-v2-076",
+      "question": "When must pages be pinned?",
+      "answer": "For DMA with devices."
+    },
+    {
+      "id": "p3l2-v2-077",
+      "question": "When does the OS swap pages out?",
+      "answer": "When memory use hits a high-water mark and CPU use is low enough (via a page-out daemon)."
+    },
+    {
+      "id": "p3l2-v2-078",
+      "question": "What does LRU replacement do?",
+      "answer": "Evicts the least recently used page.",
+      "memory": "Evict whatever you've touched least recently: the \"dustiest\" page."
+    },
+    {
+      "id": "p3l2-v2-079",
+      "question": "Which PTE bit supports LRU?",
+      "answer": "The accessed bit"
+    },
+    {
+      "id": "p3l2-v2-080",
+      "question": "Why prefer evicting clean (non-dirty) pages?",
+      "answer": "They don't need to be written to disk first."
+    },
+    {
+      "id": "p3l2-v2-081",
+      "question": "What is Linux's default page replacement algorithm?",
+      "answer": "An LRU variant with a \"second chance\" (two scans before evicting)."
+    },
+    {
+      "id": "p3l2-v2-082",
+      "question": "Quiz: loop over 11 pages with 10 frames under LRU. What % of accesses page-fault?",
+      "answer": "100%. Each evicted page is exactly the next one needed.",
+      "memory": "LRU's pathological case: a loop that is 1 page too big."
+    },
+    {
+      "id": "p3l2-v2-083",
+      "question": "What is copy-on-write (COW)?",
+      "answer": "On fork, the child shares the parent's pages (write-protected); a page is copied only when written.",
+      "memory": "Share until someone writes, then copy only that page."
+    },
+    {
+      "id": "p3l2-v2-084",
+      "question": "How does the OS detect a COW write?",
+      "answer": "The write-protected page triggers a page fault; the OS then copies the page and updates the page table."
+    },
+    {
+      "id": "p3l2-v2-085",
+      "question": "What is checkpointing?",
+      "answer": "Periodically saving process state so recovery restarts from the last checkpoint."
+    },
+    {
+      "id": "p3l2-v2-086",
+      "question": "How does the MMU make checkpointing cheaper?",
+      "answer": "Write-protect everything, then copy only dirtied pages (incremental diffs) while the process runs."
+    },
+    {
+      "id": "p3l2-v2-087",
+      "question": "What is the downside of incremental checkpoints?",
+      "answer": "Recovery must rebuild state from multiple diffs."
+    },
+    {
+      "id": "p3l2-v2-088",
+      "question": "What is rewind-replay?",
+      "answer": "Debugging by restarting from earlier and earlier checkpoints to find the bug."
+    },
+    {
+      "id": "p3l2-v2-089",
+      "question": "What is process migration?",
+      "answer": "Checkpoint a process to another machine and resume it there."
+    },
+    {
+      "id": "p3l2-v2-090",
+      "question": "How is migration done with minimal pause?",
+      "answer": "Repeated fast checkpoints until the remaining dirty state is small, then pause and copy."
+    },
+    {
+      "id": "p3l2-v2-091",
+      "question": "Checkpointing more frequently causes what? (quiz)",
+      "answer": "All of the above: more state saved, higher overhead, faster recovery.",
+      "memory": "Rare checkpoints amortize repeated writes to the same page."
+    }
   ]
 }

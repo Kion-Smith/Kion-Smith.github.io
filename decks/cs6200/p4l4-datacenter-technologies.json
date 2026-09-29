@@ -1,35 +1,351 @@
 {
   "title": "P4L4: Datacenter Technologies",
   "cards": [
-    { "id": "p4l4-001", "question": "What are the three common tiers/components used to structure an internet service?", "answer": "A presentation component (static content/web layout), a business logic component (dynamic, user-specific processing), and a data storage/management component (typically a database) - referred to as the presentation, business, and database tiers." },
-    { "id": "p4l4-002", "question": "What kinds of IPC mechanisms are commonly used between the separate processes of a multi-tier internet service?", "answer": "RPC or RMI (e.g., from Java-based architectures), plus shared-memory optimizations when different processes run on the same machine." },
-    { "id": "p4l4-003", "question": "What is a 'scale out' architecture for an internet service?", "answer": "Deploying the same service across multiple machines/processes, with a front-end dispatching/load-balancing component routing incoming requests to available machines - analogous to the boss-worker pattern." },
-    { "id": "p4l4-004", "question": "What distinguishes a functionally homogeneous architecture from a functionally heterogeneous one?", "answer": "In a homogeneous architecture, every node can process any type of request/step; in a heterogeneous architecture, specific nodes are specialized to handle specific functions or request types." },
-    { "id": "p4l4-005", "question": "What is the main benefit and the main downside of a functionally homogeneous architecture?", "answer": "Benefit: the front end can stay simple (e.g., round-robin dispatch, no need to track which node does what). Downside: little opportunity to benefit from caching/locality, since any node could serve any request." },
-    { "id": "p4l4-006", "question": "What are the tradeoffs of a functionally heterogeneous architecture compared to a homogeneous one?", "answer": "It benefits from caching/locality since nodes specialize, but the front end must be more complex (must parse requests to route them correctly), and system management is harder - adding capacity or handling load shifts requires profiling and reconfiguration, and can lead to hotspots even while other nodes idle." },
-    { "id": "p4l4-007", "question": "In the toy shop analogy, how do you scale a homogeneous (all workers can build any toy) shop when order rates increase?", "answer": "Just add more of everything proportionally - more workers, more workbenches, more tools/parts - with no need to decide what specifically to add, keeping management simple." },
-    { "id": "p4l4-008", "question": "In the toy shop analogy, how do you scale a heterogeneous (specialized workers) shop when order rates increase?", "answer": "You must first profile what kinds of orders/requests are coming in and what resources they need, and only then add the right specific mix of workers/benches/parts - making management more complex than in the homogeneous case." },
-    { "id": "p4l4-009", "question": "What paper is referenced as a key reference on the design space of large-scale internet services, including replication vs. partitioning tradeoffs?", "answer": "Eric Brewer's paper 'Lessons from Giant Scale Services.'" },
-    { "id": "p4l4-010", "question": "Per the lecture, what fundamentally limits how far a single scale-out architecture (like the toy shop) can grow?", "answer": "A single manager/control point has limited attention and cannot manage unbounded resources; there are also physical limits (space, power) to how much can be housed and managed in one datacenter." },
-    { "id": "p4l4-011", "question": "What made Animoto (2008) a famous early example of cloud computing's value?", "answer": "After launching on Facebook, Animoto's user base and compute needs exploded (50 Amazon EC2 instances to 400 in a day, to 3,400 within a week) - a scale-up that would have been impossible with owned/traditional infrastructure but was feasible by renting elastic cloud (AWS EC2) resources." },
-    { "id": "p4l4-012", "question": "What business problem originally led Amazon to create AWS/EC2?", "answer": "Amazon provisioned hardware for peak holiday shopping season demand, leaving resources idle the rest of the year; in 2006 they opened up their internal reprovisioning APIs to let third-party customers rent that spare capacity for a fee, creating AWS/EC2." },
-    { "id": "p4l4-013", "question": "According to the lecture, what four requirements distill what cloud computing should provide?", "answer": "On-demand elastic resources/services, fine-grained usage-based pricing, professionally managed and hosted resources, and access via APIs for remote use." },
-    { "id": "p4l4-014", "question": "How is cloud billing typically structured, and why not bill on exact real-time usage?", "answer": "Billing is usually done via discrete preconfigured tiers (e.g., tiny, medium, large, extra-large instances) rather than exact real-time usage, because the overhead of ultra-fine-grained monitoring/management would be too high." },
-    { "id": "p4l4-015", "question": "What two economic/statistical principles explain why cloud computing works?", "answer": "The Law of Large Numbers (averaging demand across many customers whose peaks are shifted in time yields fairly constant aggregate demand) and Economies of Scale (amortizing hardware cost across many customers/tenants makes per-unit cost cheaper)." },
-    { "id": "p4l4-016", "question": "Who articulated an early vision of computing as a public utility, and when?", "answer": "John McCarthy, in 1961 - describing computing organized as a public utility analogous to the telephone system, decades before cloud computing technology existed." },
-    { "id": "p4l4-017", "question": "What practical limitations still prevent the 'computing as a fungible utility' vision from being fully realized?", "answer": "Hardware dependencies that virtualization can't fully mask, API lock-in to a specific cloud provider (no uniform standard across providers), privacy/security concerns from placing core data and business logic in the cloud, and latency from geographic distance to cloud resources." },
-    { "id": "p4l4-018", "question": "What are the three cloud deployment models defined by NIST, and how do they differ?", "answer": "Public cloud: infrastructure owned by the provider, used by third-party tenants (e.g., Amazon EC2). Private cloud: infrastructure and tenants owned by the same entity, using cloud tech internally for elasticity. Hybrid cloud: a private cloud interfaced with public cloud resources (e.g., for failover, redundancy, or handling spikes). (NIST also defines a community cloud - a public cloud restricted to a specific community of users.)" },
-    { "id": "p4l4-019", "question": "What are the three cloud service models (SaaS, PaaS, IaaS) and an example of each from the lecture?", "answer": "SaaS (Software as a Service): provider runs the full application, e.g. Gmail. PaaS (Platform as a Service): provider gives a development/execution environment (OS, libraries, tools), e.g. Google App Engine or original Windows Azure. IaaS (Infrastructure as a Service): provider gives raw virtualized compute/storage/network instances, e.g. Amazon EC2." },
-    { "id": "p4l4-020", "question": "Why do cloud resources need to be 'fungible,' and what enabling technology makes this possible?", "answer": "Fungible resources can be dynamically repurposed for different customers/needs, which is essential for the cloud provider's economics and for hiding hardware heterogeneity from users; virtualization is the key enabling technology for this." },
-    { "id": "p4l4-021", "question": "In the cloud failure-probability quiz, with 10 components each having a 3% failure probability, what is the chance something fails? What about with 100 components?", "answer": "Using P(at least one failure) = 1 - (1-p)^n: with n=10, p=0.03, the probability is about 26%; with n=100, it rises to about 95%. This illustrates why failure becomes inevitable at scale and must be handled with mechanisms like timeouts, restart/retry, and checkpointing." },
-    { "id": "p4l4-022", "question": "Besides fungibility and failure handling, what other management requirements must cloud systems address at scale?", "answer": "Dynamic/elastic resource management operating at scales of thousands to tens of thousands of nodes, multi-tenancy isolation (performance isolation so one tenant can't degrade others), and isolation/security of tenant data and execution (privacy from other tenants, from the provider, and protecting the platform from a vulnerable tenant)." },
-    { "id": "p4l4-023", "question": "What role do frameworks like Mesos and Hadoop YARN play in cloud computing?", "answer": "They provide dynamic provisioning and scheduling of infrastructure resources, acting as low-level resource managers that let multiple frameworks (e.g., Hadoop, Spark, MPI) share and negotiate cluster resources." },
-    { "id": "p4l4-024", "question": "Name the two big data processing frameworks mentioned as examples in the lecture.", "answer": "Hadoop MapReduce and Spark." },
-    { "id": "p4l4-025", "question": "What characteristic is typical of the distributed file systems used in cloud data storage layers?", "answer": "They typically operate in an append-only mode rather than allowing arbitrary rewriting, deleting, or modifying of data." },
-    { "id": "p4l4-026", "question": "What are NoSQL technologies, and why are they used in cloud data storage?", "answer": "They are a departure from traditional relational SQL databases, enabling data storage/access/manipulation at scale, including storing data across distributed memories instead of relying on repeated disk accesses." },
-    { "id": "p4l4-027", "question": "In the Hadoop big data stack described, what role does HBase play, and what role does Hive play?", "answer": "HBase provides a table-like (but non-relational) view of data stored on the Hadoop distributed file system. Hive is a language front-end that translates SQL-like queries into MapReduce operations that run over HBase/HDFS data." },
-    { "id": "p4l4-028", "question": "What is Mahout, in the context of the Hadoop stack?", "answer": "A component of the Hadoop stack that provides a collection of machine learning algorithms for use on top of the big data stack." },
-    { "id": "p4l4-029", "question": "What is the Berkeley Data Analytics Stack (BDAS), and how does it differ architecturally from the plain Hadoop stack?", "answer": "BDAS is an alternative open-source big data stack that adds an in-memory file system layer (to avoid disk-based caching costs) on top of the data storage layer, on which either Hadoop MapReduce or Spark can run; Mesos serves as its low-level resource scheduler partitioning resources among frameworks like Hadoop, Spark, and MPI." },
-    { "id": "p4l4-030", "question": "What example predates Hadoop but remained niche, according to the lecture?", "answer": "The HPCC stack by LexisNexis - it predates Hadoop but was not widely adopted outside the LexisNexis environment, unlike Hadoop and BDAS, which are described as the dominant big data stacks today." }
+    {
+      "id": "p4l4-v2-001",
+      "question": "About how many data centers existed in 2011, and how much space did they use?",
+      "answer": "~510,000 data centers, ~285.5 million sq ft."
+    },
+    {
+      "id": "p4l4-v2-002",
+      "question": "What is an internet service?",
+      "answer": "Any service accessible through a web interface (e.g., weather, email, banking)."
+    },
+    {
+      "id": "p4l4-v2-003",
+      "question": "What are the 3 tiers of an internet service?",
+      "answer": "Presentation, business logic, and database.",
+      "memory": "Restaurant: dining room (presentation), kitchen (business logic), pantry (database)."
+    },
+    {
+      "id": "p4l4-v2-004",
+      "question": "What does the presentation tier handle?",
+      "answer": "Static content and page layout (the interface with end users)."
+    },
+    {
+      "id": "p4l4-v2-005",
+      "question": "What does the business logic tier handle?",
+      "answer": "Business-specific processing and dynamic, user-specific content."
+    },
+    {
+      "id": "p4l4-v2-006",
+      "question": "Must the 3 tiers be separate processes or machines?",
+      "answer": "No. E.g., Apache + PHP modules can serve both static and dynamic content in one process."
+    },
+    {
+      "id": "p4l4-v2-007",
+      "question": "Name 3 functions middleware provides to multi-tier services.",
+      "answer": "Any 3 of: messaging, configuration/management, security, accounting, persistence, recovery."
+    },
+    {
+      "id": "p4l4-v2-008",
+      "question": "How do the processes of a multi-process service communicate?",
+      "answer": "IPC such as RPC or Java RMI, plus shared memory when on the same machine."
+    },
+    {
+      "id": "p4l4-v2-009",
+      "question": "What is a scale-out architecture?",
+      "answer": "Handle more load by running the service on more machines behind a load balancer."
+    },
+    {
+      "id": "p4l4-v2-010",
+      "question": "The front-end dispatcher in a scale-out architecture resembles which threading pattern?",
+      "answer": "Boss-worker"
+    },
+    {
+      "id": "p4l4-v2-011",
+      "question": "What is a functionally homogeneous architecture?",
+      "answer": "Every node can handle any request and perform any processing step.",
+      "memory": "Homogeneous = every worker can build any toy. Heterogeneous = specialists."
+    },
+    {
+      "id": "p4l4-v2-012",
+      "question": "What is the main benefit of a homogeneous architecture?",
+      "answer": "A simple front end (round robin, or based on load)."
+    },
+    {
+      "id": "p4l4-v2-013",
+      "question": "What is the main downside of a homogeneous architecture?",
+      "answer": "Little benefit from caching or locality."
+    },
+    {
+      "id": "p4l4-v2-014",
+      "question": "What is a functionally heterogeneous architecture?",
+      "answer": "Nodes are specialized for certain functions or request types (e.g., eBay browse vs bid)."
+    },
+    {
+      "id": "p4l4-v2-015",
+      "question": "What is the main benefit of a heterogeneous architecture?",
+      "answer": "Better caching and locality; not every node needs all the data."
+    },
+    {
+      "id": "p4l4-v2-016",
+      "question": "Name 3 downsides of a heterogeneous architecture.",
+      "answer": "A complex front end (must parse requests), complex management, and hotspots with backlogs."
+    },
+    {
+      "id": "p4l4-v2-017",
+      "question": "Toy shop quiz: how do you scale a homogeneous shop?",
+      "answer": "Just add more of everything (workers, benches, parts); management stays simple."
+    },
+    {
+      "id": "p4l4-v2-018",
+      "question": "Toy shop quiz: how do you scale a heterogeneous shop?",
+      "answer": "First profile the demand and resource needs, then add the right resources."
+    },
+    {
+      "id": "p4l4-v2-019",
+      "question": "Which paper covers the design space of giant internet services?",
+      "answer": "Eric Brewer, \"Lessons from Giant-Scale Services\""
+    },
+    {
+      "id": "p4l4-v2-020",
+      "question": "Toy shop quiz: why can't scale-out continue forever?",
+      "answer": "Management complexity and physical space/power limits.",
+      "memory": "The solution: cloud computing."
+    },
+    {
+      "id": "p4l4-v2-021",
+      "question": "Why did Amazon have idle servers?",
+      "answer": "They were provisioned for holiday peak load and sat idle the rest of the year."
+    },
+    {
+      "id": "p4l4-v2-022",
+      "question": "What did Amazon launch in 2006?",
+      "answer": "AWS / EC2: renting its infrastructure to third parties."
+    },
+    {
+      "id": "p4l4-v2-023",
+      "question": "What did Animoto do?",
+      "answer": "Turned photo albums into videos (compute-heavy)."
+    },
+    {
+      "id": "p4l4-v2-024",
+      "question": "What happened when Animoto launched on Facebook (April 2008)?",
+      "answer": "It went from 50 → 400 → 3,400 EC2 instances in one week (750K new users in 3 days).",
+      "memory": "The cloud's poster child: impossible with self-owned hardware."
+    },
+    {
+      "id": "p4l4-v2-025",
+      "question": "What goes wrong when you provision for expected peak demand?",
+      "answer": "Capacity sits idle most of the time, and demand above the peak is lost."
+    },
+    {
+      "id": "p4l4-v2-026",
+      "question": "What is the ideal relationship between capacity and demand?",
+      "answer": "Capacity scales elastically and instantly with demand, so cost is proportional to demand."
+    },
+    {
+      "id": "p4l4-v2-027",
+      "question": "What are the 4 cloud computing requirements?",
+      "answer": "On-demand elastic resources, fine-grained usage pricing, professional management, and API access."
+    },
+    {
+      "id": "p4l4-v2-028",
+      "question": "What 2 kinds of shared resources does a cloud provide?",
+      "answer": "Infrastructure (VMs, storage, network) and software services (email, databases, runtimes)."
+    },
+    {
+      "id": "p4l4-v2-029",
+      "question": "How are cloud resources accessed?",
+      "answer": "Through APIs: web, language libraries, and command line."
+    },
+    {
+      "id": "p4l4-v2-030",
+      "question": "How is cloud billing typically done?",
+      "answer": "In discrete tiers (tiny, medium, large…), not ultra-fine-grained usage."
+    },
+    {
+      "id": "p4l4-v2-031",
+      "question": "Name 2 cloud management software stacks.",
+      "answer": "OpenStack (open source) and VMware vSphere."
+    },
+    {
+      "id": "p4l4-v2-032",
+      "question": "What is the Law of Large Numbers in cloud computing?",
+      "answer": "Across many customers, the total demand averages out to roughly constant.",
+      "memory": "Everyone's peaks happen at different times, so the total stays flat."
+    },
+    {
+      "id": "p4l4-v2-033",
+      "question": "What are economies of scale in cloud computing?",
+      "answer": "Hardware cost is amortized across many customers (\"cheaper by the dozen\")."
+    },
+    {
+      "id": "p4l4-v2-034",
+      "question": "Who first envisioned computing as a public utility, and when?",
+      "answer": "John McCarthy, 1961."
+    },
+    {
+      "id": "p4l4-v2-035",
+      "question": "Name 4 obstacles to computing as a true utility.",
+      "answer": "Hardware dependencies, API lock-in, privacy/security concerns, and latency."
+    },
+    {
+      "id": "p4l4-v2-036",
+      "question": "NIST cloud definition: which phrases map to \"elastic resources\"?",
+      "answer": "On-demand, shared pool, and rapidly provisioned."
+    },
+    {
+      "id": "p4l4-v2-037",
+      "question": "NIST cloud definition: which phrases map to \"API-based\" and \"professionally managed\"?",
+      "answer": "API-based = ubiquitous access. Managed = minimal management effort. (Pricing isn't mentioned.)"
+    },
+    {
+      "id": "p4l4-v2-038",
+      "question": "What is a public cloud?",
+      "answer": "Provider-owned infrastructure that any third-party tenant can rent (e.g., EC2)."
+    },
+    {
+      "id": "p4l4-v2-039",
+      "question": "What is a private cloud?",
+      "answer": "Cloud technology used internally; the owner runs both the infrastructure and the tenants."
+    },
+    {
+      "id": "p4l4-v2-040",
+      "question": "What is a hybrid cloud?",
+      "answer": "A private cloud plus a public cloud for failover, spikes, or testing."
+    },
+    {
+      "id": "p4l4-v2-041",
+      "question": "What is a community cloud?",
+      "answer": "A public cloud used by a specific type of user."
+    },
+    {
+      "id": "p4l4-v2-042",
+      "question": "What is SaaS? Give an example.",
+      "answer": "Software as a Service: the provider runs everything, including the app (e.g., Gmail)."
+    },
+    {
+      "id": "p4l4-v2-043",
+      "question": "What is PaaS? Give an example.",
+      "answer": "Platform as a Service: the provider supplies the dev/runtime environment (e.g., Google App Engine, Azure)."
+    },
+    {
+      "id": "p4l4-v2-044",
+      "question": "What is IaaS? Give an example.",
+      "answer": "Infrastructure as a Service: rent virtual CPUs, memory, storage, and network (e.g., Amazon EC2).",
+      "memory": "SaaS ⊃ PaaS ⊃ IaaS: the provider manages less as you go down.\nPizza: IaaS = buy ingredients; PaaS = take-and-bake; SaaS = delivery."
+    },
+    {
+      "id": "p4l4-v2-045",
+      "question": "Are IaaS resources usually physical or virtual?",
+      "answer": "Virtual and shared (except special high-performance or GPU instances)."
+    },
+    {
+      "id": "p4l4-v2-046",
+      "question": "Name 6 technical requirements for a cloud.",
+      "answer": "Fungible resources, elastic management, scale, failure handling, multi-tenancy isolation, and security/privacy."
+    },
+    {
+      "id": "p4l4-v2-047",
+      "question": "What does \"fungible resources\" mean in a cloud?",
+      "answer": "Resources can be easily repurposed for different customers and needs."
+    },
+    {
+      "id": "p4l4-v2-048",
+      "question": "Why do failures matter more at cloud scale?",
+      "answer": "The more components there are, the more likely some component is failing."
+    },
+    {
+      "id": "p4l4-v2-049",
+      "question": "What is the formula for P(some failure) with n components, each failing with probability p?",
+      "answer": "1 − (1 − p)^n"
+    },
+    {
+      "id": "p4l4-v2-050",
+      "question": "Quiz: n = 10, p = 0.03. What is P(some failure)?",
+      "answer": "≈ 26%"
+    },
+    {
+      "id": "p4l4-v2-051",
+      "question": "Quiz: n = 100, p = 0.03. What is P(some failure)?",
+      "answer": "≈ 95%"
+    },
+    {
+      "id": "p4l4-v2-052",
+      "question": "Name 3 ways software copes with inevitable failures.",
+      "answer": "Timeouts, restart/retry, and backup/replication/checkpointing."
+    },
+    {
+      "id": "p4l4-v2-053",
+      "question": "Which technology provides fungible, repurposable resources?",
+      "answer": "Virtualization"
+    },
+    {
+      "id": "p4l4-v2-054",
+      "question": "Which technologies do dynamic resource provisioning and scheduling?",
+      "answer": "Mesos and Hadoop YARN"
+    },
+    {
+      "id": "p4l4-v2-055",
+      "question": "Name 2 big-data processing frameworks.",
+      "answer": "Hadoop MapReduce and Spark"
+    },
+    {
+      "id": "p4l4-v2-056",
+      "question": "What storage technologies do clouds use?",
+      "answer": "Distributed (often append-only) file systems, NoSQL, and distributed in-memory storage."
+    },
+    {
+      "id": "p4l4-v2-057",
+      "question": "What is software-defined slicing?",
+      "answer": "Giving each tenant its own software-defined slice of compute, storage, and network."
+    },
+    {
+      "id": "p4l4-v2-058",
+      "question": "Name 3 cloud monitoring/log-processing tools.",
+      "answer": "Flume, CloudWatch (Amazon), and LogInsight (VMware)."
+    },
+    {
+      "id": "p4l4-v2-059",
+      "question": "How much data was created in 2011?",
+      "answer": "1.8 zettabytes"
+    },
+    {
+      "id": "p4l4-v2-060",
+      "question": "What layers does a big-data cloud stack need?",
+      "answer": "Storage, parallel processing, caching, a query language front end, analytics libraries, and streaming."
+    },
+    {
+      "id": "p4l4-v2-061",
+      "question": "What are the 2 dominant open-source big-data stacks?",
+      "answer": "Hadoop and the Berkeley Data Analytics Stack (BDAS)."
+    },
+    {
+      "id": "p4l4-v2-062",
+      "question": "Which proprietary stack predates Hadoop?",
+      "answer": "HPCC (LexisNexis)"
+    },
+    {
+      "id": "p4l4-v2-063",
+      "question": "What is HDFS's role in Hadoop?",
+      "answer": "The storage layer: splits and replicates data and avoids hotspots."
+    },
+    {
+      "id": "p4l4-v2-064",
+      "question": "What is HBase?",
+      "answer": "A table-like (non-relational) view of stored data in Hadoop."
+    },
+    {
+      "id": "p4l4-v2-065",
+      "question": "What is Hive?",
+      "answer": "A SQL front end that translates queries into MapReduce jobs."
+    },
+    {
+      "id": "p4l4-v2-066",
+      "question": "What is Mahout?",
+      "answer": "Hadoop's machine-learning library."
+    },
+    {
+      "id": "p4l4-v2-067",
+      "question": "What does BDAS add on top of storage?",
+      "answer": "An in-memory file system, plus Spark (with SQL, streaming, graph, and ML front ends)."
+    },
+    {
+      "id": "p4l4-v2-068",
+      "question": "What does Mesos do in BDAS?",
+      "answer": "Low-level resource manager that partitions a cluster among frameworks (Hadoop, Spark, MPI)."
+    }
   ]
 }

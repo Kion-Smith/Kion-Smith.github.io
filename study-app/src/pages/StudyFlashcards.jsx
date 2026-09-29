@@ -70,7 +70,10 @@ function FlashcardSession({ deckPath, deck }) {
       >
         <div className="flashcard-inner">
           <div className="flashcard-face front">{card.question}</div>
-          <div className="flashcard-face back">{card.answer}</div>
+          <div className="flashcard-face back">
+            <div>{card.answer}</div>
+            {card.memory && <div className="memory">💡 {card.memory}</div>}
+          </div>
         </div>
       </div>
       <p className="hint">

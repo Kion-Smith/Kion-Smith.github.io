@@ -158,6 +158,7 @@ function LearnSession({ deckPath, deck }) {
           )}
         </>
       )}
+      {revealed && card.memory && <p className="memory">💡 {card.memory}</p>}
 
       {revealed && (
         <div className="btn-row">
