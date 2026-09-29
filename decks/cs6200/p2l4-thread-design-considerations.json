@@ -4,504 +4,994 @@
     {
       "id": "p2l4-v2-001",
       "question": "What does it mean to support threads at the kernel level?",
-      "answer": "The OS kernel itself is multithreaded and schedules and synchronizes the threads."
+      "answer": "The OS kernel itself is multithreaded and schedules and synchronizes the threads.",
+      "distractors": [
+        "A user library schedules threads without the kernel knowing.",
+        "Each process gets exactly one kernel thread.",
+        "The CPU hardware schedules the threads."
+      ]
     },
     {
       "id": "p2l4-v2-002",
       "question": "What provides user-level threads?",
-      "answer": "A threading library linked into the application."
+      "answer": "A threading library linked into the application.",
+      "distractors": [
+        "The OS kernel's scheduler.",
+        "The CPU's hardware thread support.",
+        "A separate helper process."
+      ]
     },
     {
       "id": "p2l4-v2-003",
       "question": "To a user-level threading library, what do the kernel-level threads look like?",
-      "answer": "Virtual CPUs onto which it schedules user-level threads."
+      "answer": "Virtual CPUs onto which it schedules user-level threads.",
+      "distractors": [
+        "Separate processes.",
+        "User-level threads of another process.",
+        "Physical memory pages."
+      ]
     },
     {
       "id": "p2l4-v2-004",
       "question": "Which UNIX calls save and restore a user-level thread's context?",
-      "answer": "setjmp / longjmp"
+      "answer": "setjmp / longjmp",
+      "distractors": [
+        "fork / exec",
+        "pthread_create / pthread_join",
+        "signal / kill"
+      ]
     },
     {
       "id": "p2l4-v2-005",
       "question": "Why split the PCB when a process has several kernel-level threads?",
-      "answer": "So each KLT stores only its own stack/registers instead of a full copy of the PCB."
+      "answer": "So each KLT stores only its own stack/registers instead of a full copy of the PCB.",
+      "distractors": [
+        "So each KLT can run in a different address space.",
+        "So user-level threads can see the kernel's state.",
+        "Because the PCB is too small to hold thread state."
+      ]
     },
     {
       "id": "p2l4-v2-006",
       "question": "What is \"hard\" process state?",
       "answer": "State shared by all threads in the process (e.g., virtual address mappings).",
-      "memory": "Hard = heavy, shared by everyone."
+      "memory": "Hard = heavy, shared by everyone.",
+      "distractors": [
+        "State specific to one KLT, like its signal mask.",
+        "The CPU's registers during a trap.",
+        "State stored only on disk."
+      ]
     },
     {
       "id": "p2l4-v2-007",
       "question": "What is \"light\" process state?",
       "answer": "State specific to one KLT and the ULTs on it (e.g., signal mask, syscall args).",
-      "memory": "Light = per-thread, cheap to swap."
+      "memory": "Light = per-thread, cheap to swap.",
+      "distractors": [
+        "State shared by every thread, like the address space.",
+        "The kernel's global scheduling queue.",
+        "The process's open files."
+      ]
     },
     {
       "id": "p2l4-v2-008",
       "question": "What 4 problems come from using one large PCB?",
       "answer": "Poor scalability, high overhead, slow context switches, low flexibility.",
-      "memory": "\"SOPF\": Scalability, Overheads, Performance, Flexibility."
+      "memory": "\"SOPF\": Scalability, Overheads, Performance, Flexibility.",
+      "distractors": [
+        "Too little memory, no protection, no sharing, no signals.",
+        "Too many syscalls, cache thrashing, deadlocks, starvation.",
+        "Poor security, poor portability, no swapping, no threads."
+      ]
     },
     {
       "id": "p2l4-v2-009",
       "question": "How do multiple small data structures make context switches cheaper?",
-      "answer": "Only the state that actually changes is saved and restored."
+      "answer": "Only the state that actually changes is saved and restored.",
+      "distractors": [
+        "Context switches skip saving registers entirely.",
+        "The whole PCB is kept in the CPU cache.",
+        "The scheduler runs less often."
+      ]
     },
     {
       "id": "p2l4-v2-010",
       "question": "How do multiple small data structures make sharing easy?",
-      "answer": "Threads just point to the same sub-structure for shared state."
+      "answer": "Threads just point to the same sub-structure for shared state.",
+      "distractors": [
+        "Each thread gets its own full copy.",
+        "The kernel locks the whole PCB on every access.",
+        "Sharing requires IPC between threads."
+      ]
     },
     {
       "id": "p2l4-v2-011",
       "question": "In Linux 3.17, what C struct describes a process/task?",
-      "answer": "task_struct"
+      "answer": "task_struct",
+      "distractors": [
+        "kthread_worker",
+        "pcb_struct",
+        "proc_t"
+      ]
     },
     {
       "id": "p2l4-v2-012",
       "question": "In Linux 3.17, which kernel thread struct contains the task_struct?",
-      "answer": "kthread_worker"
+      "answer": "kthread_worker",
+      "distractors": [
+        "task_struct",
+        "thread_info",
+        "spinlock_t"
+      ]
     },
     {
       "id": "p2l4-v2-013",
       "question": "In Solaris 2.0, what data structure sits between each user-level thread and a kernel-level thread?",
-      "answer": "A lightweight process (LWP)"
+      "answer": "A lightweight process (LWP)",
+      "distractors": [
+        "A process control block (PCB)",
+        "A bound thread",
+        "A red zone"
+      ]
     },
     {
       "id": "p2l4-v2-014",
       "question": "Which ULT→KLT mappings does Solaris 2.0 support?",
-      "answer": "Many-to-many and one-to-one."
+      "answer": "Many-to-many and one-to-one.",
+      "distractors": [
+        "Only many-to-one.",
+        "Only one-to-one.",
+        "Many-to-one and one-to-many."
+      ]
     },
     {
       "id": "p2l4-v2-015",
       "question": "In Stein & Shah's library, what is a thread ID?",
-      "answer": "An index into a table of pointers to thread data structures, not a direct pointer."
+      "answer": "An index into a table of pointers to thread data structures, not a direct pointer.",
+      "distractors": [
+        "A direct pointer to the thread's data structure.",
+        "The thread's kernel task ID.",
+        "The address of the thread's stack."
+      ]
     },
     {
       "id": "p2l4-v2-016",
       "question": "Why use a table index instead of a direct pointer for thread IDs?",
       "answer": "The table entry can report a meaningful error when a thread is corrupted.",
-      "memory": "Bad pointer = garbage memory. Bad table entry = readable error message."
+      "memory": "Bad pointer = garbage memory. Bad table entry = readable error message.",
+      "distractors": [
+        "Table lookups are faster than pointer dereferences.",
+        "Table indices use less memory than pointers.",
+        "The kernel can see table entries but not pointers."
+      ]
     },
     {
       "id": "p2l4-v2-017",
       "question": "Name 4 fields of a Solaris user-level thread data structure.",
-      "answer": "Registers, signal mask, priority, stack pointer (+ thread-local storage)."
+      "answer": "Registers, signal mask, priority, stack pointer (+ thread-local storage).",
+      "distractors": [
+        "Page table, open files, credentials, PID.",
+        "Process ID, parent ID, exit code, file list.",
+        "Kernel stack, CPU ID, LWP pointer, run queue."
+      ]
     },
     {
       "id": "p2l4-v2-018",
       "question": "What problem occurs when user-level thread stacks are laid out next to each other?",
-      "answer": "One thread's growing stack can overwrite another thread's data."
+      "answer": "One thread's growing stack can overwrite another thread's data.",
+      "distractors": [
+        "Threads can't allocate more than one stack page.",
+        "The stacks share one stack pointer.",
+        "The kernel refuses to schedule adjacent threads."
+      ]
     },
     {
       "id": "p2l4-v2-019",
       "question": "Why is that stack-overflow bug so hard to debug?",
-      "answer": "The error appears when the victim thread runs, not the thread that caused it."
+      "answer": "The error appears when the victim thread runs, not the thread that caused it.",
+      "distractors": [
+        "The overflowing thread crashes immediately.",
+        "The OS silently fixes the corrupted data.",
+        "The bug only appears on single-CPU systems."
+      ]
     },
     {
       "id": "p2l4-v2-020",
       "question": "What is a \"red zone\"?",
       "answer": "Unallocated memory between thread stacks; writing into it causes a fault.",
-      "memory": "Red zone = tripwire. The offender faults immediately, so the culprit is obvious."
+      "memory": "Red zone = tripwire. The offender faults immediately, so the culprit is obvious.",
+      "distractors": [
+        "A reserved stack area for signal handlers.",
+        "A region the scheduler marks as high priority.",
+        "Memory shared by all threads for fast IPC."
+      ]
     },
     {
       "id": "p2l4-v2-021",
       "question": "Name 3 things the Solaris kernel process structure holds.",
-      "answer": "Any 3 of: list of KLTs, virtual address mappings, user credentials, signal handlers."
+      "answer": "Any 3 of: list of KLTs, virtual address mappings, user credentials, signal handlers.",
+      "distractors": [
+        "User registers, syscall args, signal mask.",
+        "Current thread, CPU ID, dispatch queue.",
+        "Thread stacks, red zones, thread IDs."
+      ]
     },
     {
       "id": "p2l4-v2-022",
       "question": "Name 3 things a Solaris lightweight process (LWP) structure holds.",
-      "answer": "Any 3 of: user registers, syscall args, resource usage, signal mask."
+      "answer": "Any 3 of: user registers, syscall args, resource usage, signal mask.",
+      "distractors": [
+        "Address space, credentials, list of KLTs.",
+        "Current thread, CPU ID, interrupt info.",
+        "Thread-local storage, stack pointer, priority."
+      ]
     },
     {
       "id": "p2l4-v2-023",
       "question": "In Solaris, where is resource usage tracked?",
-      "answer": "Per kernel thread, in its LWP. Walk all LWPs to get the process total."
+      "answer": "Per kernel thread, in its LWP. Walk all LWPs to get the process total.",
+      "distractors": [
+        "Once per process, in the process structure.",
+        "Per CPU, in the CPU structure.",
+        "Per user-level thread, in the library."
+      ]
     },
     {
       "id": "p2l4-v2-024",
       "question": "Is the kernel-level thread structure swappable?",
-      "answer": "No. It must always stay in memory (e.g., the scheduler needs it)."
+      "answer": "No. It must always stay in memory (e.g., the scheduler needs it).",
+      "distractors": [
+        "Yes. It's swapped out when the thread sleeps.",
+        "Only on multi-CPU systems.",
+        "Yes, like the LWP."
+      ]
     },
     {
       "id": "p2l4-v2-025",
       "question": "Is the lightweight process (LWP) structure swappable?",
-      "answer": "Yes. It can be swapped out under memory pressure."
+      "answer": "Yes. It can be swapped out under memory pressure.",
+      "distractors": [
+        "No. It must always stay in memory.",
+        "Only if the process has one thread.",
+        "No. The scheduler reads it every tick."
+      ]
     },
     {
       "id": "p2l4-v2-026",
       "question": "Name 2 things the Solaris CPU data structure holds.",
-      "answer": "The current thread and a list of KLTs that ran there (+ dispatch/interrupt info)."
+      "answer": "The current thread and a list of KLTs that ran there (+ dispatch/interrupt info).",
+      "distractors": [
+        "The page table and the open files.",
+        "User registers and syscall arguments.",
+        "Signal handlers and credentials."
+      ]
     },
     {
       "id": "p2l4-v2-027",
       "question": "How does SPARC find the current thread quickly?",
-      "answer": "A dedicated register always points to the current thread."
+      "answer": "A dedicated register always points to the current thread.",
+      "distractors": [
+        "It scans the CPU's run queue.",
+        "It asks the kernel with a syscall.",
+        "It reads the PCB from memory."
+      ]
     },
     {
       "id": "p2l4-v2-028",
       "question": "What is set_concurrency() for?",
-      "answer": "The process asks the kernel for more kernel-level threads."
+      "answer": "The process asks the kernel for more kernel-level threads.",
+      "distractors": [
+        "The kernel asks the process to use fewer threads.",
+        "It sets how many CPUs a thread can run on.",
+        "It locks all threads into one CPU."
+      ]
     },
     {
       "id": "p2l4-v2-029",
       "question": "A process's KLTs all block on I/O while it still has runnable ULTs. Why is it stuck?",
-      "answer": "The library didn't know the KLTs would block, so it didn't ask for more."
+      "answer": "The library didn't know the KLTs would block, so it didn't ask for more.",
+      "distractors": [
+        "The kernel deadlocked the process.",
+        "User-level threads can never run during I/O.",
+        "The ULTs had their signals disabled."
+      ]
     },
     {
       "id": "p2l4-v2-030",
       "question": "What PThreads function sets the concurrency level?",
-      "answer": "pthread_setconcurrency()"
+      "answer": "pthread_setconcurrency()",
+      "distractors": [
+        "pthread_attr_setscope()",
+        "pthread_create()",
+        "pthread_setschedparam()"
+      ]
     },
     {
       "id": "p2l4-v2-031",
       "question": "What value passed to pthread_setconcurrency() lets the system decide?",
-      "answer": "0"
+      "answer": "0",
+      "distractors": [
+        "−1",
+        "1",
+        "The number of CPUs."
+      ]
     },
     {
       "id": "p2l4-v2-032",
       "question": "What does it mean for a ULT to be \"bound\" to a KLT?",
-      "answer": "The ULT is permanently mapped to that KLT (like pinning a thread to a CPU)."
+      "answer": "The ULT is permanently mapped to that KLT (like pinning a thread to a CPU).",
+      "distractors": [
+        "The ULT can never be preempted.",
+        "The ULT can only run on one CPU.",
+        "The ULT is detached from its parent."
+      ]
     },
     {
       "id": "p2l4-v2-033",
       "question": "Name 2 things the kernel cannot see about user-level threads.",
-      "answer": "The library's scheduling decisions, and its mutexes and wait queues."
+      "answer": "The library's scheduling decisions, and its mutexes and wait queues.",
+      "distractors": [
+        "Their stack sizes and their priorities.",
+        "Their code and their data.",
+        "Their register values and page tables."
+      ]
     },
     {
       "id": "p2l4-v2-034",
       "question": "A ULT holds a lock and the kernel preempts its KLT. What goes wrong?",
       "answer": "Other ULTs that need the lock can't run until the kernel reschedules that KLT.",
-      "memory": "This lack of visibility is a big reason to prefer the 1:1 model."
+      "memory": "This lack of visibility is a big reason to prefer the 1:1 model.",
+      "distractors": [
+        "The lock is automatically released.",
+        "The kernel migrates the lock to another KLT.",
+        "The process is terminated."
+      ]
     },
     {
       "id": "p2l4-v2-035",
       "question": "Name 4 events that hand control to the user-level library scheduler.",
-      "answer": "ULT yields, library timer fires, lock/unlock, or a blocked ULT becomes runnable."
+      "answer": "ULT yields, library timer fires, lock/unlock, or a blocked ULT becomes runnable.",
+      "distractors": [
+        "Every instruction, every cache miss, every page fault, every syscall.",
+        "Only timer interrupts from the kernel.",
+        "Only when a thread exits."
+      ]
     },
     {
       "id": "p2l4-v2-036",
       "question": "Multi-CPU: T2 unlocks; T3 (high priority) is now ready, and T1 (low) runs on another CPU. How is T1 preempted?",
       "answer": "Send a signal/IPI to the other CPU so the library runs there and swaps T1 out.",
-      "memory": "You can't touch another CPU's registers; you have to \"tap it on the shoulder.\""
+      "memory": "You can't touch another CPU's registers; you have to \"tap it on the shoulder.\"",
+      "distractors": [
+        "Directly change the other CPU's registers.",
+        "Wait for T1 to finish its timeslice.",
+        "Kill T1 and restart it later."
+      ]
     },
     {
       "id": "p2l4-v2-037",
       "question": "On a multi-CPU system, when is it better to spin than to block on a busy mutex?",
-      "answer": "When the owner is running on another CPU and the critical section is short."
+      "answer": "When the owner is running on another CPU and the critical section is short.",
+      "distractors": [
+        "When the critical section is long.",
+        "When the owner is blocked on I/O.",
+        "Always, on any system."
+      ]
     },
     {
       "id": "p2l4-v2-038",
       "question": "What is an adaptive mutex?",
-      "answer": "A mutex that spins for short critical sections and blocks for long ones."
+      "answer": "A mutex that spins for short critical sections and blocks for long ones.",
+      "distractors": [
+        "A mutex that grows its wait queue as needed.",
+        "A mutex that changes owner automatically.",
+        "A mutex that works across processes."
+      ]
     },
     {
       "id": "p2l4-v2-039",
       "question": "Why are adaptive mutexes pointless on a single CPU?",
-      "answer": "The owner can't be running at the same time, so spinning never helps."
+      "answer": "The owner can't be running at the same time, so spinning never helps.",
+      "distractors": [
+        "Single CPUs don't support atomic instructions.",
+        "Spinning always deadlocks on one CPU.",
+        "Blocking isn't possible on one CPU."
+      ]
     },
     {
       "id": "p2l4-v2-040",
       "question": "What mutex information lets an adaptive mutex decide to spin or block?",
-      "answer": "Who the owner is, and whether that owner is running on another CPU."
+      "answer": "Who the owner is, and whether that owner is running on another CPU.",
+      "distractors": [
+        "The number of waiting threads.",
+        "The mutex's creation time.",
+        "The priority of the waiting thread."
+      ]
     },
     {
       "id": "p2l4-v2-041",
       "question": "What is thread \"death row\"?",
-      "answer": "Exited threads whose data structures are kept around for reuse, not freed immediately."
+      "answer": "Exited threads whose data structures are kept around for reuse, not freed immediately.",
+      "distractors": [
+        "Threads waiting to be killed for misbehaving.",
+        "Threads blocked on I/O forever.",
+        "Threads that are deadlocked."
+      ]
     },
     {
       "id": "p2l4-v2-042",
       "question": "Who eventually frees death-row threads?",
-      "answer": "A periodic reaper thread (garbage collection)."
+      "answer": "A periodic reaper thread (garbage collection).",
+      "distractors": [
+        "The parent thread, when it joins.",
+        "The scheduler, on every context switch.",
+        "Nobody; they're kept forever."
+      ]
     },
     {
       "id": "p2l4-v2-043",
       "question": "Why keep dead threads on death row?",
-      "answer": "A new thread can reuse the structures/stack and skip the allocation cost."
+      "answer": "A new thread can reuse the structures/stack and skip the allocation cost.",
+      "distractors": [
+        "So the parent can read their return values later.",
+        "So their locks stay held.",
+        "So debuggers can inspect them."
+      ]
     },
     {
       "id": "p2l4-v2-044",
       "question": "Minimum number of threads Linux needs to boot?",
-      "answer": "20"
+      "answer": "20",
+      "distractors": [
+        "1",
+        "4",
+        "64"
+      ]
     },
     {
       "id": "p2l4-v2-045",
       "question": "Which Linux variable sets that thread limit?",
-      "answer": "max_threads"
+      "answer": "max_threads",
+      "distractors": [
+        "nr_threads",
+        "thread_limit",
+        "min_threads"
+      ]
     },
     {
       "id": "p2l4-v2-046",
       "question": "What generates interrupts?",
-      "answer": "Hardware events external to the CPU (I/O devices, timers, other CPUs)."
+      "answer": "Hardware events external to the CPU (I/O devices, timers, other CPUs).",
+      "distractors": [
+        "Software running on the CPU.",
+        "The OS scheduler.",
+        "User programs calling kill()."
+      ]
     },
     {
       "id": "p2l4-v2-047",
       "question": "What generates signals?",
-      "answer": "Software running on the CPU (or the CPU itself), via the OS."
+      "answer": "Software running on the CPU (or the CPU itself), via the OS.",
+      "distractors": [
+        "External hardware devices only.",
+        "Other CPUs only.",
+        "The network card."
+      ]
     },
     {
       "id": "p2l4-v2-048",
       "question": "Are interrupts synchronous or asynchronous?",
-      "answer": "Asynchronous only."
+      "answer": "Asynchronous only.",
+      "distractors": [
+        "Synchronous only.",
+        "Either.",
+        "Neither; they're polled."
+      ]
     },
     {
       "id": "p2l4-v2-049",
       "question": "Are signals synchronous or asynchronous?",
       "answer": "Either.",
-      "memory": "Sync: SIGSEGV, divide by zero. Async: kill from another process, timer expiry."
+      "memory": "Sync: SIGSEGV, divide by zero. Async: kill from another process, timer expiry.",
+      "distractors": [
+        "Synchronous only.",
+        "Asynchronous only.",
+        "Neither; they're polled."
+      ]
     },
     {
       "id": "p2l4-v2-050",
       "question": "What determines which interrupts a platform has? Which signals?",
-      "answer": "Interrupts depend on the hardware. Signals depend on the OS."
+      "answer": "Interrupts depend on the hardware. Signals depend on the OS.",
+      "distractors": [
+        "Both depend only on the OS.",
+        "Both depend only on the hardware.",
+        "Interrupts depend on the OS; signals on the hardware."
+      ]
     },
     {
       "id": "p2l4-v2-051",
       "question": "Interrupt mask vs signal mask: what is each tied to?",
-      "answer": "Interrupt mask is per CPU. Signal mask is per execution context (process/thread)."
+      "answer": "Interrupt mask is per CPU. Signal mask is per execution context (process/thread).",
+      "distractors": [
+        "Both are per process.",
+        "Interrupt mask is per thread; signal mask is per CPU.",
+        "Both are per CPU."
+      ]
     },
     {
       "id": "p2l4-v2-052",
       "question": "Who defines interrupt handlers? Who can define signal handlers?",
-      "answer": "The OS defines interrupt handlers (system-wide); processes can set their own signal handlers."
+      "answer": "The OS defines interrupt handlers (system-wide); processes can set their own signal handlers.",
+      "distractors": [
+        "Each process defines its own interrupt handlers.",
+        "The hardware defines both.",
+        "Only the kernel can define signal handlers."
+      ]
     },
     {
       "id": "p2l4-v2-053",
       "question": "In the toy shop analogy, what are an interrupt and a signal?",
-      "answer": "Interrupt = snowstorm warning (external); signal = \"battery low\" (from within)."
+      "answer": "Interrupt = snowstorm warning (external); signal = \"battery low\" (from within).",
+      "distractors": [
+        "Interrupt = battery low; signal = snowstorm warning.",
+        "Both are fire alarms.",
+        "Interrupt = a new order; signal = a finished toy."
+      ]
     },
     {
       "id": "p2l4-v2-054",
       "question": "What is an MSI?",
-      "answer": "A Message Signaled Interrupt: an interrupt sent as a message over the interconnect (e.g., PCIe)."
+      "answer": "A Message Signaled Interrupt: an interrupt sent as a message over the interconnect (e.g., PCIe).",
+      "distractors": [
+        "A Mutex Signal Instruction for atomic locking.",
+        "A Memory Segment Index in the page table.",
+        "A Maskable Software Interrupt raised by syscalls."
+      ]
     },
     {
       "id": "p2l4-v2-055",
       "question": "How does the CPU find the handler for interrupt N?",
-      "answer": "It looks up N in the interrupt handler table and jumps to that address."
+      "answer": "It looks up N in the interrupt handler table and jumps to that address.",
+      "distractors": [
+        "It asks the scheduler which thread should handle it.",
+        "It searches the device's firmware.",
+        "It sends a signal to every process."
+      ]
     },
     {
       "id": "p2l4-v2-056",
       "question": "On whose stack do interrupt and signal handlers run by default?",
-      "answer": "The stack of the thread that was interrupted."
+      "answer": "The stack of the thread that was interrupted.",
+      "distractors": [
+        "A dedicated kernel handler stack.",
+        "The init process's stack.",
+        "A newly created thread's stack."
+      ]
     },
     {
       "id": "p2l4-v2-057",
       "question": "What is SIGSEGV?",
-      "answer": "The signal for an illegal memory access (signal 11 in Linux)."
+      "answer": "The signal for an illegal memory access (signal 11 in Linux).",
+      "distractors": [
+        "The signal for a terminal interrupt (Ctrl-C).",
+        "The signal for a timer expiring.",
+        "The signal for a child process exiting."
+      ]
     },
     {
       "id": "p2l4-v2-058",
       "question": "Name 4 default OS actions for a signal.",
-      "answer": "Terminate, ignore, terminate + core dump, stop/continue."
+      "answer": "Terminate, ignore, terminate + core dump, stop/continue.",
+      "distractors": [
+        "Retry, restart, reboot, reschedule.",
+        "Queue, broadcast, signal, wait.",
+        "Swap, page, fork, exec."
+      ]
     },
     {
       "id": "p2l4-v2-059",
       "question": "Can every signal be caught by a custom handler?",
-      "answer": "No. Some can't be caught (e.g., the signal that always kills a process)."
+      "answer": "No. Some can't be caught (e.g., the signal that always kills a process).",
+      "distractors": [
+        "Yes. Every signal can be caught.",
+        "No. Only SIGSEGV can be caught.",
+        "Yes, but only by the kernel."
+      ]
     },
     {
       "id": "p2l4-v2-060",
       "question": "How can a signal/interrupt handler deadlock with the thread it interrupted?",
-      "answer": "The handler needs a mutex the interrupted thread holds, and that thread can't resume until the handler finishes."
+      "answer": "The handler needs a mutex the interrupted thread holds, and that thread can't resume until the handler finishes.",
+      "distractors": [
+        "The handler spins on the CPU forever.",
+        "Two handlers run at once on the same stack.",
+        "The handler forgets to return."
+      ]
     },
     {
       "id": "p2l4-v2-061",
       "question": "How do masks prevent handler deadlock?",
-      "answer": "Disable the interrupt/signal before locking; re-enable it after unlocking."
+      "answer": "Disable the interrupt/signal before locking; re-enable it after unlocking.",
+      "distractors": [
+        "Disable all interrupts permanently.",
+        "Mask the signal only after unlocking.",
+        "Give the handler its own mutex."
+      ]
     },
     {
       "id": "p2l4-v2-062",
       "question": "What happens to an event that arrives while it is masked?",
-      "answer": "It stays pending until the mask re-enables it."
+      "answer": "It stays pending until the mask re-enables it.",
+      "distractors": [
+        "It's discarded forever.",
+        "It's delivered immediately anyway.",
+        "It's sent to another process."
+      ]
     },
     {
       "id": "p2l4-v2-063",
       "question": "If a masked signal arrives 3 times, how many times does the handler run once it's unmasked?",
-      "answer": "Usually just once."
+      "answer": "Usually just once.",
+      "distractors": [
+        "Exactly 3 times.",
+        "Never.",
+        "Twice."
+      ]
     },
     {
       "id": "p2l4-v2-064",
       "question": "How do multi-CPU systems keep interrupt overhead off most cores?",
-      "answer": "Enable interrupts on only one designated CPU."
+      "answer": "Enable interrupts on only one designated CPU.",
+      "distractors": [
+        "Disable all interrupts on every CPU.",
+        "Poll every device from every core.",
+        "Send each interrupt to all CPUs."
+      ]
     },
     {
       "id": "p2l4-v2-065",
       "question": "What are the 2 key traits of one-shot signals?",
-      "answer": "n occurrences may run the handler only once; the handler must be re-installed each time."
+      "answer": "n occurrences may run the handler only once; the handler must be re-installed each time.",
+      "distractors": [
+        "They queue every occurrence, and the handler stays installed.",
+        "They can't be masked, and they always kill the process.",
+        "They run on their own stack, and they can't block."
+      ]
     },
     {
       "id": "p2l4-v2-066",
       "question": "How do real-time signals differ from one-shot signals?",
       "answer": "n signals means n handler calls (they queue).",
-      "memory": "One-shot = overwrite. Real-time = queue."
+      "memory": "One-shot = overwrite. Real-time = queue.",
+      "distractors": [
+        "They can't be masked.",
+        "They run once no matter how many arrive.",
+        "They must be re-installed every time."
+      ]
     },
     {
       "id": "p2l4-v2-067",
       "question": "POSIX signal name: terminal interrupt?",
-      "answer": "SIGINT"
+      "answer": "SIGINT",
+      "distractors": [
+        "SIGTERM",
+        "SIGKILL",
+        "SIGQUIT"
+      ]
     },
     {
       "id": "p2l4-v2-068",
       "question": "POSIX signal name: high-bandwidth data available on a socket?",
-      "answer": "SIGURG"
+      "answer": "SIGURG",
+      "distractors": [
+        "SIGIO",
+        "SIGPIPE",
+        "SIGPOLL"
+      ]
     },
     {
       "id": "p2l4-v2-069",
       "question": "POSIX signal name: background process attempting to write?",
-      "answer": "SIGTTOU"
+      "answer": "SIGTTOU",
+      "distractors": [
+        "SIGTTIN",
+        "SIGTSTP",
+        "SIGSTOP"
+      ]
     },
     {
       "id": "p2l4-v2-070",
       "question": "POSIX signal name: file size limit exceeded?",
-      "answer": "SIGXFSZ"
+      "answer": "SIGXFSZ",
+      "distractors": [
+        "SIGFPE",
+        "SIGBUS",
+        "SIGSYS"
+      ]
     },
     {
       "id": "p2l4-v2-071",
       "question": "How does SunOS avoid handler deadlock without masking around every mutex?",
-      "answer": "A handler that might block runs as its own thread with its own stack."
+      "answer": "A handler that might block runs as its own thread with its own stack.",
+      "distractors": [
+        "It disables all interrupts during every syscall.",
+        "Handlers never use mutexes in SunOS.",
+        "It kills the interrupted thread."
+      ]
     },
     {
       "id": "p2l4-v2-072",
       "question": "When does Solaris run a handler as a real thread?",
-      "answer": "Only when the handler may lock a mutex. Otherwise it runs on the interrupted thread's stack."
+      "answer": "Only when the handler may lock a mutex. Otherwise it runs on the interrupted thread's stack.",
+      "distractors": [
+        "Always, for every interrupt.",
+        "Never; handlers always use the interrupted stack.",
+        "Only for timer interrupts."
+      ]
     },
     {
       "id": "p2l4-v2-073",
       "question": "How does Solaris avoid the cost of creating interrupt threads at interrupt time?",
-      "answer": "The kernel pre-creates and pre-initializes them."
+      "answer": "The kernel pre-creates and pre-initializes them.",
+      "distractors": [
+        "It creates them on demand, once per interrupt.",
+        "It reuses the interrupted thread.",
+        "It forks a new process per interrupt."
+      ]
     },
     {
       "id": "p2l4-v2-074",
       "question": "Linux interrupt top half: what are its rules?",
-      "answer": "Runs right away, minimal work, must never block."
+      "answer": "Runs right away, minimal work, must never block.",
+      "distractors": [
+        "Runs later as a thread and can block.",
+        "Runs in user space.",
+        "Runs only when interrupts are masked forever."
+      ]
     },
     {
       "id": "p2l4-v2-075",
       "question": "Linux interrupt bottom half: what are its rules?",
       "answer": "Runs later as a scheduled thread; it can block and do arbitrary work.",
-      "memory": "Top = triage in the ER. Bottom = surgery booked for later."
+      "memory": "Top = triage in the ER. Bottom = surgery booked for later.",
+      "distractors": [
+        "Runs immediately and must never block.",
+        "Runs in user space as a signal handler.",
+        "Runs with all interrupts disabled."
+      ]
     },
     {
       "id": "p2l4-v2-076",
       "question": "Interrupts-as-threads: cost vs savings?",
-      "answer": "+40 instructions per interrupt; −12 instructions per mutex lock/unlock."
+      "answer": "+40 instructions per interrupt; −12 instructions per mutex lock/unlock.",
+      "distractors": [
+        "−40 instructions per interrupt; +12 per mutex op.",
+        "+12 per interrupt; −40 per mutex op.",
+        "No cost; +40 instructions saved per interrupt."
+      ]
     },
     {
       "id": "p2l4-v2-077",
       "question": "Why does interrupts-as-threads come out ahead overall?",
       "answer": "Mutex operations are far more frequent than interrupts.",
-      "memory": "The big lesson: optimize for the common case."
+      "memory": "The big lesson: optimize for the common case.",
+      "distractors": [
+        "Interrupts are far more frequent than mutex operations.",
+        "Threads never block during interrupts.",
+        "It removes the need for signal masks."
+      ]
     },
     {
       "id": "p2l4-v2-078",
       "question": "Solaris: why can a ULT's signal mask disagree with the kernel's mask for its LWP?",
-      "answer": "The ULT changes its mask at user level without a syscall, so the kernel never sees it."
+      "answer": "The ULT changes its mask at user level without a syscall, so the kernel never sees it.",
+      "distractors": [
+        "The kernel changes ULT masks without telling the library.",
+        "ULTs don't have signal masks.",
+        "Each LWP ignores signals entirely."
+      ]
     },
     {
       "id": "p2l4-v2-079",
       "question": "Signal case 1: ULT mask = 1 and KLT mask = 1. What happens?",
-      "answer": "The kernel interrupts the running ULT and its handler runs. No problem."
+      "answer": "The kernel interrupts the running ULT and its handler runs. No problem.",
+      "distractors": [
+        "The signal is discarded.",
+        "The library re-raises the signal to another process.",
+        "The kernel disables the KLT's mask."
+      ]
     },
     {
       "id": "p2l4-v2-080",
       "question": "What does the threading library install for every signal?",
-      "answer": "A wrapper handler that can see all the ULT signal masks."
+      "answer": "A wrapper handler that can see all the ULT signal masks.",
+      "distractors": [
+        "Nothing; the kernel calls user handlers directly.",
+        "A default handler that terminates the process.",
+        "A mask that blocks every signal."
+      ]
     },
     {
       "id": "p2l4-v2-081",
       "question": "Signal case 2: running ULT mask = 0, and another runnable ULT has mask = 1. What happens?",
-      "answer": "The library wrapper schedules the enabled ULT onto this KLT to handle it."
+      "answer": "The library wrapper schedules the enabled ULT onto this KLT to handle it.",
+      "distractors": [
+        "The signal is discarded.",
+        "The kernel kills the running ULT.",
+        "The library sends it to another process."
+      ]
     },
     {
       "id": "p2l4-v2-082",
       "question": "Signal case 3: the enabled ULT is running on another CPU's KLT. What happens?",
-      "answer": "The library sends a directed signal to that KLT's LWP."
+      "answer": "The library sends a directed signal to that KLT's LWP.",
+      "distractors": [
+        "The library waits until that ULT migrates here.",
+        "The signal is discarded.",
+        "The kernel handles it without the library."
+      ]
     },
     {
       "id": "p2l4-v2-083",
       "question": "Signal case 4: every ULT has the signal disabled. What happens?",
-      "answer": "The library syscalls to set this KLT's mask to 0, then re-raises the signal; repeat until all KLT masks are 0."
+      "answer": "The library syscalls to set this KLT's mask to 0, then re-raises the signal; repeat until all KLT masks are 0.",
+      "distractors": [
+        "The signal is discarded immediately.",
+        "The kernel kills the process.",
+        "The library enables one ULT's mask to handle it."
+      ]
     },
     {
       "id": "p2l4-v2-084",
       "question": "What does the library do later when a ULT re-enables that signal?",
-      "answer": "It makes a syscall to re-enable one KLT's mask."
+      "answer": "It makes a syscall to re-enable one KLT's mask.",
+      "distractors": [
+        "Nothing; the kernel notices automatically.",
+        "It re-enables every KLT mask at once.",
+        "It restarts the process."
+      ]
     },
     {
       "id": "p2l4-v2-085",
       "question": "Why does Solaris make signal delivery complex instead of mask updates?",
-      "answer": "Mask updates are frequent and signals are rare, so keep the common case cheap."
+      "answer": "Mask updates are frequent and signals are rare, so keep the common case cheap.",
+      "distractors": [
+        "Signals are frequent and mask updates are rare.",
+        "Syscalls are cheaper than user-level work.",
+        "The kernel can't store signal masks."
+      ]
     },
     {
       "id": "p2l4-v2-086",
       "question": "What is Linux's main execution-context abstraction?",
       "answer": "The task (struct task_struct)",
-      "memory": "1 task = 1 kernel-level thread."
+      "memory": "1 task = 1 kernel-level thread.",
+      "distractors": [
+        "The process (struct proc)",
+        "The LWP (struct lwp)",
+        "The thread (struct thread)"
+      ]
     },
     {
       "id": "p2l4-v2-087",
       "question": "In Linux, what does a task's \"pid\" field really hold?",
-      "answer": "The task's own ID (historically named pid)."
+      "answer": "The task's own ID (historically named pid).",
+      "distractors": [
+        "The ID of the whole process group.",
+        "The parent's ID.",
+        "The user's ID."
+      ]
     },
     {
       "id": "p2l4-v2-088",
       "question": "How is a whole multithreaded process identified in Linux?",
-      "answer": "By the tgid: the pid of its first task."
+      "answer": "By the tgid: the pid of its first task.",
+      "distractors": [
+        "By the pid of its most recent task.",
+        "By its parent's pid.",
+        "By the number of threads it has."
+      ]
     },
     {
       "id": "p2l4-v2-089",
       "question": "Did Linux ever use one contiguous PCB?",
-      "answer": "No. State was always pointers to sub-structures (mm, files, …)."
+      "answer": "No. State was always pointers to sub-structures (mm, files, …).",
+      "distractors": [
+        "Yes, until NPTL replaced it.",
+        "Yes; it still does.",
+        "Only for single-threaded processes."
+      ]
     },
     {
       "id": "p2l4-v2-090",
       "question": "What system call creates a task in Linux?",
-      "answer": "clone()"
+      "answer": "clone()",
+      "distractors": [
+        "fork() only",
+        "pthread_create()",
+        "spawn()"
+      ]
     },
     {
       "id": "p2l4-v2-091",
       "question": "What does clone()'s sharing-flags bitmap control?",
-      "answer": "Which parts of state (address space, files, …) the child shares with the parent."
+      "answer": "Which parts of state (address space, files, …) the child shares with the parent.",
+      "distractors": [
+        "Which CPU the child runs on.",
+        "The child's scheduling priority.",
+        "How many threads the child may create."
+      ]
     },
     {
       "id": "p2l4-v2-092",
       "question": "clone() with ALL sharing flags set creates…?",
-      "answer": "A new thread (shares everything)."
+      "answer": "A new thread (shares everything).",
+      "distractors": [
+        "A new process (like fork).",
+        "A copy of the entire parent process.",
+        "A zombie task."
+      ]
     },
     {
       "id": "p2l4-v2-093",
       "question": "clone() with NO sharing flags set is like…?",
-      "answer": "fork() (a new process). Linux implements fork via clone this way."
+      "answer": "fork() (a new process). Linux implements fork via clone this way.",
+      "distractors": [
+        "pthread_create() (a new thread).",
+        "exec() (a new program in place).",
+        "Nothing; it fails."
+      ]
     },
     {
       "id": "p2l4-v2-094",
       "question": "Forking a multithreaded process in Linux gives a child with how many threads?",
-      "answer": "One: a copy of only the thread that called fork."
+      "answer": "One: a copy of only the thread that called fork.",
+      "distractors": [
+        "The same number as the parent.",
+        "Zero; it must create its own.",
+        "Two: the caller and main."
+      ]
     },
     {
       "id": "p2l4-v2-095",
       "question": "What is Linux's current threading library, and what model does it use?",
-      "answer": "NPTL (Native POSIX Threads Library); one-to-one."
+      "answer": "NPTL (Native POSIX Threads Library); one-to-one.",
+      "distractors": [
+        "LinuxThreads; many-to-many.",
+        "NPTL; many-to-one.",
+        "Solaris threads; one-to-one."
+      ]
     },
     {
       "id": "p2l4-v2-096",
       "question": "What older Linux threading library did NPTL replace?",
-      "answer": "LinuxThreads (many-to-many-like, with complex signal handling)"
+      "answer": "LinuxThreads (many-to-many-like, with complex signal handling)",
+      "distractors": [
+        "Green threads (many-to-one)",
+        "Solaris LWPs",
+        "GNU Pth (one-to-one)"
+      ]
     },
     {
       "id": "p2l4-v2-097",
       "question": "Name 2 reasons one-to-one became practical in Linux.",
-      "answer": "Kernel traps got cheaper, and machines have more memory for kernel threads."
+      "answer": "Kernel traps got cheaper, and machines have more memory for kernel threads.",
+      "distractors": [
+        "CPUs got more cores, and disks got faster.",
+        "User libraries got smarter, and caches got bigger.",
+        "Signals became obsolete, and mutexes became free."
+      ]
     },
     {
       "id": "p2l4-v2-098",
       "question": "When might many-to-many / user-level threading be worth revisiting?",
-      "answer": "Huge thread counts (exascale) or complex heterogeneous platforms."
+      "answer": "Huge thread counts (exascale) or complex heterogeneous platforms.",
+      "distractors": [
+        "Small embedded devices with one thread.",
+        "Single-threaded desktop apps.",
+        "Whenever kernel traps are cheap."
+      ]
     }
   ]
 }

@@ -4,366 +4,711 @@
     {
       "id": "p2l1-001",
       "question": "What is a process, in the simplest definition?",
-      "answer": "An instance of an executing program."
+      "answer": "An instance of an executing program.",
+      "distractors": [
+        "A program stored on disk.",
+        "A single CPU instruction.",
+        "A thread inside the kernel."
+      ]
     },
     {
       "id": "p2l1-002",
       "question": "In the toy-shop analogy, what does a \"process\" correspond to?",
-      "answer": "An order of toys (has execution state, needs parts, and may need special hardware)."
+      "answer": "An order of toys (has execution state, needs parts, and may need special hardware).",
+      "distractors": [
+        "A worker in the toy shop.",
+        "The toy shop manager.",
+        "A workbench in the toy shop."
+      ]
     },
     {
       "id": "p2l1-003",
       "question": "What's the key difference between an \"application\" and a \"process\"?",
-      "answer": "An application is a static program on disk; a process is that program actively loaded and executing in memory."
+      "answer": "An application is a static program on disk; a process is that program actively loaded and executing in memory.",
+      "distractors": [
+        "An application runs in kernel mode; a process runs in user mode.",
+        "They're the same thing, just different names.",
+        "A process is stored on disk; an application is loaded in memory."
+      ]
     },
     {
       "id": "p2l1-004",
       "question": "Can one application produce multiple processes?",
-      "answer": "Yes — launching the same program twice creates two separate processes with independent state."
+      "answer": "Yes — launching the same program twice creates two separate processes with independent state.",
+      "distractors": [
+        "No — a program can only have one process at a time.",
+        "Yes — but all copies share the same state.",
+        "Only if the program is multithreaded."
+      ]
     },
     {
       "id": "p2l1-005",
       "question": "What OS abstraction encapsulates all of a process's state (code, data, variables)?",
-      "answer": "The address space."
+      "answer": "The address space.",
+      "distractors": [
+        "The process control block.",
+        "The page table.",
+        "The stack."
+      ]
     },
     {
       "id": "p2l1-006",
       "question": "What are the 4 main regions of a process's address space?",
-      "answer": "Code/text, data, heap, stack."
+      "answer": "Code/text, data, heap, stack.",
+      "distractors": [
+        "Code, registers, cache, disk.",
+        "Heap, stack, PCB, page table.",
+        "Text, kernel, cache, swap."
+      ]
     },
     {
       "id": "p2l1-007",
       "question": "Which part of a process's address space holds static code and initial data?",
-      "answer": "The code/text and data regions (fixed at load time)."
+      "answer": "The code/text and data regions (fixed at load time).",
+      "distractors": [
+        "The heap.",
+        "The stack.",
+        "The page table."
+      ]
     },
     {
       "id": "p2l1-008",
       "question": "Which part of a process's address space holds dynamically allocated memory (e.g. malloc)?",
-      "answer": "The heap."
+      "answer": "The heap.",
+      "distractors": [
+        "The stack.",
+        "The code/text region.",
+        "The PCB."
+      ]
     },
     {
       "id": "p2l1-009",
       "question": "Which part of a process's address space grows/shrinks in LIFO order to track function calls?",
-      "answer": "The stack."
+      "answer": "The stack.",
+      "distractors": [
+        "The heap.",
+        "The data region.",
+        "The code/text region."
+      ]
     },
     {
       "id": "p2l1-010",
       "question": "Why is a stack's LIFO behavior useful during process execution?",
-      "answer": "It lets saved state be restored in the reverse order function calls were made (e.g. returning from a called procedure)."
+      "answer": "It lets saved state be restored in the reverse order function calls were made (e.g. returning from a called procedure).",
+      "distractors": [
+        "It lets any saved item be read in any order.",
+        "It keeps the heap from growing too large.",
+        "It lets the OS share the stack between processes."
+      ]
     },
     {
       "id": "p2l1-011",
       "question": "Why are the addresses in a process's address space called \"virtual\" addresses?",
-      "answer": "They don't have to correspond directly to actual physical memory locations."
+      "answer": "They don't have to correspond directly to actual physical memory locations.",
+      "distractors": [
+        "They are only used by the kernel, never by processes.",
+        "They are stored on disk instead of memory.",
+        "They are fake addresses that are never actually accessed."
+      ]
     },
     {
       "id": "p2l1-012",
       "question": "What OS/hardware structure maps a process's virtual addresses to physical memory addresses?",
-      "answer": "The page table."
+      "answer": "The page table.",
+      "distractors": [
+        "The process control block.",
+        "The ready queue.",
+        "The stack pointer."
+      ]
     },
     {
       "id": "p2l1-013",
       "question": "Why does decoupling virtual from physical addresses help the OS?",
-      "answer": "Physical memory management stays simple and independent of each process's data layout."
+      "answer": "Physical memory management stays simple and independent of each process's data layout.",
+      "distractors": [
+        "It makes every process use less memory.",
+        "It lets processes read each other's memory freely.",
+        "It removes the need for page tables."
+      ]
     },
     {
       "id": "p2l1-014",
       "question": "If two processes P1 and P2 run at the same time, can they use the exact same virtual address range?",
-      "answer": "Yes — the OS maps each process's identical virtual addresses to distinct physical memory locations."
+      "answer": "Yes — the OS maps each process's identical virtual addresses to distinct physical memory locations.",
+      "distractors": [
+        "No — the OS must give each process a different range.",
+        "No — only if they're the same program.",
+        "Yes — and they share the same physical memory."
+      ]
     },
     {
       "id": "p2l1-015",
       "question": "What 2 CPU register values define what a process is \"doing\" at a given moment?",
-      "answer": "The program counter (PC) and the stack pointer."
+      "answer": "The program counter (PC) and the stack pointer.",
+      "distractors": [
+        "The heap pointer and the page table.",
+        "The process ID and the priority.",
+        "The cache and the TLB."
+      ]
     },
     {
       "id": "p2l1-016",
       "question": "What is a Process Control Block (PCB)?",
-      "answer": "A per-process data structure the OS maintains to track everything needed to manage/resume that process."
+      "answer": "A per-process data structure the OS maintains to track everything needed to manage/resume that process.",
+      "distractors": [
+        "The CPU register that holds the current instruction.",
+        "A table mapping virtual to physical addresses.",
+        "A queue of processes waiting for the CPU."
+      ]
     },
     {
       "id": "p2l1-017",
       "question": "What are the main components stored in a PCB?",
-      "answer": "CPU state (PC, stack pointer, all registers) · memory mappings (virtual→physical translation) · list of open files · scheduling info (CPU time used, priority)."
+      "answer": "CPU state (PC, stack pointer, all registers) · memory mappings (virtual→physical translation) · list of open files · scheduling info (CPU time used, priority).",
+      "distractors": [
+        "Only the program counter and the process ID.",
+        "The program's source code and compiler flags.",
+        "The cache contents and the TLB entries."
+      ]
     },
     {
       "id": "p2l1-018",
       "question": "When is a process's PCB created and initialized?",
-      "answer": "When the process is first created."
+      "answer": "When the process is first created.",
+      "distractors": [
+        "On every context switch.",
+        "The first time it touches the disk.",
+        "When the process terminates."
+      ]
     },
     {
       "id": "p2l1-019",
       "question": "Why doesn't the OS update the PCB's program-counter field on every single instruction?",
-      "answer": "The CPU tracks the current PC in a dedicated register while running; the OS only saves it to the PCB when the process stops running."
+      "answer": "The CPU tracks the current PC in a dedicated register while running; the OS only saves it to the PCB when the process stops running.",
+      "distractors": [
+        "The PC never changes during execution.",
+        "The page table tracks the PC instead.",
+        "The PCB stores only the starting address of the program."
+      ]
     },
     {
       "id": "p2l1-020",
       "question": "What is a context switch?",
-      "answer": "The OS mechanism for switching CPU execution from one process's context to another's."
+      "answer": "The OS mechanism for switching CPU execution from one process's context to another's.",
+      "distractors": [
+        "The switch from user mode to kernel mode on a syscall.",
+        "Copying a process's memory to disk.",
+        "Creating a child process with fork."
+      ]
     },
     {
       "id": "p2l1-021",
       "question": "What are the \"direct costs\" of a context switch?",
-      "answer": "CPU cycles spent saving/loading PCB register values to/from memory."
+      "answer": "CPU cycles spent saving/loading PCB register values to/from memory.",
+      "distractors": [
+        "Cache misses after the new process starts.",
+        "Time spent waiting on disk I/O.",
+        "Time spent running the scheduling algorithm only."
+      ]
     },
     {
       "id": "p2l1-022",
       "question": "What are the \"indirect costs\" of a context switch?",
-      "answer": "Losing cache locality — the new process's data evicts the old process's data from the CPU cache."
+      "answer": "Losing cache locality — the new process's data evicts the old process's data from the CPU cache.",
+      "distractors": [
+        "Cycles spent saving and loading registers.",
+        "Rebuilding the page table on disk.",
+        "The time to fork a new process."
+      ]
     },
     {
       "id": "p2l1-023",
       "question": "What does it mean for a process's cache to be \"hot\"?",
-      "answer": "Most of its data is currently present in the CPU cache, so accesses are fast."
+      "answer": "Most of its data is currently present in the CPU cache, so accesses are fast.",
+      "distractors": [
+        "The CPU is physically overheating from use.",
+        "The cache is full and must be flushed.",
+        "The process has been running longer than its timeslice."
+      ]
     },
     {
       "id": "p2l1-024",
       "question": "Even with a hot cache, why might the OS still context switch away from a process?",
-      "answer": "A higher-priority process needs to run, or the process's timeslice has expired."
+      "answer": "A higher-priority process needs to run, or the process's timeslice has expired.",
+      "distractors": [
+        "The hot cache might malfunction.",
+        "A hot cache always forces a context switch.",
+        "The OS must flush a hot cache regularly."
+      ]
     },
     {
       "id": "p2l1-025",
       "question": "What are the 5 states in the basic process life cycle?",
-      "answer": "New, ready, running, waiting, terminated."
+      "answer": "New, ready, running, waiting, terminated.",
+      "distractors": [
+        "Created, loaded, running, sleeping, killed.",
+        "Ready, running, blocked, swapped, zombie.",
+        "New, active, idle, waiting, finished."
+      ]
     },
     {
       "id": "p2l1-026",
       "question": "What happens in the \"new\" state of a process's life cycle?",
-      "answer": "The OS performs admission control and initializes the PCB and initial resources."
+      "answer": "The OS performs admission control and initializes the PCB and initial resources.",
+      "distractors": [
+        "The process runs its first instruction.",
+        "The process waits for I/O to complete.",
+        "The scheduler dispatches it onto the CPU."
+      ]
     },
     {
       "id": "p2l1-027",
       "question": "What moves a process from \"ready\" to \"running\"?",
-      "answer": "The scheduler dispatches it onto the CPU."
+      "answer": "The scheduler dispatches it onto the CPU.",
+      "distractors": [
+        "Its I/O operation completes.",
+        "It calls fork().",
+        "It is admitted by admission control."
+      ]
     },
     {
       "id": "p2l1-028",
       "question": "What moves a running process back to \"ready\" (instead of \"waiting\")?",
-      "answer": "It's interrupted/preempted for a context switch (not waiting on I/O or an event)."
+      "answer": "It's interrupted/preempted for a context switch (not waiting on I/O or an event).",
+      "distractors": [
+        "It starts a disk read.",
+        "It calls exit().",
+        "Its I/O completes."
+      ]
     },
     {
       "id": "p2l1-029",
       "question": "What moves a running process into the \"waiting\" state?",
-      "answer": "It initiates a long operation (e.g. disk I/O) or waits on an event (timer, keyboard input)."
+      "answer": "It initiates a long operation (e.g. disk I/O) or waits on an event (timer, keyboard input).",
+      "distractors": [
+        "Its timeslice expires.",
+        "The scheduler dispatches another process.",
+        "It is newly created."
+      ]
     },
     {
       "id": "p2l1-030",
       "question": "What moves a waiting process back to \"ready\"?",
-      "answer": "Its I/O operation completes or the event it was waiting on occurs."
+      "answer": "Its I/O operation completes or the event it was waiting on occurs.",
+      "distractors": [
+        "The scheduler preempts it.",
+        "It calls exec().",
+        "Its timeslice expires."
+      ]
     },
     {
       "id": "p2l1-031",
       "question": "In which process states can the CPU actually run/dispatch the process?",
-      "answer": "Running and ready (ready processes are eligible; they just need the scheduler to dispatch them)."
+      "answer": "Running and ready (ready processes are eligible; they just need the scheduler to dispatch them).",
+      "distractors": [
+        "Running and waiting.",
+        "Only running.",
+        "New and ready."
+      ]
     },
     {
       "id": "p2l1-032",
       "question": "What are the two basic OS mechanisms for creating a process?",
-      "answer": "fork and exec."
+      "answer": "fork and exec.",
+      "distractors": [
+        "create and destroy.",
+        "spawn and kill.",
+        "open and exec."
+      ]
     },
     {
       "id": "p2l1-033",
       "question": "What does fork() do?",
-      "answer": "Creates a new PCB for the child, copying the parent's PCB values — both continue executing right after the fork call."
+      "answer": "Creates a new PCB for the child, copying the parent's PCB values — both continue executing right after the fork call.",
+      "distractors": [
+        "Replaces the current program image with a new program.",
+        "Creates a new thread inside the same process.",
+        "Starts a new program from its first instruction with an empty PCB."
+      ]
     },
     {
       "id": "p2l1-034",
       "question": "What does exec() do?",
-      "answer": "Replaces a (forked) child's program image with a new program — its PC now points to the new program's first instruction."
+      "answer": "Replaces a (forked) child's program image with a new program — its PC now points to the new program's first instruction.",
+      "distractors": [
+        "Copies the parent's PCB into a new child process.",
+        "Creates a new thread that shares the address space.",
+        "Terminates the child and returns its exit code."
+      ]
     },
     {
       "id": "p2l1-035",
       "question": "On Unix-based systems, which process is the ancestor of all other processes?",
-      "answer": "init."
+      "answer": "init.",
+      "distractors": [
+        "kernel.",
+        "shell.",
+        "systemd-login."
+      ]
     },
     {
       "id": "p2l1-036",
       "question": "On Android, which daemon process is the parent of all app processes?",
-      "answer": "Zygote."
+      "answer": "Zygote.",
+      "distractors": [
+        "init.",
+        "launchd.",
+        "Dalvik."
+      ]
     },
     {
       "id": "p2l1-037",
       "question": "What are the 3 main jobs of the CPU scheduler?",
-      "answer": "Preempt the running process, run the scheduling algorithm to pick the next one, dispatch it onto the CPU."
+      "answer": "Preempt the running process, run the scheduling algorithm to pick the next one, dispatch it onto the CPU.",
+      "distractors": [
+        "Allocate memory, map pages, evict pages.",
+        "Handle interrupts, service syscalls, schedule I/O.",
+        "Create processes, fork threads, join threads."
+      ]
     },
     {
       "id": "p2l1-038",
       "question": "Why must the CPU scheduler itself be efficient?",
-      "answer": "Time spent scheduling is time not spent running actual application processes."
+      "answer": "Time spent scheduling is time not spent running actual application processes.",
+      "distractors": [
+        "The scheduler runs in user mode and can be preempted.",
+        "The scheduler must run on every instruction.",
+        "Slow schedulers cause cache corruption."
+      ]
     },
     {
       "id": "p2l1-039",
       "question": "In CPU-utilization terms, why does a longer timeslice (Tp) improve efficiency?",
-      "answer": "Scheduling overhead (Tsched) is fixed per switch, so a larger Tp:Tsched ratio means a higher fraction of time is spent on useful work."
+      "answer": "Scheduling overhead (Tsched) is fixed per switch, so a larger Tp:Tsched ratio means a higher fraction of time is spent on useful work.",
+      "distractors": [
+        "A longer timeslice makes each context switch cheaper.",
+        "A longer timeslice reduces cache misses to zero.",
+        "A longer timeslice lets more processes run at once."
+      ]
     },
     {
       "id": "p2l1-040",
       "question": "Name the 4 ways a process can end up in the ready queue.",
-      "answer": "I/O completes; timeslice expires; process is newly forked; an awaited interrupt/event occurs."
+      "answer": "I/O completes; timeslice expires; process is newly forked; an awaited interrupt/event occurs.",
+      "distractors": [
+        "A syscall starts; the cache is hot; the process calls exit; the heap grows.",
+        "The process calls join; memory is freed; a page is swapped out; a lock is released.",
+        "The scheduler preempts it; I/O starts; the process forks a child; a signal is sent."
+      ]
     },
     {
       "id": "p2l1-041",
       "question": "Does the CPU scheduler control when I/O operations or external events complete?",
-      "answer": "No — it has no control over those (only over timer-interrupt-driven context switches and the ready queue)."
+      "answer": "No — it has no control over those (only over timer-interrupt-driven context switches and the ready queue).",
+      "distractors": [
+        "Yes — it schedules all I/O completions.",
+        "Yes — it decides when every interrupt fires.",
+        "Only for disk I/O, not network I/O."
+      ]
     },
     {
       "id": "p2l1-042",
       "question": "What is IPC (inter-process communication)?",
-      "answer": "OS mechanisms that let processes exchange data across address spaces while preserving isolation/protection."
+      "answer": "OS mechanisms that let processes exchange data across address spaces while preserving isolation/protection.",
+      "distractors": [
+        "A way for threads in one process to share variables.",
+        "The OS scheduling processes across CPUs.",
+        "Copying a process's memory to another machine."
+      ]
     },
     {
       "id": "p2l1-043",
       "question": "How does message-passing IPC work?",
-      "answer": "Processes write/send and read/receive messages through an OS-managed communication channel."
+      "answer": "Processes write/send and read/receive messages through an OS-managed communication channel.",
+      "distractors": [
+        "The OS maps one memory region into both processes.",
+        "Processes read each other's memory directly.",
+        "The processes share a single stack."
+      ]
     },
     {
       "id": "p2l1-044",
       "question": "What's the main benefit of message-passing IPC?",
-      "answer": "Uses standard OS-provided APIs/system calls, so it's simple and uniform."
+      "answer": "Uses standard OS-provided APIs/system calls, so it's simple and uniform.",
+      "distractors": [
+        "No kernel involvement after setup.",
+        "No data is ever copied.",
+        "It needs no system calls at all."
+      ]
     },
     {
       "id": "p2l1-045",
       "question": "What's the main downside of message-passing IPC?",
-      "answer": "Overhead — every message is copied from sender's space → kernel channel → receiver's space."
+      "answer": "Overhead — every message is copied from sender's space → kernel channel → receiver's space.",
+      "distractors": [
+        "Setting up the shared mapping is expensive.",
+        "No standard API, so it's error-prone.",
+        "Messages can only be one byte long."
+      ]
     },
     {
       "id": "p2l1-046",
       "question": "How does shared-memory IPC work?",
-      "answer": "The OS maps a shared memory region into both processes' address spaces; they read/write it directly."
+      "answer": "The OS maps a shared memory region into both processes' address spaces; they read/write it directly.",
+      "distractors": [
+        "Processes send messages through a kernel buffer.",
+        "The OS copies each write into the other process.",
+        "Each process gets a read-only copy of the other's memory."
+      ]
     },
     {
       "id": "p2l1-047",
       "question": "What's the main benefit of shared-memory IPC?",
-      "answer": "No OS involvement in the actual data path, so per-access overhead is very low."
+      "answer": "No OS involvement in the actual data path, so per-access overhead is very low.",
+      "distractors": [
+        "It uses standard OS APIs, so it's simple.",
+        "The OS enforces synchronization automatically.",
+        "It needs no setup at all."
+      ]
     },
     {
       "id": "p2l1-048",
       "question": "What's the main downside of shared-memory IPC?",
-      "answer": "No fixed API — the OS is \"out of the way,\" so usage is more error-prone and often needs custom synchronization code."
+      "answer": "No fixed API — the OS is \"out of the way,\" so usage is more error-prone and often needs custom synchronization code.",
+      "distractors": [
+        "Every message is copied through the kernel.",
+        "It can only be used by threads, not processes.",
+        "It requires a network connection."
+      ]
     },
     {
       "id": "p2l1-049",
       "question": "Is shared-memory IPC always faster than message passing?",
-      "answer": "It depends — the setup/mapping cost is expensive, so it only pays off if amortized over enough messages."
+      "answer": "It depends — the setup/mapping cost is expensive, so it only pays off if amortized over enough messages.",
+      "distractors": [
+        "Yes — shared memory never copies data.",
+        "No — shared memory is always slower.",
+        "Yes — the OS is never involved."
+      ]
     },
     {
       "id": "p2l1-gap-001",
       "question": "What other terms mean the same as \"process\"?",
       "answer": "Task or job.",
-      "memory": "Process = task = job."
+      "memory": "Process = task = job.",
+      "distractors": [
+        "Thread or fiber.",
+        "Program or binary.",
+        "Kernel or daemon."
+      ]
     },
     {
       "id": "p2l1-gap-002",
       "question": "Is a waiting process still a process?",
       "answer": "Yes. It's active state, even if not running on the CPU.",
-      "memory": "Process = executing *state*, not necessarily on the CPU."
+      "memory": "Process = executing *state*, not necessarily on the CPU.",
+      "distractors": [
+        "No. It becomes a program again until it runs.",
+        "No. The OS deletes its PCB while it waits.",
+        "Only if it holds a lock."
+      ]
     },
     {
       "id": "p2l1-gap-003",
       "question": "Can the heap have holes?",
       "answer": "Yes. Parts may be unallocated, and the process can't access them.",
-      "memory": "Heap = Swiss cheese; touching a hole = segfault."
+      "memory": "Heap = Swiss cheese; touching a hole = segfault.",
+      "distractors": [
+        "No. The heap is always one contiguous block.",
+        "No. Holes only occur in the stack.",
+        "Yes, and the process can read them freely."
+      ]
     },
     {
       "id": "p2l1-gap-004",
       "question": "How big is a 32-bit virtual address space?",
       "answer": "4 GB (2^32 bytes)",
-      "memory": "2^32 = 4,294,967,296 ≈ 4 GB."
+      "memory": "2^32 = 4,294,967,296 ≈ 4 GB.",
+      "distractors": [
+        "32 MB",
+        "4 TB",
+        "64 GB"
+      ]
     },
     {
       "id": "p2l1-gap-005",
       "question": "Where can parts of a process's address space live besides RAM?",
       "answer": "Swapped out to disk.",
-      "memory": "Brought back in when needed."
+      "memory": "Brought back in when needed.",
+      "distractors": [
+        "In the CPU cache only.",
+        "In the PCB.",
+        "In another process's address space."
+      ]
     },
     {
       "id": "p2l1-gap-006",
       "question": "Besides mapping, what does the OS use the page table for?",
       "answer": "Checking that each memory access is valid.",
-      "memory": "Page table = map + security guard."
+      "memory": "Page table = map + security guard.",
+      "distractors": [
+        "Choosing which process runs next.",
+        "Storing the process's open files.",
+        "Saving the CPU registers on a context switch."
+      ]
     },
     {
       "id": "p2l1-gap-007",
       "question": "What must the OS keep for every process's memory?",
       "answer": "Its virtual → physical (or disk) mappings.",
-      "memory": "Every virtual address needs a \"where is it really?\" entry."
+      "memory": "Every virtual address needs a \"where is it really?\" entry.",
+      "distractors": [
+        "A copy of its entire memory on disk.",
+        "Its cache contents.",
+        "The source code of its program."
+      ]
     },
     {
       "id": "p2l1-gap-008",
       "question": "Cache vs memory access time?",
       "answer": "Cache: a few cycles. Memory: hundreds of cycles.",
-      "memory": "Cache = desk drawer. Memory = the basement."
+      "memory": "Cache = desk drawer. Memory = the basement.",
+      "distractors": [
+        "Cache: hundreds of cycles. Memory: a few cycles.",
+        "Both about one cycle.",
+        "Cache: a few cycles. Memory: millions of cycles."
+      ]
     },
     {
       "id": "p2l1-gap-009",
       "question": "Does \"hot cache\" mean the cache is physically hot?",
-      "answer": "No. It means most accesses are cache hits."
+      "answer": "No. It means most accesses are cache hits.",
+      "distractors": [
+        "Yes, and the OS must context switch to cool it.",
+        "It means the cache is full and must be flushed.",
+        "It means most accesses miss the cache."
+      ]
     },
     {
       "id": "p2l1-gap-010",
       "question": "What does a process return when it terminates?",
       "answer": "An exit code (success or error).",
-      "memory": "exit(0) = success; non-zero = error."
+      "memory": "exit(0) = success; non-zero = error.",
+      "distractors": [
+        "Its full memory image.",
+        "A new PCB for its parent.",
+        "Nothing; the OS just deletes it."
+      ]
     },
     {
       "id": "p2l1-gap-011",
       "question": "Where does a new user's shell process come from?",
       "answer": "It's created at login, and it spawns commands as children.",
-      "memory": "Process tree: init → login → shell → ls"
+      "memory": "Process tree: init → login → shell → ls",
+      "distractors": [
+        "It's created by the scheduler on boot.",
+        "It's the init process itself.",
+        "It's loaded from disk each time a command runs."
+      ]
     },
     {
       "id": "p2l1-gap-012",
       "question": "What does the CPU scheduler decide besides who runs next?",
       "answer": "How long the process may run (its timeslice).",
-      "memory": "Who, and for how long."
+      "memory": "Who, and for how long.",
+      "distractors": [
+        "Which pages to evict.",
+        "When I/O operations complete.",
+        "How much memory the process gets."
+      ]
     },
     {
       "id": "p2l1-gap-013",
       "question": "CPU utilization formula for timeslice Tp and scheduling time Tsched?",
       "answer": "2Tp / (2Tp + 2Tsched), i.e., Tp / (Tp + Tsched).",
-      "memory": "Useful time ÷ total time."
+      "memory": "Useful time ÷ total time.",
+      "distractors": [
+        "Tsched / (Tp + Tsched).",
+        "Tp / Tsched.",
+        "Tp − Tsched."
+      ]
     },
     {
       "id": "p2l1-gap-014",
       "question": "Utilization when Tp = Tsched?",
       "answer": "50%",
-      "memory": "Half the time is overhead."
+      "memory": "Half the time is overhead.",
+      "distractors": [
+        "100%",
+        "25%",
+        "91%"
+      ]
     },
     {
       "id": "p2l1-gap-015",
       "question": "Utilization when Tp = 10 × Tsched?",
       "answer": "≈ 91% (10/11)",
-      "memory": "A longer timeslice means less overhead."
+      "memory": "A longer timeslice means less overhead.",
+      "distractors": [
+        "50%",
+        "100%",
+        "≈ 9%"
+      ]
     },
     {
       "id": "p2l1-gap-016",
       "question": "Where does a process wait during a disk read?",
       "answer": "In the I/O queue for that device.",
-      "memory": "Each device has its own waiting line."
+      "memory": "Each device has its own waiting line.",
+      "distractors": [
+        "In the ready queue.",
+        "In the PCB of the disk.",
+        "On the CPU, spinning."
+      ]
     },
     {
       "id": "p2l1-gap-017",
       "question": "After its I/O completes, where does a process go?",
       "answer": "The ready queue (or straight to the CPU if nothing else is waiting).",
-      "memory": "I/O line → ready line → CPU."
+      "memory": "I/O line → ready line → CPU.",
+      "distractors": [
+        "Straight back to the I/O queue.",
+        "It is terminated.",
+        "It returns to the \"new\" state."
+      ]
     },
     {
       "id": "p2l1-gap-018",
       "question": "Is maintaining the I/O queue the scheduler's job?",
       "answer": "No. The scheduler maintains the ready queue.",
-      "memory": "The scheduler owns the ready line only."
+      "memory": "The scheduler owns the ready line only.",
+      "distractors": [
+        "Yes. The scheduler maintains all queues.",
+        "Yes. It decides when each I/O finishes.",
+        "No. The file system maintains the ready queue."
+      ]
     },
     {
       "id": "p2l1-gap-019",
       "question": "Can the scheduler control when events happen?",
       "answer": "No, except for timer interrupts.",
-      "memory": "The scheduler controls the clock, not the disk."
+      "memory": "The scheduler controls the clock, not the disk.",
+      "distractors": [
+        "Yes, it controls all interrupts.",
+        "Yes, but only for disk events.",
+        "No, not even timer interrupts."
+      ]
     },
     {
       "id": "p2l1-gap-020",
       "question": "Give an example of a multi-process application.",
       "answer": "A web server front end plus a database back end.",
-      "memory": "Web front end ↔ DB back end talk via IPC."
+      "memory": "Web front end ↔ DB back end talk via IPC.",
+      "distractors": [
+        "A single-threaded calculator.",
+        "A word processor with one window.",
+        "A shell running one command."
+      ]
     }
   ]
 }

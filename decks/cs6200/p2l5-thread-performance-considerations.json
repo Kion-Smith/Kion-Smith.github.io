@@ -4,445 +4,875 @@
     {
       "id": "p2l5-v2-001",
       "question": "Toy shop (6 workers, 11 orders): which model had the shorter total execution time?",
-      "answer": "Pipeline: 320 ms vs boss-worker's 360 ms."
+      "answer": "Pipeline: 320 ms vs boss-worker's 360 ms.",
+      "distractors": [
+        "Boss-worker: 320 ms vs pipeline's 360 ms.",
+        "They tied at 320 ms.",
+        "Pipeline: 220 ms vs boss-worker's 196 ms."
+      ]
     },
     {
       "id": "p2l5-v2-002",
       "question": "Toy shop (6 workers, 11 orders): which model had the lower average time per order?",
       "answer": "Boss-worker: 196 ms vs pipeline's 220 ms.",
-      "memory": "Manager wants throughput → pipeline. Customer wants fast orders → boss-worker."
+      "memory": "Manager wants throughput → pipeline. Customer wants fast orders → boss-worker.",
+      "distractors": [
+        "Pipeline: 196 ms vs boss-worker's 220 ms.",
+        "They tied at 196 ms.",
+        "Boss-worker: 320 ms vs pipeline's 360 ms."
+      ]
     },
     {
       "id": "p2l5-v2-003",
       "question": "What is the key lesson of the boss-worker vs pipeline comparison?",
-      "answer": "\"Better\" depends on which metric you use and who cares about it."
+      "answer": "\"Better\" depends on which metric you use and who cares about it.",
+      "distractors": [
+        "The pipeline is always better with 6 workers.",
+        "Boss-worker is always better for 11 orders.",
+        "Execution time is the only metric that matters."
+      ]
     },
     {
       "id": "p2l5-v2-004",
       "question": "What is a metric?",
-      "answer": "A measurable, quantifiable property of a system, used to evaluate or compare it."
+      "answer": "A measurable, quantifiable property of a system, used to evaluate or compare it.",
+      "distractors": [
+        "A subjective opinion about system quality.",
+        "A configuration parameter you set before running.",
+        "A unit of CPU time used by the scheduler."
+      ]
     },
     {
       "id": "p2l5-v2-005",
       "question": "Why report a 95th/99th-percentile value instead of the average?",
-      "answer": "Outliers can skew averages; percentiles show what most requests experience."
+      "answer": "Outliers can skew averages; percentiles show what most requests experience.",
+      "distractors": [
+        "Percentiles are easier to compute than averages.",
+        "Averages always overstate performance.",
+        "Percentiles remove the need for multiple runs."
+      ]
     },
     {
       "id": "p2l5-v2-006",
       "question": "What is wait time?",
-      "answer": "How long until a job starts executing."
+      "answer": "How long until a job starts executing.",
+      "distractors": [
+        "How long a job takes from start to finish.",
+        "Jobs completed per unit of time.",
+        "The time a job spends blocked on I/O."
+      ]
     },
     {
       "id": "p2l5-v2-007",
       "question": "What is throughput?",
-      "answer": "The number of tasks completed per unit of time."
+      "answer": "The number of tasks completed per unit of time.",
+      "distractors": [
+        "How long a single task takes to finish.",
+        "The time until a task starts.",
+        "The fraction of time the CPU is busy."
+      ]
     },
     {
       "id": "p2l5-v2-008",
       "question": "What does \"platform efficiency\" measure?",
       "answer": "How well resources are used to deliver throughput (income vs cost).",
-      "memory": "What a data-center owner cares about."
+      "memory": "What a data-center owner cares about.",
+      "distractors": [
+        "The fraction of time the CPU is busy.",
+        "How fast one request completes.",
+        "The number of servers in the data center."
+      ]
     },
     {
       "id": "p2l5-v2-009",
       "question": "Name 2 cost/energy-based metrics.",
-      "answer": "Performance per dollar; performance per watt (or per joule)."
+      "answer": "Performance per dollar; performance per watt (or per joule).",
+      "distractors": [
+        "Requests per second; response time.",
+        "Wait time; completion time.",
+        "CPU utilization; cache hit rate."
+      ]
     },
     {
       "id": "p2l5-v2-010",
       "question": "What does SLA stand for?",
-      "answer": "Service Level Agreement"
+      "answer": "Service Level Agreement",
+      "distractors": [
+        "System Load Average",
+        "Software License Agreement",
+        "Server Latency Allowance"
+      ]
     },
     {
       "id": "p2l5-v2-011",
       "question": "What metric tracks how well an enterprise app keeps its SLAs?",
-      "answer": "Percentage of SLA violations."
+      "answer": "Percentage of SLA violations.",
+      "distractors": [
+        "Average CPU utilization.",
+        "Requests per second.",
+        "Number of servers online."
+      ]
     },
     {
       "id": "p2l5-v2-012",
       "question": "Why isn't maximizing frames per second the goal for video?",
       "answer": "Humans can't perceive much beyond ~30 fps; the goal is to stay at or above that.",
-      "memory": "This is \"client-perceived performance.\""
+      "memory": "This is \"client-perceived performance.\"",
+      "distractors": [
+        "Higher fps always uses less bandwidth.",
+        "Video players can't exceed 24 fps.",
+        "Frame rate doesn't affect perceived quality at all."
+      ]
     },
     {
       "id": "p2l5-v2-013",
       "question": "What is a testbed?",
-      "answer": "The experimental setting (machines, workloads, simulation) where metrics are measured."
+      "answer": "The experimental setting (machines, workloads, simulation) where metrics are measured.",
+      "distractors": [
+        "The hardware the final product ships on.",
+        "The set of metrics being measured.",
+        "A unit test for one function."
+      ]
     },
     {
       "id": "p2l5-v2-014",
       "question": "If you can't test on the real deployment, what must a toy experiment be?",
-      "answer": "Representative: similar workloads, access patterns, and machines."
+      "answer": "Representative: similar workloads, access patterns, and machines.",
+      "distractors": [
+        "As small as possible, to run quickly.",
+        "Identical to the best-case scenario.",
+        "Random, so no bias is introduced."
+      ]
     },
     {
       "id": "p2l5-v2-015",
       "question": "\"Are threads useful?\" What does the answer depend on?",
       "answer": "The workload, the resources, and the metrics you choose.",
-      "memory": "\"It depends\" is always true in systems, but never an accepted answer."
+      "memory": "\"It depends\" is always true in systems, but never an accepted answer.",
+      "distractors": [
+        "Only on the number of CPUs.",
+        "Only on the programming language.",
+        "Nothing; threads are always useful."
+      ]
     },
     {
       "id": "p2l5-v2-016",
       "question": "List the steps of a simple web server.",
-      "answer": "Accept conn → read request → parse → find file → compute header → send header → send file/error."
+      "answer": "Accept conn → read request → parse → find file → compute header → send header → send file/error.",
+      "distractors": [
+        "Parse → accept conn → send file → read request → compute header.",
+        "Read request → accept conn → find file → parse → send file.",
+        "Accept conn → send header → find file → parse → send file."
+      ]
     },
     {
       "id": "p2l5-v2-017",
       "question": "Which web server steps are CPU-bound?",
-      "answer": "Parsing the request and computing the header."
+      "answer": "Parsing the request and computing the header.",
+      "distractors": [
+        "Accepting the connection and reading the request.",
+        "Finding and reading the file.",
+        "Sending the header and the file."
+      ]
     },
     {
       "id": "p2l5-v2-018",
       "question": "Which web server steps may block?",
-      "answer": "Network steps (accept, read, send) and disk steps (find/read file)."
+      "answer": "Network steps (accept, read, send) and disk steps (find/read file).",
+      "distractors": [
+        "Only parsing the request.",
+        "Only computing the header.",
+        "None; web servers never block."
+      ]
     },
     {
       "id": "p2l5-v2-019",
       "question": "When won't a \"blocking\" web server step actually block?",
-      "answer": "When the data is already there (connection pending, file cached in memory)."
+      "answer": "When the data is already there (connection pending, file cached in memory).",
+      "distractors": [
+        "Never; these steps always block.",
+        "Only when the CPU is idle.",
+        "When the request is very large."
+      ]
     },
     {
       "id": "p2l5-v2-020",
       "question": "What is the main benefit of a multi-process web server?",
-      "answer": "Simplicity: write one process correctly, then run many copies."
+      "answer": "Simplicity: write one process correctly, then run many copies.",
+      "distractors": [
+        "Lowest memory use of all designs.",
+        "Cheapest context switches.",
+        "Easy sharing of state between workers."
+      ]
     },
     {
       "id": "p2l5-v2-021",
       "question": "Name 3 drawbacks of a multi-process web server.",
       "answer": "High memory use, costly context switches, and expensive shared state/IPC.",
-      "memory": "Also: sharing one socket port across processes is tricky."
+      "memory": "Also: sharing one socket port across processes is tricky.",
+      "distractors": [
+        "Hard synchronization, needs kernel thread support, no isolation.",
+        "Blocking I/O stalls everything, complex event routing, one CPU only.",
+        "Too little memory, no caching, no concurrency."
+      ]
     },
     {
       "id": "p2l5-v2-022",
       "question": "Name 3 benefits of a multi-threaded web server.",
-      "answer": "Shared address space, cheap context switches, and lower memory use."
+      "answer": "Shared address space, cheap context switches, and lower memory use.",
+      "distractors": [
+        "Full isolation, no synchronization, simple code.",
+        "No context switches, no locking, one thread.",
+        "Separate address spaces, cheap IPC, easy debugging."
+      ]
     },
     {
       "id": "p2l5-v2-023",
       "question": "Name 2 drawbacks of a multi-threaded web server.",
-      "answer": "Explicit synchronization is harder to program, and it needs OS thread support."
+      "answer": "Explicit synchronization is harder to program, and it needs OS thread support.",
+      "distractors": [
+        "High memory use and costly process switches.",
+        "One blocking call stalls every request.",
+        "It can't use more than one CPU."
+      ]
     },
     {
       "id": "p2l5-v2-024",
       "question": "Event-driven model: how many processes and threads?",
-      "answer": "One address space (process), one thread of control."
+      "answer": "One address space (process), one thread of control.",
+      "distractors": [
+        "One process with one thread per request.",
+        "Many processes, one thread each.",
+        "One process per CPU, many threads each."
+      ]
     },
     {
       "id": "p2l5-v2-025",
       "question": "What is the core loop of an event-driven server?",
       "answer": "An event dispatcher that waits for events and calls the matching handler.",
-      "memory": "Works like a state machine."
+      "memory": "Works like a state machine.",
+      "distractors": [
+        "A boss thread handing requests to worker threads.",
+        "A pipeline of stages, one thread each.",
+        "A pool of processes, one per request."
+      ]
     },
     {
       "id": "p2l5-v2-026",
       "question": "Name 3 kinds of events in an event-driven web server.",
-      "answer": "Client request arrives, send completes, disk read completes."
+      "answer": "Client request arrives, send completes, disk read completes.",
+      "distractors": [
+        "Thread created, thread joined, thread exits.",
+        "Mutex locked, mutex unlocked, CV signaled.",
+        "Page fault, TLB miss, cache miss."
+      ]
     },
     {
       "id": "p2l5-v2-027",
       "question": "What is \"calling a handler\" in an event-driven server?",
-      "answer": "Jumping to the handler's code in the same address space."
+      "answer": "Jumping to the handler's code in the same address space.",
+      "distractors": [
+        "Creating a new thread to run the handler.",
+        "Sending an IPC message to another process.",
+        "Making a system call to the kernel."
+      ]
     },
     {
       "id": "p2l5-v2-028",
       "question": "What must a handler do before it would block?",
       "answer": "Start the operation, then return to the dispatcher right away.",
-      "memory": "Handlers run to completion. They never sit and wait."
+      "memory": "Handlers run to completion. They never sit and wait.",
+      "distractors": [
+        "Block until the operation completes.",
+        "Fork a helper and wait for it.",
+        "Spin until the data is ready."
+      ]
     },
     {
       "id": "p2l5-v2-029",
       "question": "How does a single-threaded event-driven server achieve concurrency?",
-      "answer": "It interleaves the steps of many requests in one execution context."
+      "answer": "It interleaves the steps of many requests in one execution context.",
+      "distractors": [
+        "It creates a thread for each request behind the scenes.",
+        "It processes requests strictly one at a time, start to finish.",
+        "It relies on the kernel to run handlers in parallel."
+      ]
     },
     {
       "id": "p2l5-v2-030",
       "question": "When does context switching pay off?",
-      "answer": "When the wait is longer than 2× the context-switch time."
+      "answer": "When the wait is longer than 2× the context-switch time.",
+      "distractors": [
+        "Always, whenever a thread waits at all.",
+        "When the wait is shorter than the context-switch time.",
+        "Only on multi-CPU systems."
+      ]
     },
     {
       "id": "p2l5-v2-031",
       "question": "Why is event-driven better than threads when there's no idle waiting?",
-      "answer": "Context switches would just waste cycles that could process requests."
+      "answer": "Context switches would just waste cycles that could process requests.",
+      "distractors": [
+        "Threads can't handle network I/O.",
+        "Event-driven servers use more CPUs.",
+        "Threads require more disk I/O."
+      ]
     },
     {
       "id": "p2l5-v2-032",
       "question": "How is the event-driven model used on multiple CPUs?",
-      "answer": "Run one event-driven process per CPU; events must be steered to the right one."
+      "answer": "Run one event-driven process per CPU; events must be steered to the right one.",
+      "distractors": [
+        "It can't be; it's limited to one CPU.",
+        "Run one thread per event across all CPUs.",
+        "Use a single dispatcher that locks every handler."
+      ]
     },
     {
       "id": "p2l5-v2-033",
       "question": "Sockets and files share what OS data structure?",
-      "answer": "The file descriptor"
+      "answer": "The file descriptor",
+      "distractors": [
+        "The page table entry",
+        "The process control block",
+        "The inode"
+      ]
     },
     {
       "id": "p2l5-v2-034",
       "question": "Which syscalls find a file descriptor that has input?",
-      "answer": "select() and poll()"
+      "answer": "select() and poll()",
+      "distractors": [
+        "read() and write()",
+        "accept() and listen()",
+        "wait() and signal()"
+      ]
     },
     {
       "id": "p2l5-v2-035",
       "question": "What is the weakness of select/poll?",
-      "answer": "They scan a long list of FDs, and few of them are ready."
+      "answer": "They scan a long list of FDs, and few of them are ready.",
+      "distractors": [
+        "They block the calling process forever.",
+        "They only work for files, not sockets.",
+        "They can only watch one FD at a time."
+      ]
     },
     {
       "id": "p2l5-v2-036",
       "question": "What Linux API fixes select/poll's scanning cost?",
-      "answer": "epoll"
+      "answer": "epoll",
+      "distractors": [
+        "kqueue",
+        "ioctl",
+        "aio_read"
+      ]
     },
     {
       "id": "p2l5-v2-037",
       "question": "Name 3 benefits of the event-driven model.",
-      "answer": "No context switches, smaller memory footprint, no synchronization needed."
+      "answer": "No context switches, smaller memory footprint, no synchronization needed.",
+      "distractors": [
+        "Full isolation, easy debugging, and parallelism.",
+        "No I/O blocking, unlimited CPUs, no caching needed.",
+        "Cheaper IPC, separate address spaces, and simple locks."
+      ]
     },
     {
       "id": "p2l5-v2-038",
       "question": "What performance cost does an event-driven server still pay?",
-      "answer": "Some loss of locality/cache pollution from jumping between handlers (much less than a full context switch)."
+      "answer": "Some loss of locality/cache pollution from jumping between handlers (much less than a full context switch).",
+      "distractors": [
+        "A full context switch between every event.",
+        "Lock contention on every handler.",
+        "Copying every request through the kernel."
+      ]
     },
     {
       "id": "p2l5-v2-039",
       "question": "What is the main risk in a pure event-driven server?",
       "answer": "One blocking I/O call in a handler blocks the whole process.",
-      "memory": "Same problem as many-to-one threading."
+      "memory": "Same problem as many-to-one threading.",
+      "distractors": [
+        "Too many threads compete for the CPU.",
+        "Handlers deadlock on shared mutexes.",
+        "The process runs out of memory for stacks."
+      ]
     },
     {
       "id": "p2l5-v2-040",
       "question": "What is asynchronous I/O?",
-      "answer": "The call returns immediately; the kernel/device finishes the I/O and the caller checks back later."
+      "answer": "The call returns immediately; the kernel/device finishes the I/O and the caller checks back later.",
+      "distractors": [
+        "The caller blocks until the I/O finishes.",
+        "The I/O is performed by the CPU instruction by instruction.",
+        "The data is read ahead of time on every call."
+      ]
     },
     {
       "id": "p2l5-v2-041",
       "question": "What makes asynchronous I/O possible?",
-      "answer": "A multithreaded kernel (or a smart device) does the waiting instead of the caller."
+      "answer": "A multithreaded kernel (or a smart device) does the waiting instead of the caller.",
+      "distractors": [
+        "A single-threaded kernel.",
+        "Disabling interrupts during I/O.",
+        "A larger CPU cache."
+      ]
     },
     {
       "id": "p2l5-v2-042",
       "question": "In the Flash design, what is a helper?",
-      "answer": "A separate process/thread that performs blocking I/O on behalf of the dispatcher."
+      "answer": "A separate process/thread that performs blocking I/O on behalf of the dispatcher.",
+      "distractors": [
+        "The main event dispatcher loop.",
+        "A handler that parses HTTP requests.",
+        "A thread that monitors CPU usage."
+      ]
     },
     {
       "id": "p2l5-v2-043",
       "question": "How do helpers talk to the event dispatcher?",
-      "answer": "Sockets or pipes, which are FDs so select/poll can watch them."
+      "answer": "Sockets or pipes, which are FDs so select/poll can watch them.",
+      "distractors": [
+        "Shared memory with mutexes.",
+        "Signals only.",
+        "Direct function calls."
+      ]
     },
     {
       "id": "p2l5-v2-044",
       "question": "What does AMPED stand for?",
       "answer": "Asymmetric Multi-Process Event-Driven",
-      "memory": "Asymmetric: helpers do only blocking I/O; the main process does everything else."
+      "memory": "Asymmetric: helpers do only blocking I/O; the main process does everything else.",
+      "distractors": [
+        "Asynchronous Multi-Process Event Dispatcher",
+        "Adaptive Multi-Pipeline Event-Driven",
+        "Asymmetric Memory-Pooled Event Dispatcher"
+      ]
     },
     {
       "id": "p2l5-v2-045",
       "question": "Why did Flash use helper processes instead of threads?",
-      "answer": "Not all kernels at the time were multithreaded."
+      "answer": "Not all kernels at the time were multithreaded.",
+      "distractors": [
+        "Processes are faster than threads.",
+        "Threads can't do disk I/O.",
+        "Processes use less memory than threads."
+      ]
     },
     {
       "id": "p2l5-v2-046",
       "question": "What is the thread-based version of AMPED called?",
-      "answer": "AMTED (Asymmetric Multi-Threaded Event-Driven)"
+      "answer": "AMTED (Asymmetric Multi-Threaded Event-Driven)",
+      "distractors": [
+        "SPED",
+        "AMPTD",
+        "MTED"
+      ]
     },
     {
       "id": "p2l5-v2-047",
       "question": "Why does AMPED use less memory than MP/MT servers?",
-      "answer": "Helpers exist only for concurrent blocking I/O, not for every request."
+      "answer": "Helpers exist only for concurrent blocking I/O, not for every request.",
+      "distractors": [
+        "Helpers don't need stacks.",
+        "AMPED uses only one process total.",
+        "AMPED stores no file data in memory."
+      ]
     },
     {
       "id": "p2l5-v2-048",
       "question": "Name 2 downsides of AMPED.",
-      "answer": "It fits server-type apps only, and routing events on multi-CPU systems is complex."
+      "answer": "It fits server-type apps only, and routing events on multi-CPU systems is complex.",
+      "distractors": [
+        "High memory use, and costly context switches for every request.",
+        "It can't do disk I/O, and it has no caching.",
+        "It needs many threads, and heavy locking."
+      ]
     },
     {
       "id": "p2l5-v2-049",
       "question": "Which model likely needs the least memory: boss-worker, pipeline, or event-driven?",
-      "answer": "Event-driven"
+      "answer": "Event-driven",
+      "distractors": [
+        "Boss-worker",
+        "Pipeline",
+        "They all use the same amount."
+      ]
     },
     {
       "id": "p2l5-v2-050",
       "question": "In Flash, what are the only blocking operations?",
-      "answer": "Disk reads (static Web 1.0 files)."
+      "answer": "Disk reads (static Web 1.0 files).",
+      "distractors": [
+        "Network sends.",
+        "CPU-bound HTTP parsing.",
+        "Database queries."
+      ]
     },
     {
       "id": "p2l5-v2-051",
       "question": "What call does Flash use to check whether file pages are already in memory?",
       "answer": "mincore()",
-      "memory": "In memory → handle locally. Not in memory → send to a helper."
+      "memory": "In memory → handle locally. Not in memory → send to a helper.",
+      "distractors": [
+        "mmap()",
+        "select()",
+        "stat()"
+      ]
     },
     {
       "id": "p2l5-v2-052",
       "question": "How do Flash helpers load file data?",
-      "answer": "With mmap()"
+      "answer": "With mmap()",
+      "distractors": [
+        "With read() into a private buffer.",
+        "By asking the dispatcher to read it.",
+        "With sendfile() directly to the socket."
+      ]
     },
     {
       "id": "p2l5-v2-053",
       "question": "What is \"computation caching\" in Flash? Give an example.",
-      "answer": "Reusing computed results, e.g., cached pathname lookups and HTTP headers."
+      "answer": "Reusing computed results, e.g., cached pathname lookups and HTTP headers.",
+      "distractors": [
+        "Caching file contents in memory.",
+        "Caching CPU instructions in the L1 cache.",
+        "Storing TCP connections for reuse."
+      ]
     },
     {
       "id": "p2l5-v2-054",
       "question": "Name 2 NIC optimizations in Flash.",
-      "answer": "DMA-aligned data structures, and scatter-gather DMA (header and data sent separately)."
+      "answer": "DMA-aligned data structures, and scatter-gather DMA (header and data sent separately).",
+      "distractors": [
+        "Interrupt coalescing and TCP offload.",
+        "Jumbo frames and checksum offload.",
+        "Polling the NIC and disabling interrupts."
+      ]
     },
     {
       "id": "p2l5-v2-055",
       "question": "What is Apache's concurrency model?",
-      "answer": "Multi-process, where each process is a multithreaded boss-worker pool."
+      "answer": "Multi-process, where each process is a multithreaded boss-worker pool.",
+      "distractors": [
+        "A single-process event-driven server.",
+        "AMPED with helper processes.",
+        "One thread per process, with a pipeline."
+      ]
     },
     {
       "id": "p2l5-v2-056",
       "question": "How is Apache's software organized?",
-      "answer": "A core (connections, concurrency) plus pluggable modules that each request passes through."
+      "answer": "A core (connections, concurrency) plus pluggable modules that each request passes through.",
+      "distractors": [
+        "A single event loop with no modules.",
+        "One process per module, connected by pipes.",
+        "A pipeline with one thread per stage."
+      ]
     },
     {
       "id": "p2l5-v2-057",
       "question": "How does Apache size its thread pools and process count?",
-      "answer": "Dynamically, based on connections, pending requests, and CPU usage."
+      "answer": "Dynamically, based on connections, pending requests, and CPU usage.",
+      "distractors": [
+        "Fixed at startup and never changed.",
+        "One thread per incoming request.",
+        "By the number of files on disk."
+      ]
     },
     {
       "id": "p2l5-v2-058",
       "question": "Which 4 questions define a good experimental design?",
-      "answer": "What is compared, which workloads, which metrics, and who cares."
+      "answer": "What is compared, which workloads, which metrics, and who cares.",
+      "distractors": [
+        "Which language, which compiler, which OS, which CPU.",
+        "How many runs, how many CPUs, how much memory, how long.",
+        "Which bugs, which fixes, which tests, which releases."
+      ]
     },
     {
       "id": "p2l5-v2-059",
       "question": "What server models did Flash compare against?",
-      "answer": "MP, MT (boss-worker), SPED, Zeus (dual SPED), and Apache."
+      "answer": "MP, MT (boss-worker), SPED, Zeus (dual SPED), and Apache.",
+      "distractors": [
+        "Nginx, IIS, and Lighttpd.",
+        "Only Apache.",
+        "MP, MT, and AMTED."
+      ]
     },
     {
       "id": "p2l5-v2-060",
       "question": "What does SPED stand for?",
-      "answer": "Single Process Event-Driven"
+      "answer": "Single Process Event-Driven",
+      "distractors": [
+        "Shared Pipeline Event Dispatcher",
+        "Synchronous Process Event Daemon",
+        "Single Pool Event-Driven"
+      ]
     },
     {
       "id": "p2l5-v2-061",
       "question": "Why did the Flash authors build MP/MT/SPED with Flash's own optimizations?",
-      "answer": "So the comparison isolates the concurrency model itself (apples to apples)."
+      "answer": "So the comparison isolates the concurrency model itself (apples to apples).",
+      "distractors": [
+        "To make Flash look better than the others.",
+        "Because the optimizations were required by HTTP.",
+        "To reduce the number of experiments needed."
+      ]
     },
     {
       "id": "p2l5-v2-062",
       "question": "Why replay real web traces instead of live traffic?",
-      "answer": "Traces are realistic yet repeatable across implementations."
+      "answer": "Traces are realistic yet repeatable across implementations.",
+      "distractors": [
+        "Traces use less memory.",
+        "Live traffic can't be measured.",
+        "Traces are faster than real requests."
+      ]
     },
     {
       "id": "p2l5-v2-063",
       "question": "What were the two real Rice University traces used by Flash?",
-      "answer": "CS trace (large, doesn't fit in memory) and Owlnet (small, fits in memory)."
+      "answer": "CS trace (large, doesn't fit in memory) and Owlnet (small, fits in memory).",
+      "distractors": [
+        "Owlnet (large, disk-bound) and CS (small, fits in memory).",
+        "Apache and Zeus logs.",
+        "A synthetic trace and a random trace."
+      ]
     },
     {
       "id": "p2l5-v2-064",
       "question": "Which 2 metrics did Flash measure?",
-      "answer": "Bandwidth (bytes/sec) and connection rate (connections/sec)."
+      "answer": "Bandwidth (bytes/sec) and connection rate (connections/sec).",
+      "distractors": [
+        "CPU utilization and cache hit rate.",
+        "Response time and wait time.",
+        "Memory use and power."
+      ]
     },
     {
       "id": "p2l5-v2-065",
       "question": "Against which workload parameter were those metrics plotted?",
-      "answer": "File size"
+      "answer": "File size",
+      "distractors": [
+        "Number of CPUs",
+        "Number of helper processes",
+        "Request rate"
+      ]
     },
     {
       "id": "p2l5-v2-066",
       "question": "How does a larger file size affect bandwidth vs connection rate?",
-      "answer": "Bandwidth goes up (connection cost is amortized); connection rate goes down (more work per connection)."
+      "answer": "Bandwidth goes up (connection cost is amortized); connection rate goes down (more work per connection).",
+      "distractors": [
+        "Both go up.",
+        "Both go down.",
+        "Bandwidth goes down; connection rate goes up."
+      ]
     },
     {
       "id": "p2l5-v2-067",
       "question": "Flash best-case test: what was the workload?",
-      "answer": "Every request asks for the same file (always cached)."
+      "answer": "Every request asks for the same file (always cached).",
+      "distractors": [
+        "Random files from a huge data set.",
+        "Only very large files.",
+        "Real traces from Rice University."
+      ]
     },
     {
       "id": "p2l5-v2-068",
       "question": "In the best-case test, why did SPED slightly beat Flash?",
-      "answer": "Flash still runs the mincore memory check, which SPED skips."
+      "answer": "Flash still runs the mincore memory check, which SPED skips.",
+      "distractors": [
+        "SPED uses helper processes, which are faster.",
+        "Flash blocks on disk I/O in that test.",
+        "SPED uses more memory for caching."
+      ]
     },
     {
       "id": "p2l5-v2-069",
       "question": "In the best-case test, why did Apache perform worst?",
-      "answer": "It had none of the Flash optimizations."
+      "answer": "It had none of the Flash optimizations.",
+      "distractors": [
+        "It blocked on disk I/O constantly.",
+        "It used too little memory.",
+        "It ran on slower hardware."
+      ]
     },
     {
       "id": "p2l5-v2-070",
       "question": "On the Owlnet trace, why did Flash edge out SPED?",
-      "answer": "Occasional disk I/O blocks SPED, while Flash hands it off to helpers."
+      "answer": "Occasional disk I/O blocks SPED, while Flash hands it off to helpers.",
+      "distractors": [
+        "SPED used too much memory.",
+        "Flash ran on more CPUs.",
+        "Owlnet didn't fit in memory at all."
+      ]
     },
     {
       "id": "p2l5-v2-071",
       "question": "On the CS trace, what happened to SPED?",
-      "answer": "It fell below MP and MT, because the disk-bound workload blocks its only thread."
+      "answer": "It fell below MP and MT, because the disk-bound workload blocks its only thread.",
+      "distractors": [
+        "It stayed the best of all servers.",
+        "It ran out of memory and crashed.",
+        "It matched Flash exactly."
+      ]
     },
     {
       "id": "p2l5-v2-072",
       "question": "On the CS trace, why did MT beat MP?",
-      "answer": "A smaller footprint leaves more cache memory, and thread switches/sync are cheaper."
+      "answer": "A smaller footprint leaves more cache memory, and thread switches/sync are cheaper.",
+      "distractors": [
+        "MP had fewer processes than MT had threads.",
+        "MT used helper processes.",
+        "MP couldn't use the disk."
+      ]
     },
     {
       "id": "p2l5-v2-073",
       "question": "On the CS trace, why did Flash win overall?",
-      "answer": "Smallest footprint (more cache), no blocking, and no synchronization needed."
+      "answer": "Smallest footprint (more cache), no blocking, and no synchronization needed.",
+      "distractors": [
+        "It used the most threads.",
+        "It had no caching at all.",
+        "It ran on the fastest hardware."
+      ]
     },
     {
       "id": "p2l5-v2-074",
       "question": "What did the Flash optimization experiments show?",
-      "answer": "Each caching optimization (path, mmap, header) raised connection rate significantly."
+      "answer": "Each caching optimization (path, mmap, header) raised connection rate significantly.",
+      "distractors": [
+        "The optimizations had no measurable effect.",
+        "Only the mmap optimization mattered.",
+        "The optimizations helped bandwidth but hurt connection rate."
+      ]
     },
     {
       "id": "p2l5-v2-075",
       "question": "When is SPED better than AMPED?",
-      "answer": "When the data is all in cache."
+      "answer": "When the data is all in cache.",
+      "distractors": [
+        "When the workload is disk-bound.",
+        "When files are very large.",
+        "Never."
+      ]
     },
     {
       "id": "p2l5-v2-076",
       "question": "When is AMPED better than SPED?",
-      "answer": "When the workload is disk-bound (no async I/O support)."
+      "answer": "When the workload is disk-bound (no async I/O support).",
+      "distractors": [
+        "When the data is all in cache.",
+        "When there's only one request.",
+        "Never."
+      ]
     },
     {
       "id": "p2l5-v2-077",
       "question": "Why does Flash beat SPED once the data set is about 100 MB?",
       "answer": "The workload becomes I/O-bound, and Flash's helpers keep it from blocking.",
-      "memory": "Wrong quiz answer: \"Flash caches more files.\" It doesn't; helpers take up memory."
+      "memory": "Wrong quiz answer: \"Flash caches more files.\" It doesn't; helpers take up memory.",
+      "distractors": [
+        "Flash can cache more files than SPED.",
+        "SPED starts receiving more requests.",
+        "SPED runs out of CPU."
+      ]
     },
     {
       "id": "p2l5-v2-078",
       "question": "What makes an experiment \"relevant\"?",
-      "answer": "Its results are credible and matter to the stakeholders."
+      "answer": "Its results are credible and matter to the stakeholders.",
+      "distractors": [
+        "It uses the largest possible workload.",
+        "It produces the best-looking graph.",
+        "It runs on the newest hardware."
+      ]
     },
     {
       "id": "p2l5-v2-079",
       "question": "Who cares about response time? Who cares about throughput?",
-      "answer": "Clients care about response time; operators care about throughput."
+      "answer": "Clients care about response time; operators care about throughput.",
+      "distractors": [
+        "Operators care about response time; clients care about throughput.",
+        "Both care only about throughput.",
+        "Both care only about cost."
+      ]
     },
     {
       "id": "p2l5-v2-080",
       "question": "When choosing metrics, what's a good rule of thumb?",
-      "answer": "Use the domain's standard metrics plus ones that answer \"why am I doing this?\""
+      "answer": "Use the domain's standard metrics plus ones that answer \"why am I doing this?\"",
+      "distractors": [
+        "Pick the metric that makes your system look best.",
+        "Use as many metrics as possible.",
+        "Invent new metrics for every experiment."
+      ]
     },
     {
       "id": "p2l5-v2-081",
       "question": "What 2 kinds of system factors affect metrics?",
-      "answer": "System resources (hardware and software) and workload parameters."
+      "answer": "System resources (hardware and software) and workload parameters.",
+      "distractors": [
+        "Programming language and compiler flags.",
+        "Graph style and chart type.",
+        "Author names and paper venue."
+      ]
     },
     {
       "id": "p2l5-v2-082",
       "question": "Rule for choosing parameter ranges in experiments?",
-      "answer": "They must be realistic, unless you're deliberately showing best or worst case."
+      "answer": "They must be realistic, unless you're deliberately showing best or worst case.",
+      "distractors": [
+        "Use the widest possible range, even unrealistic ones.",
+        "Use a single value to keep it simple.",
+        "Pick values that make your system win."
+      ]
     },
     {
       "id": "p2l5-v2-083",
       "question": "What does \"compare apples to apples\" mean?",
       "answer": "Change only one factor between runs so you can attribute the difference to it.",
-      "memory": "Bad: big workload + few threads vs. small workload + many threads. Which change helped?"
+      "memory": "Bad: big workload + few threads vs. small workload + many threads. Which change helped?",
+      "distractors": [
+        "Compare two systems of the same brand.",
+        "Change the workload and resources together.",
+        "Run each test exactly once."
+      ]
     },
     {
       "id": "p2l5-v2-084",
       "question": "What baseline should an experiment compare against?",
-      "answer": "The state of the art, or at least common practice (or extreme cases)."
+      "answer": "The state of the art, or at least common practice (or extreme cases).",
+      "distractors": [
+        "Your own previous version only.",
+        "A random configuration.",
+        "No baseline; absolute numbers are enough."
+      ]
     },
     {
       "id": "p2l5-v2-085",
       "question": "After running experiments, what must you do besides showing graphs?",
-      "answer": "State the conclusion the results support."
+      "answer": "State the conclusion the results support.",
+      "distractors": [
+        "Nothing; the graphs speak for themselves.",
+        "List every raw data point.",
+        "Rerun with different hardware."
+      ]
     },
     {
       "id": "p2l5-v2-086",
       "question": "Toy shop worst-case quiz: which experiment design is correct?",
       "answer": "All train orders, with 3 → 6 → 9 workers.",
-      "memory": "Worst-case load, and workers added evenly across the 3 work areas."
+      "memory": "Worst-case load, and workers added evenly across the 3 work areas.",
+      "distractors": [
+        "All train orders, with 3 → 4 → 5 workers.",
+        "Mixed orders, with 3 → 6 → 9 workers.",
+        "Blocks, bears, then trains, with 3 → 6 → 9 workers."
+      ]
     }
   ]
 }

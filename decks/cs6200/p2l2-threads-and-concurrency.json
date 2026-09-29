@@ -4,572 +4,1117 @@
     {
       "id": "p2l2-001",
       "question": "In one phrase, what is a thread?",
-      "answer": "An independent execution context (stream of instructions) within a single process."
+      "answer": "An independent execution context (stream of instructions) within a single process.",
+      "distractors": [
+        "A separate program with its own address space.",
+        "A copy of a process created by fork().",
+        "A kernel data structure that maps pages."
+      ]
     },
     {
       "id": "p2l2-002",
       "question": "In the toy-shop analogy, what does a \"thread\" correspond to?",
-      "answer": "A worker in the toy shop (active, works simultaneously with others, needs coordination)."
+      "answer": "A worker in the toy shop (active, works simultaneously with others, needs coordination).",
+      "distractors": [
+        "An order of toys.",
+        "The toy shop manager.",
+        "A toy part in storage."
+      ]
     },
     {
       "id": "p2l2-003",
       "question": "Why must a process have multiple threads to use multiple CPUs/cores?",
-      "answer": "A single execution context (one PC/stack/registers) can only run on one CPU at a time."
+      "answer": "A single execution context (one PC/stack/registers) can only run on one CPU at a time.",
+      "distractors": [
+        "The OS limits each process to one CPU unless it forks.",
+        "One thread can run on many CPUs, but only slowly.",
+        "Multiple threads are needed only for I/O, not for CPUs."
+      ]
     },
     {
       "id": "p2l2-004",
       "question": "What do threads in the same process share?",
-      "answer": "The entire virtual address space (code, data, file mappings)."
+      "answer": "The entire virtual address space (code, data, file mappings).",
+      "distractors": [
+        "Their stacks and registers.",
+        "Only the code segment; data is private.",
+        "Nothing; each thread has its own address space."
+      ]
     },
     {
       "id": "p2l2-005",
       "question": "What per-thread state must each thread keep separate, even though it shares an address space?",
-      "answer": "Its own program counter, stack pointer, stack, and registers."
+      "answer": "Its own program counter, stack pointer, stack, and registers.",
+      "distractors": [
+        "Its own page table and heap.",
+        "Its own code segment and open files.",
+        "Its own virtual address space."
+      ]
     },
     {
       "id": "p2l2-006",
       "question": "How does a multithreaded process's PCB differ from a single-threaded one?",
-      "answer": "One shared section (address space, code/data) plus separate per-thread execution-context info for each thread."
+      "answer": "One shared section (address space, code/data) plus separate per-thread execution-context info for each thread.",
+      "distractors": [
+        "Each thread gets a complete copy of the PCB.",
+        "It's identical; the OS doesn't track threads.",
+        "It stores only the threads' stacks, not the address space."
+      ]
     },
     {
       "id": "p2l2-007",
       "question": "Do threads or processes usually result in hotter caches when several execute concurrently?",
-      "answer": "Threads — since they share an address space, one thread's cached data is often useful to another."
+      "answer": "Threads — since they share an address space, one thread's cached data is often useful to another.",
+      "distractors": [
+        "Processes — each has its own cache region.",
+        "Neither; they're always identical.",
+        "Processes — they never share data, so no cache conflicts."
+      ]
     },
     {
       "id": "p2l2-008",
       "question": "Why do threads context-switch faster than processes?",
-      "answer": "They share the same virtual-to-physical mappings, so no new address-space mapping has to be created."
+      "answer": "They share the same virtual-to-physical mappings, so no new address-space mapping has to be created.",
+      "distractors": [
+        "They don't save any registers when switching.",
+        "They skip the scheduler entirely.",
+        "They run in kernel mode, where switches are free."
+      ]
     },
     {
       "id": "p2l2-009",
       "question": "Do both processes and threads have their own execution context (stack + registers)?",
-      "answer": "Yes — both do."
+      "answer": "Yes — both do.",
+      "distractors": [
+        "Only processes do.",
+        "Only threads do.",
+        "Neither; the CPU tracks it instead."
+      ]
     },
     {
       "id": "p2l2-010",
       "question": "Do both processes and threads use some communication mechanism between execution contexts?",
-      "answer": "Yes — processes use IPC; threads synchronize via shared memory."
+      "answer": "Yes — processes use IPC; threads synchronize via shared memory.",
+      "distractors": [
+        "No — threads never need to coordinate.",
+        "Only processes do; threads use IPC too.",
+        "No — both rely only on the scheduler."
+      ]
     },
     {
       "id": "p2l2-011",
       "question": "Give 2 reasons multithreading is more resource-efficient than an equivalent multi-process design.",
-      "answer": "Threads share one address space (no duplicate memory allocation) and communicate via shared memory instead of costlier IPC."
+      "answer": "Threads share one address space (no duplicate memory allocation) and communicate via shared memory instead of costlier IPC.",
+      "distractors": [
+        "Threads get their own address space and use IPC for everything.",
+        "Threads skip context switches entirely and use less CPU.",
+        "Threads don't need stacks and don't need synchronization."
+      ]
     },
     {
       "id": "p2l2-012",
       "question": "How does splitting work across specialized threads (vs. generic ones) improve performance?",
-      "answer": "Each thread repeatedly touches a smaller code/data footprint, so it runs with a hotter cache."
+      "answer": "Each thread repeatedly touches a smaller code/data footprint, so it runs with a hotter cache.",
+      "distractors": [
+        "Each thread gets its own dedicated CPU core.",
+        "Specialized threads avoid context switches entirely.",
+        "Specialized threads need no synchronization."
+      ]
     },
     {
       "id": "p2l2-013",
       "question": "Why is multithreading useful even on a single CPU?",
-      "answer": "It lets the CPU switch to another thread during one thread's I/O wait, hiding idle time."
+      "answer": "It lets the CPU switch to another thread during one thread's I/O wait, hiding idle time.",
+      "distractors": [
+        "It's not — threads only help with multiple CPUs.",
+        "It doubles the CPU's clock speed.",
+        "It removes the need for the scheduler."
+      ]
     },
     {
       "id": "p2l2-014",
       "question": "Under what condition does it make sense to switch to another thread instead of just waiting on I/O?",
-      "answer": "When the expected idle time exceeds roughly 2x the context-switch cost."
+      "answer": "When the expected idle time exceeds roughly 2x the context-switch cost.",
+      "distractors": [
+        "When idle time is less than the context-switch cost.",
+        "Always — switching is free.",
+        "Only when the idle time exceeds 100× the switch cost."
+      ]
     },
     {
       "id": "p2l2-015",
       "question": "Why is hiding I/O latency cheaper with threads than with processes?",
-      "answer": "Thread context switches skip recreating virtual-to-physical address mappings, so they're faster."
+      "answer": "Thread context switches skip recreating virtual-to-physical address mappings, so they're faster.",
+      "distractors": [
+        "Threads don't need to save any registers.",
+        "Threads never block on I/O.",
+        "Threads run with interrupts disabled."
+      ]
     },
     {
       "id": "p2l2-016",
       "question": "How does multithreading benefit the OS kernel itself?",
-      "answer": "Lets the kernel run multiple execution contexts concurrently across CPUs (e.g. for daemons/drivers)."
+      "answer": "Lets the kernel run multiple execution contexts concurrently across CPUs (e.g. for daemons/drivers).",
+      "distractors": [
+        "It makes each system call faster.",
+        "It removes the need for device drivers.",
+        "It lets user apps run in kernel mode."
+      ]
     },
     {
       "id": "p2l2-017",
       "question": "In Birrell's thread model, what does the thread data structure store?",
-      "answer": "Thread ID, register values (PC, stack pointer), the stack, and other thread-specific attributes."
+      "answer": "Thread ID, register values (PC, stack pointer), the stack, and other thread-specific attributes.",
+      "distractors": [
+        "The page table and the list of open files.",
+        "The address space and the heap.",
+        "Only the thread ID and priority."
+      ]
     },
     {
       "id": "p2l2-018",
       "question": "In Birrell's model, what 2 arguments does thread fork() take?",
-      "answer": "A procedure to run (proc) and its arguments (args)."
+      "answer": "A procedure to run (proc) and its arguments (args).",
+      "distractors": [
+        "A process ID and a priority.",
+        "A mutex and a condition variable.",
+        "A file name and a mode."
+      ]
     },
     {
       "id": "p2l2-019",
       "question": "After a Birrell-style fork() creates thread T1, what does the parent thread do next?",
-      "answer": "Continues executing the instruction right after the fork call, concurrently with T1."
+      "answer": "Continues executing the instruction right after the fork call, concurrently with T1.",
+      "distractors": [
+        "Waits until T1 finishes.",
+        "Is replaced by T1's program.",
+        "Terminates, and T1 takes over."
+      ]
     },
     {
       "id": "p2l2-020",
       "question": "What does join() do in Birrell's thread model?",
-      "answer": "Blocks the calling thread until the specified child thread finishes, then returns its result."
+      "answer": "Blocks the calling thread until the specified child thread finishes, then returns its result.",
+      "distractors": [
+        "Creates a new thread and returns its ID.",
+        "Merges two threads into one.",
+        "Wakes all threads waiting on a condition."
+      ]
     },
     {
       "id": "p2l2-021",
       "question": "Once a joined child thread finishes, what happens to its resources?",
-      "answer": "They're freed and the child is terminated."
+      "answer": "They're freed and the child is terminated.",
+      "distractors": [
+        "They're kept until the process exits.",
+        "They're passed to the parent thread.",
+        "They're reused by the next forked thread automatically."
+      ]
     },
     {
       "id": "p2l2-022",
       "question": "Why do concurrently running threads risk data races even though processes don't (by default)?",
-      "answer": "Threads share the same virtual-to-physical mappings, so they can legally access the exact same memory at the same time."
+      "answer": "Threads share the same virtual-to-physical mappings, so they can legally access the exact same memory at the same time.",
+      "distractors": [
+        "Threads run in kernel mode.",
+        "Threads always run on the same CPU.",
+        "Threads don't have their own stacks."
+      ]
     },
     {
       "id": "p2l2-023",
       "question": "What is mutual exclusion?",
-      "answer": "A guarantee that only one thread at a time can execute a given operation/section of code."
+      "answer": "A guarantee that only one thread at a time can execute a given operation/section of code.",
+      "distractors": [
+        "Letting all threads run the same code at once.",
+        "Giving each thread its own address space.",
+        "A guarantee that threads run in creation order."
+      ]
     },
     {
       "id": "p2l2-024",
       "question": "What is a mutex?",
-      "answer": "A lock construct that gives one thread at a time exclusive access to a shared resource."
+      "answer": "A lock construct that gives one thread at a time exclusive access to a shared resource.",
+      "distractors": [
+        "A queue where threads wait for a condition.",
+        "A counter that allows N threads at once.",
+        "A signal sent to all threads."
+      ]
     },
     {
       "id": "p2l2-025",
       "question": "What happens to a thread that tries to lock an already-locked mutex?",
-      "answer": "It blocks (suspends) until the mutex is released."
+      "answer": "It blocks (suspends) until the mutex is released.",
+      "distractors": [
+        "It spins, retrying until it gets the lock.",
+        "It gets the lock anyway and runs.",
+        "It's terminated with an error."
+      ]
     },
     {
       "id": "p2l2-026",
       "question": "What does a mutex data structure need to track?",
-      "answer": "Its lock state (locked/free), the list of threads blocked on it, and (often) its current owner."
+      "answer": "Its lock state (locked/free), the list of threads blocked on it, and (often) its current owner.",
+      "distractors": [
+        "The condition it's waiting on and its timeslice.",
+        "The list of all threads in the process.",
+        "The page table of its owner."
+      ]
     },
     {
       "id": "p2l2-027",
       "question": "What is a \"critical section\"?",
-      "answer": "The portion of code protected by a mutex, where only one thread may execute at a time."
+      "answer": "The portion of code protected by a mutex, where only one thread may execute at a time.",
+      "distractors": [
+        "Any code that runs in kernel mode.",
+        "Code that must run before main().",
+        "Code that can run in parallel with no locking."
+      ]
     },
     {
       "id": "p2l2-028",
       "question": "In a mutex API with separate lock()/unlock() calls, what must a programmer remember to do?",
-      "answer": "Explicitly call unlock() when leaving the critical section, or no other thread can proceed."
+      "answer": "Explicitly call unlock() when leaving the critical section, or no other thread can proceed.",
+      "distractors": [
+        "Call lock() twice to be safe.",
+        "Call join() on every waiting thread.",
+        "Nothing; unlock is automatic."
+      ]
     },
     {
       "id": "p2l2-029",
       "question": "What problem do condition variables solve that plain mutexes can't?",
-      "answer": "Letting a thread wait efficiently until a specific condition becomes true, instead of busy-waiting/polling."
+      "answer": "Letting a thread wait efficiently until a specific condition becomes true, instead of busy-waiting/polling.",
+      "distractors": [
+        "Letting two threads hold the same lock at once.",
+        "Making mutexes faster to acquire.",
+        "Preventing deadlock automatically."
+      ]
     },
     {
       "id": "p2l2-030",
       "question": "What 2 arguments does a condition variable's wait() call take?",
-      "answer": "A mutex and a condition variable."
+      "answer": "A mutex and a condition variable.",
+      "distractors": [
+        "A thread ID and a timeout.",
+        "Two mutexes.",
+        "A condition variable and a priority."
+      ]
     },
     {
       "id": "p2l2-031",
       "question": "What does wait() do to the mutex it's called with?",
-      "answer": "Automatically releases it while waiting, and automatically reacquires it before returning."
+      "answer": "Automatically releases it while waiting, and automatically reacquires it before returning.",
+      "distractors": [
+        "Keeps holding it the whole time.",
+        "Releases it and never takes it back.",
+        "Destroys it."
+      ]
     },
     {
       "id": "p2l2-032",
       "question": "What's the difference between signal() and broadcast() on a condition variable?",
-      "answer": "signal() wakes one waiting thread; broadcast() wakes all waiting threads."
+      "answer": "signal() wakes one waiting thread; broadcast() wakes all waiting threads.",
+      "distractors": [
+        "signal() wakes all waiting threads; broadcast() wakes one.",
+        "signal() is for mutexes; broadcast() is for processes.",
+        "signal() blocks the caller; broadcast() doesn't."
+      ]
     },
     {
       "id": "p2l2-033",
       "question": "After broadcast() wakes multiple threads, can they all proceed immediately?",
-      "answer": "No — they must reacquire the shared mutex one at a time."
+      "answer": "No — they must reacquire the shared mutex one at a time.",
+      "distractors": [
+        "Yes — they all run the critical section at once.",
+        "Yes — broadcast gives each its own mutex.",
+        "No — only the first one ever wakes."
+      ]
     },
     {
       "id": "p2l2-034",
       "question": "Why must a condition-variable wait always be inside a while loop (not an if)?",
-      "answer": "The predicate must be rechecked after waking, since the shared state may have changed again before this thread resumes."
+      "answer": "The predicate must be rechecked after waking, since the shared state may have changed again before this thread resumes.",
+      "distractors": [
+        "A while loop makes the wait faster.",
+        "An if would deadlock immediately.",
+        "The while loop releases the mutex for other threads."
+      ]
     },
     {
       "id": "p2l2-035",
       "question": "What is the readers/writer problem?",
-      "answer": "Letting any number of readers access a resource concurrently, but only one writer (and no readers) at a time."
+      "answer": "Letting any number of readers access a resource concurrently, but only one writer (and no readers) at a time.",
+      "distractors": [
+        "Letting any number of writers in at once, but only one reader.",
+        "Letting readers and writers take strict turns.",
+        "Letting only one thread of any kind access the resource at a time."
+      ]
     },
     {
       "id": "p2l2-036",
       "question": "Why can't a plain mutex alone solve the readers/writer problem?",
-      "answer": "A mutex only allows one thread at a time total — it can't allow multiple concurrent readers."
+      "answer": "A mutex only allows one thread at a time total — it can't allow multiple concurrent readers.",
+      "distractors": [
+        "A mutex can't block writers.",
+        "A mutex can't be used with files.",
+        "A mutex would let readers and writers in together."
+      ]
     },
     {
       "id": "p2l2-037",
       "question": "In the readers/writer solution, what does the resource_counter proxy variable's value mean?",
-      "answer": "0 = free, positive N = N active readers, -1 = one active writer."
+      "answer": "0 = free, positive N = N active readers, -1 = one active writer.",
+      "distractors": [
+        "0 = one writer, N = readers waiting, −1 = free.",
+        "1 = free, 0 = in use.",
+        "N = number of writers waiting."
+      ]
     },
     {
       "id": "p2l2-038",
       "question": "In the readers/writer solution, what do the read_phase and write_phase condition variables represent?",
-      "answer": "What waiting readers, and waiting writers, block on respectively."
+      "answer": "What waiting readers, and waiting writers, block on respectively.",
+      "distractors": [
+        "The number of active readers and writers.",
+        "The mutexes for reading and writing.",
+        "The priority of readers vs writers."
+      ]
     },
     {
       "id": "p2l2-039",
       "question": "In the readers/writer solution, why does the last exiting reader signal write_phase (not broadcast)?",
-      "answer": "Only one writer can proceed, so waking just one waiter is correct."
+      "answer": "Only one writer can proceed, so waking just one waiter is correct.",
+      "distractors": [
+        "Broadcast would crash the waiting writers.",
+        "Only readers can be woken by broadcast.",
+        "Signal wakes all writers anyway."
+      ]
     },
     {
       "id": "p2l2-040",
       "question": "In the readers/writer solution, why does an exiting writer broadcast to read_phase?",
-      "answer": "Multiple readers can proceed concurrently, so all waiting readers should be woken."
+      "answer": "Multiple readers can proceed concurrently, so all waiting readers should be woken.",
+      "distractors": [
+        "Only one reader can proceed at a time.",
+        "Readers must wake in the order they arrived.",
+        "Broadcast also wakes the writer that just left."
+      ]
     },
     {
       "id": "p2l2-041",
       "question": "What's the standard structure of an \"enter critical section\" block?",
-      "answer": "Lock mutex → check predicate in a while loop → wait if not met → proceed once met."
+      "answer": "Lock mutex → check predicate in a while loop → wait if not met → proceed once met.",
+      "distractors": [
+        "Check predicate → lock mutex → update → wait.",
+        "Lock mutex → check predicate once with if → proceed.",
+        "Wait → lock mutex → check predicate → unlock."
+      ]
     },
     {
       "id": "p2l2-042",
       "question": "What's the standard structure of an \"exit critical section\" block?",
-      "answer": "Lock mutex → update shared state/predicate → signal/broadcast → unlock."
+      "answer": "Lock mutex → update shared state/predicate → signal/broadcast → unlock.",
+      "distractors": [
+        "Signal → lock mutex → update → unlock.",
+        "Unlock → update shared state → lock.",
+        "Lock mutex → wait → update → unlock."
+      ]
     },
     {
       "id": "p2l2-043",
       "question": "Common pitfall: what should you do when declaring a mutex/condition variable?",
-      "answer": "Comment which shared resource/operation it protects."
+      "answer": "Comment which shared resource/operation it protects.",
+      "distractors": [
+        "Give it the same name as its resource.",
+        "Make it a local variable in each thread.",
+        "Declare one per thread."
+      ]
     },
     {
       "id": "p2l2-044",
       "question": "Common pitfall: what happens if different threads use different mutexes to protect the same resource?",
-      "answer": "The mutex offers no real protection — concurrent unsafe access can still happen."
+      "answer": "The mutex offers no real protection — concurrent unsafe access can still happen.",
+      "distractors": [
+        "They deadlock immediately.",
+        "The OS merges the two mutexes.",
+        "It's fine, as long as each thread unlocks."
+      ]
     },
     {
       "id": "p2l2-045",
       "question": "Common pitfall: is calling broadcast() when signal() would suffice dangerous?",
-      "answer": "No — just less efficient. Using signal() when broadcast() was needed IS dangerous (threads can wait forever)."
+      "answer": "No — just less efficient. Using signal() when broadcast() was needed IS dangerous (threads can wait forever).",
+      "distractors": [
+        "Yes — broadcast can wake threads that crash.",
+        "Yes — broadcast always causes deadlock.",
+        "No — and using signal when broadcast was needed is also safe."
+      ]
     },
     {
       "id": "p2l2-046",
       "question": "What is a \"spurious wake-up\"?",
-      "answer": "A thread woken by signal/broadcast that still can't proceed (e.g. mutex still held), wasting a context switch."
+      "answer": "A thread woken by signal/broadcast that still can't proceed (e.g. mutex still held), wasting a context switch.",
+      "distractors": [
+        "A thread that wakes without anyone calling signal, due to a hardware bug.",
+        "A thread that never wakes up.",
+        "A thread that wakes and deadlocks."
+      ]
     },
     {
       "id": "p2l2-047",
       "question": "How can spurious wake-ups sometimes be avoided?",
-      "answer": "Unlock the mutex before calling signal/broadcast, when correctness allows it."
+      "answer": "Unlock the mutex before calling signal/broadcast, when correctness allows it.",
+      "distractors": [
+        "Always use broadcast instead of signal.",
+        "Use if instead of while.",
+        "Signal before locking the mutex."
+      ]
     },
     {
       "id": "p2l2-048",
       "question": "What is a deadlock?",
-      "answer": "A situation where two or more threads each wait on a resource the other holds, so none can proceed."
+      "answer": "A situation where two or more threads each wait on a resource the other holds, so none can proceed.",
+      "distractors": [
+        "A thread that runs forever in a loop.",
+        "Two threads writing the same variable at once.",
+        "A thread waiting on a slow disk read."
+      ]
     },
     {
       "id": "p2l2-049",
       "question": "In the classic 2-thread/2-mutex deadlock, what causes it?",
-      "answer": "T1 locks A then wants B, while T2 locks B then wants A — a circular wait."
+      "answer": "T1 locks A then wants B, while T2 locks B then wants A — a circular wait.",
+      "distractors": [
+        "Both threads lock A first, then B.",
+        "T1 forgets to unlock A.",
+        "T2 signals the wrong condition variable."
+      ]
     },
     {
       "id": "p2l2-050",
       "question": "What graph condition is necessary and sufficient for a deadlock?",
-      "answer": "A cycle in the wait-for graph (edges from a waiting thread to the thread holding what it needs)."
+      "answer": "A cycle in the wait-for graph (edges from a waiting thread to the thread holding what it needs).",
+      "distractors": [
+        "Any thread holding more than one lock.",
+        "A thread waiting longer than its timeslice.",
+        "Two threads using the same mutex."
+      ]
     },
     {
       "id": "p2l2-051",
       "question": "What's the standard foolproof way to prevent deadlocks?",
-      "answer": "Enforce a global lock ordering — always acquire mutexes in the same order."
+      "answer": "Enforce a global lock ordering — always acquire mutexes in the same order.",
+      "distractors": [
+        "Always use broadcast instead of signal.",
+        "Use a separate mutex per thread.",
+        "Detect cycles and kill a thread."
+      ]
     },
     {
       "id": "p2l2-052",
       "question": "Besides prevention, what are 2 other strategies for dealing with deadlocks?",
-      "answer": "Detect + roll back and recover, or do nothing and hope (the \"ostrich algorithm\")."
+      "answer": "Detect + roll back and recover, or do nothing and hope (the \"ostrich algorithm\").",
+      "distractors": [
+        "Priority boosting, or giving each thread its own CPU.",
+        "Using broadcast, or unlocking before signaling.",
+        "Adding more threads, or adding more memory."
+      ]
     },
     {
       "id": "p2l2-053",
       "question": "Why is deadlock detection + rollback often impractical?",
-      "answer": "It's expensive, and some operations (e.g. external I/O) can't be rolled back."
+      "answer": "It's expensive, and some operations (e.g. external I/O) can't be rolled back.",
+      "distractors": [
+        "It only works on single-CPU systems.",
+        "It requires a global lock order.",
+        "It can only detect cycles of two threads."
+      ]
     },
     {
       "id": "p2l2-054",
       "question": "What's the difference between a kernel-level thread and a user-level thread?",
-      "answer": "Kernel-level threads are visible to and scheduled by the OS; user-level threads are managed by a library and invisible to the OS unless mapped."
+      "answer": "Kernel-level threads are visible to and scheduled by the OS; user-level threads are managed by a library and invisible to the OS unless mapped.",
+      "distractors": [
+        "Kernel-level threads run faster; user-level threads can't block.",
+        "User-level threads are visible to the OS; kernel-level ones aren't.",
+        "They're identical; only the name differs."
+      ]
     },
     {
       "id": "p2l2-055",
       "question": "What must happen before a user-level thread can actually execute on a CPU?",
-      "answer": "It must be associated with a kernel-level thread, which the OS scheduler then schedules."
+      "answer": "It must be associated with a kernel-level thread, which the OS scheduler then schedules.",
+      "distractors": [
+        "It must be converted into a process.",
+        "It must acquire a mutex.",
+        "Nothing; it runs directly on the CPU."
+      ]
     },
     {
       "id": "p2l2-056",
       "question": "Describe the One-to-One threading model.",
-      "answer": "Each user-level thread maps to its own kernel-level thread."
+      "answer": "Each user-level thread maps to its own kernel-level thread.",
+      "distractors": [
+        "All user-level threads share one kernel-level thread.",
+        "Each kernel-level thread runs one process.",
+        "User-level threads map onto several kernel-level threads."
+      ]
     },
     {
       "id": "p2l2-057",
       "question": "What's the main benefit of the One-to-One model?",
-      "answer": "The OS sees all threads, so it can schedule/manage them with full native support."
+      "answer": "The OS sees all threads, so it can schedule/manage them with full native support.",
+      "distractors": [
+        "No system calls are needed for thread operations.",
+        "No kernel support is needed at all.",
+        "It's the most portable model."
+      ]
     },
     {
       "id": "p2l2-058",
       "question": "What's the main downside of the One-to-One model?",
-      "answer": "Every thread operation costs a system call, and you're limited by kernel-imposed policies/limits."
+      "answer": "Every thread operation costs a system call, and you're limited by kernel-imposed policies/limits.",
+      "distractors": [
+        "One blocking thread blocks the whole process.",
+        "The OS can't see any of the threads.",
+        "It needs complex user/kernel coordination."
+      ]
     },
     {
       "id": "p2l2-059",
       "question": "Describe the Many-to-One threading model.",
-      "answer": "All user-level threads map onto a single kernel-level thread."
+      "answer": "All user-level threads map onto a single kernel-level thread.",
+      "distractors": [
+        "Each user-level thread gets its own kernel-level thread.",
+        "All kernel-level threads map onto one user-level thread.",
+        "Each process gets one thread per CPU."
+      ]
     },
     {
       "id": "p2l2-060",
       "question": "What's the main benefit of the Many-to-One model?",
-      "answer": "Fully portable — all scheduling/sync happens in user space, no system calls needed."
+      "answer": "Fully portable — all scheduling/sync happens in user space, no system calls needed.",
+      "distractors": [
+        "The OS sees every thread.",
+        "One blocking thread doesn't block the others.",
+        "It supports bound threads."
+      ]
     },
     {
       "id": "p2l2-061",
       "question": "What's the main downside of the Many-to-One model?",
-      "answer": "If one user-level thread blocks (e.g. on I/O), the whole process stalls."
+      "answer": "If one user-level thread blocks (e.g. on I/O), the whole process stalls.",
+      "distractors": [
+        "Every thread operation needs a system call.",
+        "It requires kernel coordination.",
+        "It can't run on single-CPU machines."
+      ]
     },
     {
       "id": "p2l2-062",
       "question": "Describe the Many-to-Many threading model.",
-      "answer": "Multiple user-level threads map onto multiple kernel-level threads (not strictly 1:1)."
+      "answer": "Multiple user-level threads map onto multiple kernel-level threads (not strictly 1:1).",
+      "distractors": [
+        "Each user-level thread has exactly one kernel thread.",
+        "All user-level threads share one kernel thread.",
+        "Kernel threads map onto user threads one-to-one."
+      ]
     },
     {
       "id": "p2l2-063",
       "question": "What's the main benefit of Many-to-Many over Many-to-One?",
-      "answer": "If one user thread blocks, other kernel threads remain available so the process can still progress."
+      "answer": "If one user thread blocks, other kernel threads remain available so the process can still progress.",
+      "distractors": [
+        "It needs no kernel support at all.",
+        "It never requires system calls.",
+        "It eliminates synchronization."
+      ]
     },
     {
       "id": "p2l2-064",
       "question": "In the Many-to-Many model, what is a \"bound\" thread?",
-      "answer": "A user-level thread permanently, one-to-one mapped to a specific kernel-level thread (e.g. for responsiveness/priority)."
+      "answer": "A user-level thread permanently, one-to-one mapped to a specific kernel-level thread (e.g. for responsiveness/priority).",
+      "distractors": [
+        "A thread that can't be preempted.",
+        "A thread tied to a single CPU core forever.",
+        "A thread whose stack is fixed in size."
+      ]
     },
     {
       "id": "p2l2-065",
       "question": "What's the main downside of the Many-to-Many model?",
-      "answer": "It requires extra coordination between the kernel-level and user-level thread managers."
+      "answer": "It requires extra coordination between the kernel-level and user-level thread managers.",
+      "distractors": [
+        "One blocking thread blocks the whole process.",
+        "The OS can't see that the process is multithreaded.",
+        "It can only run one thread at a time."
+      ]
     },
     {
       "id": "p2l2-066",
       "question": "What is \"process scope\" thread management?",
-      "answer": "A user-level thread library manages/schedules threads only within its own process; the OS is unaware of them."
+      "answer": "A user-level thread library manages/schedules threads only within its own process; the OS is unaware of them.",
+      "distractors": [
+        "The OS schedules every thread system-wide.",
+        "Threads can only run on one CPU.",
+        "The process schedules threads across all processes."
+      ]
     },
     {
       "id": "p2l2-067",
       "question": "What is \"system scope\" thread management?",
-      "answer": "The OS-level scheduler manages threads across the entire platform, seeing every thread."
+      "answer": "The OS-level scheduler manages threads across the entire platform, seeing every thread.",
+      "distractors": [
+        "A user library schedules threads within one process.",
+        "Each process gets exactly one thread.",
+        "Threads are scheduled by the application."
+      ]
     },
     {
       "id": "p2l2-068",
       "question": "With process-scope threading, if two processes have very different thread counts, how does the OS typically split CPU between them?",
-      "answer": "Roughly evenly per-process, regardless of thread count — so the process with more threads gets less CPU per thread."
+      "answer": "Roughly evenly per-process, regardless of thread count — so the process with more threads gets less CPU per thread.",
+      "distractors": [
+        "In proportion to each process's thread count.",
+        "All CPU goes to the process with more threads.",
+        "All CPU goes to the process that started first."
+      ]
     },
     {
       "id": "p2l2-069",
       "question": "Describe the boss-workers pattern.",
-      "answer": "One boss thread accepts/assigns work; worker threads each perform the entire task."
+      "answer": "One boss thread accepts/assigns work; worker threads each perform the entire task.",
+      "distractors": [
+        "Each thread handles one stage of the task.",
+        "All threads take turns being boss.",
+        "The boss does all the work while workers wait."
+      ]
     },
     {
       "id": "p2l2-070",
       "question": "In the boss-workers pattern, what limits system throughput?",
-      "answer": "The time the boss spends handling each incoming request."
+      "answer": "The time the boss spends handling each incoming request.",
+      "distractors": [
+        "The number of workers.",
+        "The slowest pipeline stage.",
+        "The size of the shared queue."
+      ]
     },
     {
       "id": "p2l2-071",
       "question": "What's the preferred way for the boss to hand off work, and why?",
-      "answer": "A shared producer-consumer queue — avoids the boss tracking worker status or waiting on a handshake."
+      "answer": "A shared producer-consumer queue — avoids the boss tracking worker status or waiting on a handshake.",
+      "distractors": [
+        "Direct handshake with each worker, so no queue sync is needed.",
+        "Broadcast to all workers and let them race.",
+        "Assign work round-robin by thread ID."
+      ]
     },
     {
       "id": "p2l2-072",
       "question": "Why use a dynamically-sized thread pool instead of creating a worker per request?",
-      "answer": "Avoids the latency of creating a new thread on demand, while avoiding a wastefully fixed pool size."
+      "answer": "Avoids the latency of creating a new thread on demand, while avoiding a wastefully fixed pool size.",
+      "distractors": [
+        "A fixed pool is always faster.",
+        "Creating threads on demand is free.",
+        "Pools reduce the number of locks needed."
+      ]
     },
     {
       "id": "p2l2-073",
       "question": "What's the main downside of the (unspecialized) boss-workers pattern?",
-      "answer": "It ignores locality — the boss doesn't consider which worker's cache already holds relevant state."
+      "answer": "It ignores locality — the boss doesn't consider which worker's cache already holds relevant state.",
+      "distractors": [
+        "The boss becomes idle.",
+        "Workers can't share data.",
+        "It requires a pipeline."
+      ]
     },
     {
       "id": "p2l2-074",
       "question": "How does specializing workers by task type improve the boss-workers pattern?",
-      "answer": "Better cache locality (smaller data footprint per thread) and lets it prioritize certain task types."
+      "answer": "Better cache locality (smaller data footprint per thread) and lets it prioritize certain task types.",
+      "distractors": [
+        "It removes the need for a boss.",
+        "It eliminates synchronization on the queue.",
+        "It makes every worker faster at every task."
+      ]
     },
     {
       "id": "p2l2-075",
       "question": "What's the main added cost of a specialized-worker boss-workers variant?",
-      "answer": "More complex load balancing across worker groups."
+      "answer": "More complex load balancing across worker groups.",
+      "distractors": [
+        "No locality between workers.",
+        "The boss can't use a queue anymore.",
+        "Each worker needs its own address space."
+      ]
     },
     {
       "id": "p2l2-076",
       "question": "Describe the pipeline pattern.",
-      "answer": "The overall task is split into ordered stages; each stage is handled by a dedicated thread (or pool), and work flows through the stages."
+      "answer": "The overall task is split into ordered stages; each stage is handled by a dedicated thread (or pool), and work flows through the stages.",
+      "distractors": [
+        "One boss hands whole tasks to identical workers.",
+        "Tasks are grouped into layers that pass work up and down.",
+        "Every thread performs every step of every task."
+      ]
     },
     {
       "id": "p2l2-077",
       "question": "What determines a pipeline's overall throughput?",
-      "answer": "Its slowest stage (bottleneck)."
+      "answer": "Its slowest stage (bottleneck).",
+      "distractors": [
+        "Its fastest stage.",
+        "The number of stages.",
+        "The size of the buffers."
+      ]
     },
     {
       "id": "p2l2-078",
       "question": "How do you fix a pipeline stage that's slower than the others?",
-      "answer": "Assign it multiple threads (a small thread pool for that stage)."
+      "answer": "Assign it multiple threads (a small thread pool for that stage).",
+      "distractors": [
+        "Remove that stage.",
+        "Merge it with the fastest stage.",
+        "Give it a higher CPU priority only."
+      ]
     },
     {
       "id": "p2l2-079",
       "question": "How should work be passed between pipeline stages?",
-      "answer": "Via a shared buffer/queue between adjacent stages, not direct hand-offs."
+      "answer": "Via a shared buffer/queue between adjacent stages, not direct hand-offs.",
+      "distractors": [
+        "Direct hand-offs between threads.",
+        "Through a global mutex-protected variable.",
+        "Via signals to the next thread."
+      ]
     },
     {
       "id": "p2l2-080",
       "question": "What's the main benefit of the pipeline pattern?",
-      "answer": "Highly specialized threads per stage → better cache locality/efficiency."
+      "answer": "Highly specialized threads per stage → better cache locality/efficiency.",
+      "distractors": [
+        "No synchronization needed.",
+        "Easy to rebalance.",
+        "Lowest latency for a single item."
+      ]
     },
     {
       "id": "p2l2-081",
       "question": "What's the main downside of the pipeline pattern?",
-      "answer": "Complex to keep balanced as workload/resources change, plus more synchronization points."
+      "answer": "Complex to keep balanced as workload/resources change, plus more synchronization points.",
+      "distractors": [
+        "Threads ignore locality.",
+        "The boss becomes a bottleneck.",
+        "Only one item can be in the pipeline at a time."
+      ]
     },
     {
       "id": "p2l2-082",
       "question": "Describe the layered pattern.",
-      "answer": "Related tasks are grouped into layers; a request passes up/down through the layers, and any thread in a layer can handle its subtasks."
+      "answer": "Related tasks are grouped into layers; a request passes up/down through the layers, and any thread in a layer can handle its subtasks.",
+      "distractors": [
+        "Each stage has one thread and work only moves forward.",
+        "One boss assigns whole tasks to workers.",
+        "Every thread handles every layer at once."
+      ]
     },
     {
       "id": "p2l2-083",
       "question": "How does the layered pattern differ from the pipeline pattern in how work flows?",
-      "answer": "Work can pass in both directions through layers, not just forward through stages."
+      "answer": "Work can pass in both directions through layers, not just forward through stages.",
+      "distractors": [
+        "Work only moves forward, like a pipeline.",
+        "Work skips layers at random.",
+        "Each layer runs in a separate process."
+      ]
     },
     {
       "id": "p2l2-084",
       "question": "What's the main downside of the layered pattern?",
-      "answer": "More complex synchronization (each layer coordinates with the ones above and below), and it may not suit all applications."
+      "answer": "More complex synchronization (each layer coordinates with the ones above and below), and it may not suit all applications.",
+      "distractors": [
+        "It ignores cache locality entirely.",
+        "It needs one thread per request.",
+        "It can't use thread pools."
+      ]
     },
     {
       "id": "p2l2-gap-001",
       "question": "Is Birrell's fork() the same as UNIX fork()?",
       "answer": "No. Birrell's creates a thread; UNIX's copies a process.",
-      "memory": "Same name, different animal."
+      "memory": "Same name, different animal.",
+      "distractors": [
+        "Yes. Both copy the calling process.",
+        "Yes. Both create a thread.",
+        "No. Birrell's copies a process; UNIX's creates a thread."
+      ]
     },
     {
       "id": "p2l2-gap-002",
       "question": "Why is join() unnecessary in the safe_insert example?",
       "answer": "The result is already visible in the shared list.",
-      "memory": "join is for getting results; here they're already shared."
+      "memory": "join is for getting results; here they're already shared.",
+      "distractors": [
+        "join() only works for processes.",
+        "The child never finishes.",
+        "The parent already exited."
+      ]
     },
     {
       "id": "p2l2-gap-003",
       "question": "What goes wrong if two threads insert at the head of a list concurrently?",
       "answer": "Both read the same head, so one insert is lost.",
-      "memory": "Race: both write p_next = old head; the last writer wins."
+      "memory": "Race: both write p_next = old head; the last writer wins.",
+      "distractors": [
+        "Both elements are added twice.",
+        "The list becomes sorted.",
+        "The program deadlocks."
+      ]
     },
     {
       "id": "p2l2-gap-004",
       "question": "Mutex quiz: T2 and T4 are waiting when T1 unlocks, and T5 arrives just then. Who can get the lock?",
       "answer": "T2, T4, or T5.",
-      "memory": "No FIFO guarantee: a newcomer can win."
+      "memory": "No FIFO guarantee: a newcomer can win.",
+      "distractors": [
+        "Only T2 (it waited longest).",
+        "Only T4 (it asked first).",
+        "Only T5 (it arrived last)."
+      ]
     },
     {
       "id": "p2l2-gap-005",
       "question": "In producer/consumer without a CV, what does the consumer do?",
       "answer": "Busy-waits: lock, check if full, unlock, repeat.",
-      "memory": "\"Are we there yet?\""
+      "memory": "\"Are we there yet?\"",
+      "distractors": [
+        "Sleeps until a producer signals.",
+        "Exits and restarts later.",
+        "Forks a new consumer."
+      ]
     },
     {
       "id": "p2l2-gap-006",
       "question": "When does a producer signal list_full?",
       "answer": "Only when its insert made the list full.",
-      "memory": "Only ring the bell when there's news."
+      "memory": "Only ring the bell when there's news.",
+      "distractors": [
+        "After every insert.",
+        "Only when the list becomes empty.",
+        "Never; the consumer polls."
+      ]
     },
     {
       "id": "p2l2-gap-007",
       "question": "wait() implementation step 1?",
       "answer": "Release the mutex and join the CV's wait queue.",
-      "memory": "Release the key, then take a seat in the waiting room."
+      "memory": "Release the key, then take a seat in the waiting room.",
+      "distractors": [
+        "Lock the mutex a second time.",
+        "Signal the other waiting threads.",
+        "Spin until the condition is true."
+      ]
     },
     {
       "id": "p2l2-gap-008",
       "question": "wait() implementation step 2 (on signal)?",
       "answer": "Leave the queue and reacquire the mutex, then return.",
-      "memory": "Hand back the key while you nap; grab it again on waking."
+      "memory": "Hand back the key while you nap; grab it again on waking.",
+      "distractors": [
+        "Return immediately without the mutex.",
+        "Stay in the queue until broadcast.",
+        "Destroy the condition variable."
+      ]
     },
     {
       "id": "p2l2-gap-009",
       "question": "Why is broadcast sometimes not very useful?",
       "answer": "Woken threads still take the mutex one at a time.",
-      "memory": "Everyone wakes, but there's still one key."
+      "memory": "Everyone wakes, but there's still one key.",
+      "distractors": [
+        "Broadcast only wakes one thread.",
+        "Broadcast releases the mutex permanently.",
+        "Broadcast can only be called once."
+      ]
     },
     {
       "id": "p2l2-gap-010",
       "question": "CV quiz: why use while instead of if?",
       "answer": "The list may change before the consumer reacquires the mutex (all of the above).",
-      "memory": "Wake-up means \"maybe\"; the while loop checks again."
+      "memory": "Wake-up means \"maybe\"; the while loop checks again.",
+      "distractors": [
+        "A while loop is faster than an if.",
+        "An if statement can't call wait().",
+        "A while loop releases the mutex."
+      ]
     },
     {
       "id": "p2l2-gap-011",
       "question": "Toy shop quiz: what is the new-order entry predicate?",
       "answer": "while (new_order == 3 || (new_order == 1 && old_order > 0)) wait",
-      "memory": "Up to 3 new orders; old orders only allowed while ≤ 1 new order."
+      "memory": "Up to 3 new orders; old orders only allowed while ≤ 1 new order.",
+      "distractors": [
+        "while (new_order < 3 && old_order == 0) wait",
+        "if (new_order == 3 || old_order > 0) wait",
+        "while (new_order == 1 || old_order >= 0) wait"
+      ]
     },
     {
       "id": "p2l2-gap-012",
       "question": "Toy shop quiz: is `if` instead of `while` correct?",
       "answer": "No. Another thread may change the counts first.",
-      "memory": "if = trust the old news; while = check again."
+      "memory": "if = trust the old news; while = check again.",
+      "distractors": [
+        "Yes. The predicate only needs checking once.",
+        "Yes. if is faster and just as safe.",
+        "No. if can't be used with wait()."
+      ]
     },
     {
       "id": "p2l2-gap-013",
       "question": "Toy shop quiz: is `new_order >= 3` also correct?",
       "answer": "Yes. new_order can never exceed 3.",
-      "memory": "Can't exceed 3, so ≥ 3 behaves the same as == 3."
+      "memory": "Can't exceed 3, so ≥ 3 behaves the same as == 3.",
+      "distractors": [
+        "No. It lets a 4th new order in.",
+        "No. It blocks all new orders.",
+        "No. It changes the old-order rule."
+      ]
     },
     {
       "id": "p2l2-gap-014",
       "question": "Does signaling one CV before another give it priority?",
       "answer": "No. The scheduler decides who runs first.",
-      "memory": "Code order ≠ run order."
+      "memory": "Code order ≠ run order.",
+      "distractors": [
+        "Yes. The first signaled CV always runs first.",
+        "Yes. Broadcast always beats signal.",
+        "Only on single-CPU systems."
+      ]
     },
     {
       "id": "p2l2-gap-015",
       "question": "Deadlock fix: why doesn't fine-grained locking (unlock A, then lock B) work?",
       "answer": "The code needs A and B held together.",
-      "memory": "Fine-grained only works if you need one lock at a time."
+      "memory": "Fine-grained only works if you need one lock at a time.",
+      "distractors": [
+        "Fine-grained locking always deadlocks more.",
+        "Unlocking A isn't allowed while holding B.",
+        "It works; it's the standard fix."
+      ]
     },
     {
       "id": "p2l2-gap-016",
       "question": "Deadlock fix: what does one mega-lock for A and B cost?",
       "answer": "Parallelism: only one thread at a time.",
-      "memory": "One giant lock = one thread at a time."
+      "memory": "One giant lock = one thread at a time.",
+      "distractors": [
+        "Memory: each lock needs its own stack.",
+        "Correctness: it can deadlock.",
+        "Nothing; it's the standard solution."
+      ]
     },
     {
       "id": "p2l2-gap-017",
       "question": "What do the deadlock-handling techniques have in common?",
       "answer": "They're expensive; used mostly in performance-critical systems.",
-      "memory": "Prevention and detection cost a lot; lock order is the cheap fix."
+      "memory": "Prevention and detection cost a lot; lock order is the cheap fix.",
+      "distractors": [
+        "They're free and used everywhere.",
+        "They require only one mutex.",
+        "They need special hardware."
+      ]
     },
     {
       "id": "p2l2-gap-018",
       "question": "Toy shop: which step does the boss do in boss-workers?",
       "answer": "Only step 1 (accept the order).",
-      "memory": "The boss hands off immediately to stay fast."
+      "memory": "The boss hands off immediately to stay fast.",
+      "distractors": [
+        "Steps 1–6 (everything).",
+        "Only step 6 (ship the order).",
+        "Steps 1 and 2 (accept and parse)."
+      ]
     },
     {
       "id": "p2l2-gap-019",
       "question": "Boss-worker handshake: pro?",
       "answer": "Workers don't need to synchronize with each other.",
-      "memory": "Each worker gets its own direct order: no tray fights."
+      "memory": "Each worker gets its own direct order: no tray fights.",
+      "distractors": [
+        "The boss does less work per order.",
+        "Throughput goes up.",
+        "Workers can share one queue."
+      ]
     },
     {
       "id": "p2l2-gap-020",
       "question": "Boss-worker handshake: con?",
       "answer": "The boss tracks and waits on workers, so throughput drops.",
-      "memory": "The boss becomes a babysitter."
+      "memory": "The boss becomes a babysitter.",
+      "distractors": [
+        "Workers must synchronize on a shared queue.",
+        "The boss needs a thread pool.",
+        "Workers lose locality."
+      ]
     },
     {
       "id": "p2l2-gap-021",
       "question": "Boss-worker: what happens when the shared queue is full?",
       "answer": "The boss waits, so throughput drops.",
-      "memory": "Full tray → the boss stands and waits."
+      "memory": "Full tray → the boss stands and waits.",
+      "distractors": [
+        "Workers stop processing.",
+        "Orders are dropped silently.",
+        "The boss creates one new worker per order."
+      ]
     },
     {
       "id": "p2l2-gap-022",
       "question": "Boss-worker pool: how does it grow?",
       "answer": "Several threads at a time, not one per request.",
-      "memory": "Hire in batches."
+      "memory": "Hire in batches.",
+      "distractors": [
+        "One thread per incoming request.",
+        "It never grows; the size is fixed.",
+        "It doubles on every request."
+      ]
     },
     {
       "id": "p2l2-gap-023",
       "question": "Layered pattern: what is its benefit over a pipeline?",
       "answer": "Coarser, so choosing threads per layer is easier.",
-      "memory": "Fewer, bigger groups = fewer sizing decisions."
+      "memory": "Fewer, bigger groups = fewer sizing decisions.",
+      "distractors": [
+        "Work only moves forward.",
+        "It needs no synchronization.",
+        "Each layer uses a single thread."
+      ]
     },
     {
       "id": "p2l2-gap-024",
       "question": "Specialized threads: what else can you do with them besides locality?",
       "answer": "Give important tasks or customers higher priority.",
-      "memory": "VIP customers get more workers."
+      "memory": "VIP customers get more workers.",
+      "distractors": [
+        "Remove the need for a boss.",
+        "Avoid all synchronization.",
+        "Share one stack across threads."
+      ]
     },
     {
       "id": "p2l2-gap-025",
       "question": "Kernel-level threads: what else do they run besides user threads?",
       "answer": "OS services such as daemons and drivers.",
-      "memory": "The kernel has its own staff too."
+      "memory": "The kernel has its own staff too.",
+      "distractors": [
+        "User applications' main() functions.",
+        "The page tables.",
+        "Only interrupt handlers."
+      ]
     }
   ]
 }

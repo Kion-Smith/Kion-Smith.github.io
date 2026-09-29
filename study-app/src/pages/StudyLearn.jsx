@@ -8,10 +8,49 @@ function normalize(text) {
   return text.trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
+const STOPWORDS = new Set(
+  'the a an and or of to in on for with is are was be by it its that this what which why how when does do can from as at into than then there their they you your not no'.split(' '),
+);
+
+function tokens(text) {
+  return new Set(
+    text
+      .toLowerCase()
+      .split(/[^a-z0-9_]+/)
+      .filter((w) => w.length > 2 && !STOPWORDS.has(w)),
+  );
+}
+
+function shuffle(items) {
+  return [...items].sort(() => Math.random() - 0.5);
+}
+
+// Wrong options for a multiple-choice question. Cards may carry hand-written
+// `distractors` (plausible wrong answers); otherwise borrow answers from the
+// cards most similar to this one, so the options stay on-topic instead of
+// being obviously unrelated.
 function pickDistractors(allCards, correctCard, count) {
-  const others = allCards.filter((c) => c.id !== correctCard.id);
-  const shuffled = [...others].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  if (Array.isArray(correctCard.distractors) && correctCard.distractors.length >= count) {
+    return shuffle(correctCard.distractors)
+      .slice(0, count)
+      .map((answer, i) => ({ id: `${correctCard.id}::d${i}`, answer }));
+  }
+
+  const target = tokens(`${correctCard.question} ${correctCard.answer}`);
+  const targetLen = correctCard.answer.length;
+  const scored = allCards
+    .filter((c) => c.id !== correctCard.id && c.answer !== correctCard.answer)
+    .map((c) => {
+      const words = tokens(`${c.question} ${c.answer}`);
+      let overlap = 0;
+      for (const w of words) if (target.has(w)) overlap += 1;
+      const lengthPenalty = Math.abs(c.answer.length - targetLen) / Math.max(targetLen, 1);
+      return { card: c, score: overlap - lengthPenalty };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const pool = scored.slice(0, count * 2).map((s) => s.card);
+  return shuffle(pool).slice(0, count);
 }
 
 export default function StudyLearn() {
@@ -34,7 +73,9 @@ function LearnSession({ deckPath, deck }) {
   const card = queue[index];
   // Alternate style so it doesn't feel monotonous; falls back to typed if
   // the deck is too small for good distractors.
-  const mode = canMultipleChoice && index % 2 === 0 ? 'choice' : 'typed';
+  // Cards with hand-written distractors are always asked as multiple choice.
+  const hasDistractors = Array.isArray(card?.distractors) && card.distractors.length >= 3;
+  const mode = hasDistractors || (canMultipleChoice && index % 2 === 0) ? 'choice' : 'typed';
 
   const choices = useMemo(() => {
     if (!card || mode !== 'choice') return [];
