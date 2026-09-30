@@ -1,0 +1,374 @@
+{
+  "title": "P2L1–P2L5: Formulas",
+  "cards": [
+    {
+      "id": "p2-formulas-001",
+      "question": "Tp ÷ (Tp + Tsched)",
+      "answer": "CPU utilization: fraction of CPU time spent on useful work. Tp = timeslice (time a process runs on the CPU); Tsched = time the scheduler takes to run.",
+      "memory": "P2L1. Lecture form over two intervals: (2 × Tp) ÷ (2 × Tp + 2 × Tsched). Tp = Tsched → 50%. Tp = 10 × Tsched → 10/11 ≈ 91%.",
+      "distractors": [
+        "Scheduler overhead: fraction of CPU time spent scheduling. Tp = timeslice; Tsched = time the scheduler takes to run.",
+        "CPU utilization. Tp = time the scheduler takes to run; Tsched = timeslice (time a process runs on the CPU).",
+        "Throughput. Tp = number of processes completed; Tsched = length of the scheduling period."
+      ]
+    },
+    {
+      "id": "p2-formulas-002",
+      "question": "2^(number of address bits) bytes",
+      "answer": "Maximum size of a process's virtual address space (V0 to Vmax). Number of address bits = width of a virtual address.",
+      "memory": "P2L1: 32-bit virtual addresses → 2^32 bytes = 4 GB. Every process gets the full range; the OS maps each process's range to different physical memory. (The lecture gives the 32-bit example; 2^bits is the general rule behind it.)",
+      "distractors": [
+        "Physical memory a process is actually using. Number of address bits = pages the process has touched.",
+        "Number of page table entries in a process. Number of address bits = size of one page.",
+        "Physical memory shared by all processes. Number of address bits = number of running processes."
+      ]
+    },
+    {
+      "id": "p2-formulas-003",
+      "question": "shared-memory setup cost ÷ number of messages",
+      "answer": "Amortized setup cost per message for shared-memory IPC; shared memory only pays off when enough messages make this small. Setup cost = cost of mapping the memory into both processes; number of messages = messages exchanged over the region.",
+      "memory": "P2L1 quiz: \"it depends.\" Each exchange is cheap (no copying into/out of the kernel), but the mapping itself is expensive. (The lecture says this in words; the ratio is written out here.)",
+      "distractors": [
+        "Cost of copying each message through the kernel. Setup cost = system call cost; number of messages = messages in the kernel buffer.",
+        "Number of messages that fit in the shared region. Setup cost = region size; number of messages = message size.",
+        "Context-switch cost per message. Setup cost = context-switch time; number of messages = messages per timeslice."
+      ]
+    },
+    {
+      "id": "p2-formulas-004",
+      "question": "t_idle > 2 × t_ctx_switch",
+      "answer": "Condition for when context switching to another thread (to hide idle time) is worthwhile. t_idle = time a thread would sit idle (e.g. waiting on disk I/O); t_ctx_switch = time for one context switch.",
+      "memory": "P2L2 (repeated in P2L5). ×2 = one switch away + one switch back. Thread switches are cheaper than process switches (no new virtual-to-physical mappings), so threads can hide more idle time.",
+      "distractors": [
+        "Condition for when context switching is worthwhile. t_idle = time for one context switch; t_ctx_switch = time a thread waits on I/O.",
+        "Adaptive mutex rule for when to spin. t_idle = remaining critical-section time; t_ctx_switch = time to queue a thread.",
+        "Condition for a hot cache. t_idle = time since the process last ran; t_ctx_switch = cache refill time."
+      ]
+    },
+    {
+      "id": "p2-formulas-005",
+      "question": "process's CPU share ÷ number of user-level threads in that process",
+      "answer": "CPU share each user-level thread gets under process scope (the OS divides the CPU among processes, not threads). Process's CPU share = portion the OS gives the whole process; number of user-level threads = threads managed by that process's library.",
+      "memory": "P2L2: web server has 2× the threads of the database; the OS splits 50/50 → each web-server thread gets half the CPU cycles of a database thread.",
+      "distractors": [
+        "CPU share each user-level thread gets under system scope. Process's CPU share = total CPU; number of user-level threads = threads across all processes.",
+        "Number of kernel-level threads a process needs. Process's CPU share = number of CPUs; number of user-level threads = threads that are blocked.",
+        "Throughput of the boss-worker model. Process's CPU share = boss time per order; number of user-level threads = workers."
+      ]
+    },
+    {
+      "id": "p2-formulas-006",
+      "question": "total CPU ÷ total user-level threads (across all processes)",
+      "answer": "CPU share each user-level thread gets under system scope (every thread is visible to the kernel and gets an equal share). Total CPU = all CPU time on the platform; total user-level threads = threads across every process.",
+      "memory": "P2L2. A process with more threads ends up with a larger total share of the CPU. (Equal share per thread assumes that is the kernel's policy.)",
+      "distractors": [
+        "CPU share each user-level thread gets under process scope. Total CPU = the process's CPU share; total user-level threads = threads in that one process.",
+        "CPU utilization. Total CPU = timeslice; total user-level threads = number of scheduler runs.",
+        "Minimum threads needed to boot Linux. Total CPU = number of CPUs; total user-level threads = init threads."
+      ]
+    },
+    {
+      "id": "p2-formulas-007",
+      "question": "throughput ∝ 1 ÷ (boss time per order)",
+      "answer": "Boss-worker throughput is inversely proportional to how long the boss spends on each order. Boss time per order = time the boss thread spends accepting and handing off one order.",
+      "memory": "P2L2. Keep the boss efficient: a shared queue beats having the boss track which worker is free, because it cuts boss time per order.",
+      "distractors": [
+        "Pipeline throughput is limited by the fastest stage. Boss time per order = time of the shortest stage.",
+        "Boss-worker throughput grows with how long the boss spends on each order. Boss time per order = time a worker takes per order.",
+        "Boss-worker average completion time. Boss time per order = time a worker takes per order."
+      ]
+    },
+    {
+      "id": "p2-formulas-008",
+      "question": "⌈orders ÷ workers⌉ × time_per_order",
+      "answer": "Total execution time of the boss-worker model. orders = number of orders; workers = threads − 1 (one thread is the boss); time_per_order = time one worker takes to finish one order.",
+      "memory": "P2L2 quiz: 6 threads → 5 workers, 120 ms per toy. 10 orders: 2 × 120 = 240 ms. 11 orders: 3 × 120 = 360 ms.",
+      "distractors": [
+        "Total execution time of the pipeline model. orders = number of orders; workers = number of stages; time_per_order = time per stage.",
+        "Average completion time in the boss-worker model. orders = number of orders; workers = threads; time_per_order = time per order.",
+        "Total execution time of the boss-worker model. orders = number of orders; workers = all threads including the boss; time_per_order = time the boss spends per order."
+      ]
+    },
+    {
+      "id": "p2-formulas-009",
+      "question": "(stages × stage_time) + (orders − 1) × stage_time",
+      "answer": "Total execution time of the pipeline model. stages = number of pipeline stages; stage_time = time per stage; orders = number of orders. First term = first order through every stage; each later order finishes one stage_time behind.",
+      "memory": "P2L2 quiz: 6 stages × 20 ms = 120 ms for the first order. 10 orders: 120 + 9 × 20 = 300 ms. 11 orders: 120 + 10 × 20 = 320 ms. Only works when every stage takes the same time; for unequal stages use (Σ stage_timeᵢ) + (N − 1) × balanced stage time.",
+      "distractors": [
+        "Total execution time of the boss-worker model. stages = workers; stage_time = time per order; orders = number of orders.",
+        "Average completion time in the pipeline model. stages = number of stages; stage_time = time per stage; orders = number of orders.",
+        "Time for one order to pass through the pipeline. stages = number of stages; stage_time = time per stage; orders = orders waiting in the queue."
+      ]
+    },
+    {
+      "id": "p2-formulas-010",
+      "question": "stage_timeᵢ ÷ shortest stage_time",
+      "answer": "Number of threads to assign to pipeline stage i so every stage keeps pace (a balanced pipeline). stage_timeᵢ = time stage i takes with one thread; shortest stage_time = time of the fastest stage.",
+      "memory": "P2L2: wood-cutting takes 3× longer than the other stages → 3 threads. Midterm-style: stages of 10, 30, 20 ms → 1, 3, 2 threads. (The lecture gives the example; the ratio is written out here.)",
+      "distractors": [
+        "Number of threads to assign to stage i. stage_timeᵢ = time of the fastest stage; shortest stage_time = time stage i takes.",
+        "Pipeline speedup over a single thread. stage_timeᵢ = total single-thread time; shortest stage_time = time per stage.",
+        "Fraction of time stage i sits idle. stage_timeᵢ = idle time of stage i; shortest stage_time = busy time."
+      ]
+    },
+    {
+      "id": "p2-formulas-011",
+      "question": "(Σ stage_timeᵢ) + (N − 1) × max(stage_timeᵢ ÷ threadsᵢ)",
+      "answer": "Total execution time of a pipeline with unequal stages. stage_timeᵢ = time stage i takes with one thread; threadsᵢ = threads assigned to stage i; N = number of requests. First term = first request through every stage; after that one request finishes every max(stage_timeᵢ ÷ threadsᵢ), the slowest effective stage.",
+      "memory": "Midterm-style: stages of 10, 30, 20 ms with 1, 3, 2 threads → every stage effectively 10 ms. 100 requests: 60 + 99 × 10 = 1,050 ms = 1.05 s. With 1 thread per stage the bottleneck is 30 ms: 60 + 99 × 30 = 3,030 ms.",
+      "distractors": [
+        "Total execution time of the boss-worker model. stage_timeᵢ = time per worker; threadsᵢ = workers; N = number of requests.",
+        "Average completion time per request in a pipeline. stage_timeᵢ = time of stage i; threadsᵢ = threads in stage i; N = number of requests.",
+        "Total pipeline execution time. stage_timeᵢ = time of stage i; threadsᵢ = threads in stage i; N = number of stages."
+      ]
+    },
+    {
+      "id": "p2-formulas-012",
+      "question": "stage_timeᵢ ÷ threadsᵢ",
+      "answer": "Effective time per request for pipeline stage i once it has several threads; the largest of these sets the pipeline pace. stage_timeᵢ = time stage i takes with one thread; threadsᵢ = threads assigned to stage i.",
+      "memory": "30 ms stage with 3 threads → one request leaves every 10 ms. Pipeline throughput is set by the weakest link (longest effective stage).",
+      "distractors": [
+        "Number of threads to assign to stage i. stage_timeᵢ = time of stage i; threadsᵢ = time of the fastest stage.",
+        "Total execution time of stage i. stage_timeᵢ = time of stage i; threadsᵢ = number of requests.",
+        "CPU share per thread in stage i. stage_timeᵢ = CPU time of stage i; threadsᵢ = threads in the process."
+      ]
+    },
+    {
+      "id": "p2-formulas-013",
+      "question": "N requests ÷ total execution time",
+      "answer": "Average throughput of a server run (requests per second). N requests = number of requests processed; total execution time = time to finish all N (convert ms → s).",
+      "memory": "Midterm-style pipeline: 100 requests ÷ 1.05 s ≈ 95.2 req/s. As N grows it approaches 1 ÷ (bottleneck stage time) = 1 ÷ 0.010 s = 100 req/s.",
+      "distractors": [
+        "Average time per request. N requests = total execution time; total execution time = number of requests.",
+        "Connection rate. N requests = connections serviced; total execution time = file size.",
+        "Bandwidth. N requests = bytes sent; total execution time = transfer time."
+      ]
+    },
+    {
+      "id": "p2-formulas-014",
+      "question": "(in + 1) mod N = out",
+      "answer": "Circular buffer is full (the next slot to write is the next slot to read). in = index of the next slot to write; out = index of the next item to read; N = buffer size (BUFFERSIZE).",
+      "memory": "This convention always leaves one slot empty, so the buffer holds at most N − 1 items. That slot is how \"full\" is told apart from \"empty\" (in = out). The P2L3 lecture tracks a count, num, instead: full when num = N.",
+      "distractors": [
+        "Circular buffer is empty. in = index of the next slot to write; out = index of the next item to read; N = buffer size.",
+        "Index of the next slot after in. in = current write index; out = read index; N = buffer size.",
+        "Number of items in the buffer. in = write index; out = read index; N = buffer size."
+      ]
+    },
+    {
+      "id": "p2-formulas-015",
+      "question": "in = out",
+      "answer": "Circular buffer is empty (nothing between the read and write positions). in = index of the next slot to write; out = index of the next item to read.",
+      "memory": "Pairs with full: (in + 1) mod N = out. The P2L3 lecture uses num = 0 for empty instead.",
+      "distractors": [
+        "Circular buffer is full. in = write index; out = read index.",
+        "Producer and consumer are deadlocked. in = producers waiting; out = consumers waiting.",
+        "Buffer index wrapped around to 0. in = write index; out = buffer size."
+      ]
+    },
+    {
+      "id": "p2-formulas-016",
+      "question": "(i + 1) mod N",
+      "answer": "Next index in a circular buffer, wrapping back to 0 after the last slot. i = current index (in or out); N = buffer size.",
+      "memory": "P2L3: add and rem both advance this way (\"modular computation to deal with wrap-arounds\"). N = 3 in the lecture: 0 → 1 → 2 → 0.",
+      "distractors": [
+        "Number of items in the buffer. i = write index; N = buffer size.",
+        "Circular buffer is full. i = write index; N = read index.",
+        "Number of threads for a pipeline stage. i = stage time; N = shortest stage time."
+      ]
+    },
+    {
+      "id": "p2-formulas-017",
+      "question": "(in − out + N) mod N",
+      "answer": "Number of items currently in a circular buffer. in = index of the next slot to write; out = index of the next item to read; N = buffer size.",
+      "memory": "Plays the role of the lecture's num counter. + N keeps the result non-negative when in has wrapped around past out.",
+      "distractors": [
+        "Number of free slots in the buffer. in = write index; out = read index; N = buffer size.",
+        "Next index in the buffer. in = current index; out = step size; N = buffer size.",
+        "Circular buffer is full. in = write index; out = read index; N = buffer size."
+      ]
+    },
+    {
+      "id": "p2-formulas-018",
+      "question": "time for the mutex owner to release < time to context switch and queue the waiting thread",
+      "answer": "Adaptive mutex rule: spin instead of block (only when the owner is running on another CPU). Time for the owner to release = remaining critical-section time; time to context switch and queue = cost of blocking the waiting thread.",
+      "memory": "P2L4: short critical sections → spin; long → block. Only makes sense on multi-CPU systems. (The lecture says this in words; the inequality is written out here.)",
+      "distractors": [
+        "Condition for when context switching to hide idle time is worthwhile. Time for the owner to release = I/O wait time; time to context switch = one switch.",
+        "Adaptive mutex rule: block instead of spin. Time for the owner to release = remaining critical-section time; time to context switch and queue = cost of blocking.",
+        "Condition for a deadlock. Time for the owner to release = lock hold time; time to context switch and queue = wait time."
+      ]
+    },
+    {
+      "id": "p2-formulas-019",
+      "question": "(12 × mutex_ops) − (40 × interrupts)",
+      "answer": "Net instructions saved by Solaris handling interrupts as threads. mutex_ops = number of mutex lock/unlock operations; interrupts = number of interrupts; 12 = instructions saved per mutex op (no interrupt-mask change); 40 = instructions added per interrupt (checks + possibly creating a thread).",
+      "memory": "P2L4. Mutex ops vastly outnumber interrupts → net win. Lesson: optimize for the common case.",
+      "distractors": [
+        "Net instructions saved by Solaris handling interrupts as threads. mutex_ops = number of interrupts; interrupts = number of mutex operations; 12 = cost per interrupt; 40 = savings per mutex op.",
+        "Instructions spent on context switches between threads. mutex_ops = switches; interrupts = timer ticks; 12 = cost per switch; 40 = cost per tick.",
+        "Net cost of disabling interrupts in critical sections. mutex_ops = critical sections; interrupts = masked interrupts; 12 = mask cost; 40 = handler cost."
+      ]
+    },
+    {
+      "id": "p2-formulas-020",
+      "question": "thread index × size of thread data structure",
+      "answer": "Offset for finding a user-level thread's data structure in Solaris's contiguous layout. Thread index = the thread ID (an index into a table); size of thread data structure = fixed size known at compile time.",
+      "memory": "P2L4 (Stein & Shah). Contiguous layout → locality, and the scheduler finds a thread with one multiply. Red zones between structures catch stack overflows.",
+      "distractors": [
+        "Total stack space for all threads. Thread index = number of threads; size of thread data structure = stack size.",
+        "Size of the red zone between two threads. Thread index = thread priority; size of thread data structure = page size.",
+        "Number of lightweight processes the kernel creates. Thread index = concurrency level; size of thread data structure = LWP size."
+      ]
+    },
+    {
+      "id": "p2-formulas-021",
+      "question": "signal raised n times → handler runs n times",
+      "answer": "Real-time signals (e.g. Linux): queuing behavior. n = number of times the signal is raised.",
+      "distractors": [
+        "One-shot signals: overriding behavior. n = number of times the signal is raised.",
+        "Interrupts: every instance is handled by the top half. n = number of interrupts.",
+        "Masked signals: they are delivered once the mask is cleared. n = number of pending signals."
+      ]
+    },
+    {
+      "id": "p2-formulas-022",
+      "question": "signal raised n times → handler runs at least once (maybe only once)",
+      "answer": "One-shot signals: overriding behavior, and the custom handler must be re-installed after each use. n = number of times the signal is raised.",
+      "distractors": [
+        "Real-time signals: queuing behavior. n = number of times the signal is raised.",
+        "Interrupts handled as threads. n = number of interrupts.",
+        "Signals sent to a multithreaded process: one per thread. n = number of threads."
+      ]
+    },
+    {
+      "id": "p2-formulas-023",
+      "question": "(sum of each order's completion time) ÷ number of orders",
+      "answer": "Average time to complete an order (the metric customers care about). Completion time = time from start until that order finishes; number of orders = total orders in the workload.",
+      "memory": "P2L5, 11 toy orders. Boss-worker: (5 × 120 + 5 × 240 + 360) ÷ 11 ≈ 196 ms. Pipeline: (120 + 140 + … + 320) ÷ 11 = 220 ms. Boss-worker wins on average time, pipeline wins on total time.",
+      "distractors": [
+        "Total execution time. Completion time = time per stage; number of orders = number of stages.",
+        "Throughput. Completion time = time period; number of orders = orders completed.",
+        "Metric averaged over repeated experiment runs. Completion time = metric per run; number of orders = number of runs."
+      ]
+    },
+    {
+      "id": "p2-formulas-024",
+      "question": "tasks completed ÷ time period",
+      "answer": "Throughput. Tasks completed = number of tasks/processes/jobs finished; time period = length of the measurement window.",
+      "memory": "P2L5. Measures a platform's utility (one server or a whole data center). What a toy-shop manager or data center operator cares about.",
+      "distractors": [
+        "Connection rate. Tasks completed = client connections serviced; time period = measurement window.",
+        "Response time. Tasks completed = requests answered; time period = time per request.",
+        "CPU utilization. Tasks completed = useful CPU time; time period = total CPU time."
+      ]
+    },
+    {
+      "id": "p2-formulas-025",
+      "question": "throughput ÷ resources used",
+      "answer": "Platform efficiency: how well resources are used to deliver throughput. Throughput = tasks completed per time period; resources used = servers/cost consumed to deliver it.",
+      "memory": "P2L5. Data center operator: throughput brings income, but machines cost money, so the ratio matters. (The lecture describes this in words; the ratio is written out here.)",
+      "distractors": [
+        "Performance per dollar. Throughput = performance; resources used = hardware price.",
+        "CPU utilization. Throughput = useful CPU time; resources used = total CPU time.",
+        "Percentage of SLA violations. Throughput = violating requests; resources used = total requests."
+      ]
+    },
+    {
+      "id": "p2-formulas-026",
+      "question": "performance ÷ cost",
+      "answer": "Performance per dollar: whether the extra cost of new hardware is worth the performance gain. Performance = the chosen performance metric; cost = price in dollars.",
+      "distractors": [
+        "Performance per watt. Performance = chosen metric; cost = power delivered in watts.",
+        "Platform efficiency. Performance = throughput; cost = resources used.",
+        "Performance per joule. Performance = chosen metric; cost = energy consumed."
+      ]
+    },
+    {
+      "id": "p2-formulas-027",
+      "question": "performance ÷ power",
+      "answer": "Performance per watt. Performance = the chosen performance metric; power = watts delivered to the platform.",
+      "distractors": [
+        "Performance per joule. Performance = chosen metric; power = energy consumed during execution.",
+        "Performance per dollar. Performance = chosen metric; power = price of the hardware.",
+        "Bandwidth. Performance = bytes transferred; power = transfer time."
+      ]
+    },
+    {
+      "id": "p2-formulas-028",
+      "question": "performance ÷ energy",
+      "answer": "Performance per joule. Performance = the chosen performance metric; energy = joules consumed during execution.",
+      "distractors": [
+        "Performance per watt. Performance = chosen metric; energy = power delivered to the platform.",
+        "Performance per dollar. Performance = chosen metric; energy = price of the hardware.",
+        "Platform efficiency. Performance = throughput; energy = resources used."
+      ]
+    },
+    {
+      "id": "p2-formulas-029",
+      "question": "(requests violating the SLA ÷ total requests) × 100",
+      "answer": "Percentage of SLA (Service Level Agreement) violations. Requests violating the SLA = requests that missed the agreed target; total requests = all requests served.",
+      "memory": "P2L5. Example SLAs: \"response within 3 seconds\", or \"accurate quotes for 95% of flights.\"",
+      "distractors": [
+        "95th-percentile response time. Requests violating the SLA = slowest 5% of requests; total requests = all requests.",
+        "Connection rate. Requests violating the SLA = connections serviced; total requests = time period.",
+        "CPU utilization. Requests violating the SLA = busy time; total requests = total time."
+      ]
+    },
+    {
+      "id": "p2-formulas-030",
+      "question": "(n × file_size) ÷ time to process the n requests",
+      "answer": "Web server bandwidth in bytes/second (Flash paper). n = number of requests; file_size = bytes in the requested file.",
+      "memory": "P2L5 Flash best-case experiment: every request is for the same file; file size varied 0–200 KB. Bigger files amortize connection cost → higher bandwidth.",
+      "distractors": [
+        "Connection rate. n = connections serviced; file_size = connection overhead.",
+        "Throughput in requests per second. n = number of requests; file_size = requests per connection.",
+        "Average response time. n = number of requests; file_size = bytes per response."
+      ]
+    },
+    {
+      "id": "p2-formulas-031",
+      "question": "client connections serviced ÷ time period",
+      "answer": "Connection rate (Flash paper). Client connections serviced = number of client connections handled; time period = measurement window.",
+      "memory": "P2L5. Evaluated against file size: larger files mean more work per connection, which can lower the connection rate.",
+      "distractors": [
+        "Bandwidth. Client connections serviced = bytes sent; time period = transfer time.",
+        "Percentage of SLA violations. Client connections serviced = violating requests; time period = total requests.",
+        "Platform efficiency. Client connections serviced = throughput; time period = resources used."
+      ]
+    },
+    {
+      "id": "p2-formulas-032",
+      "question": "(metric₁ + metric₂ + … + metricₙ) ÷ n",
+      "answer": "The value to report for a metric: its average over n repeated runs of an experiment. metricₖ = value measured in run k; n = number of runs.",
+      "memory": "P2L5, advice on running experiments: run each test case n times, then compute the averages.",
+      "distractors": [
+        "Average order completion time. metricₖ = completion time of order k; n = number of orders.",
+        "Throughput. metricₖ = tasks finished in second k; n = seconds measured.",
+        "Priority-weighted average execution time. metricₖ = time of task k; n = sum of the priorities."
+      ]
+    },
+    {
+      "id": "p2-formulas-033",
+      "question": "Σ (priorityₖ × timeₖ) ÷ Σ priorityₖ",
+      "answer": "Aggregate performance metric: the priority-weighted average of execution (or wait) time across all tasks. priorityₖ = priority (weight) of task k; timeₖ = execution or wait time of task k.",
+      "memory": "P2L5. The lecture mentions averaging execution or wait time over all tasks, \"or maybe even a weighted average based on the priorities.\" (The formula is written out here.)",
+      "distractors": [
+        "Metric averaged over repeated runs. priorityₖ = run number; timeₖ = metric measured in run k.",
+        "Average order completion time. priorityₖ = order number; timeₖ = completion time of order k.",
+        "Percentage of SLA violations. priorityₖ = SLA target; timeₖ = response time of request k."
+      ]
+    },
+    {
+      "id": "p2-formulas-034",
+      "question": "time the job starts executing − time the job was submitted",
+      "answer": "Wait time: how long a user waits before their job actually starts running.",
+      "memory": "P2L5. Matters for interactive jobs, and for long jobs (start early → spot problems early). (The lecture defines it in words; the subtraction is written out here.)",
+      "distractors": [
+        "Response time: how long until the job's result comes back.",
+        "Execution time: how long the job runs on the CPU.",
+        "Timeslice: how long the job may run before it is preempted."
+      ]
+    }
+  ]
+}

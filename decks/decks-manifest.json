@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-29T13:36:28.516Z",
+  "generatedAt": "2026-09-30T23:29:33.522Z",
   "decks": [
     {
       "path": "biology/cell-structure.json",
@@ -11,13 +11,19 @@
       "path": "cs6200/midterm-review-p1l2-p2l5.json",
       "title": "Midterm Review: P1L2–P2L5",
       "subject": "cs6200",
-      "cardCount": 206
+      "cardCount": 228
     },
     {
       "path": "cs6200/p1l2-introduction-to-operating-systems.json",
       "title": "P1L2: Introduction to Operating Systems",
       "subject": "cs6200",
       "cardCount": 61
+    },
+    {
+      "path": "cs6200/p2-formulas.json",
+      "title": "P2L1–P2L5: Formulas",
+      "subject": "cs6200",
+      "cardCount": 34
     },
     {
       "path": "cs6200/p2l1-processes-and-process-management.json",
@@ -108,6 +114,12 @@
       "title": "P4L4: Datacenter Technologies",
       "subject": "cs6200",
       "cardCount": 68
+    },
+    {
+      "path": "cs6200/readings-gios-papers.json",
+      "title": "Readings: GIOS Papers",
+      "subject": "cs6200",
+      "cardCount": 116
     },
     {
       "path": "history/ww2.json",

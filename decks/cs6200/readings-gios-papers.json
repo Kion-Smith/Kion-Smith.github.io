@@ -1,0 +1,1180 @@
+{
+  "title": "Readings: GIOS Papers",
+  "cards": [
+    {
+      "id": "papers-001",
+      "question": "Birrell (1989): what is \"An Introduction to Programming with Threads\"?",
+      "answer": "A practical tutorial on using fork/join, mutexes, condition variables, and alerts correctly.",
+      "memory": "Programming-model layer. The model behind pthreads.",
+      "distractors": [
+        "A redesign of the SunOS kernel around kernel threads.",
+        "A user-level threads library built on LWPs.",
+        "An event-driven web server design."
+      ]
+    },
+    {
+      "id": "papers-002",
+      "question": "Birrell: name 5 reasons to use threads.",
+      "answer": "Use multiprocessors, overlap work with slow devices, keep a UI responsive, serve many network clients, and defer work to cut latency.",
+      "distractors": [
+        "Lower memory use, no locks, no scheduling, portability, and security.",
+        "Avoid system calls, avoid interrupts, avoid I/O, avoid caches, and avoid IPC.",
+        "Replace processes, replace the kernel, replace signals, replace pipes, and replace files."
+      ]
+    },
+    {
+      "id": "papers-003",
+      "question": "Birrell: what does Fork(proc, arg) return?",
+      "answer": "A handle to the new thread (later passed to Join).",
+      "distractors": [
+        "The procedure's result.",
+        "A new process ID.",
+        "Nothing; the thread is anonymous."
+      ]
+    },
+    {
+      "id": "papers-004",
+      "question": "Birrell: how often is Join used, and why?",
+      "answer": "Rarely. Most threads are daemons that are never joined.",
+      "distractors": [
+        "After every Fork, or the thread leaks.",
+        "Only for threads that hold a mutex.",
+        "Never; Birrell's model has no Join."
+      ]
+    },
+    {
+      "id": "papers-005",
+      "question": "Birrell: what does the LOCK m DO … END clause do?",
+      "answer": "Locks the mutex, runs the statements, then unlocks automatically.",
+      "memory": "Holding the mutex is the only way to touch its data: a monitor.",
+      "distractors": [
+        "Locks the mutex until the thread exits.",
+        "Runs the statements only if the mutex is free, otherwise skips them.",
+        "Disables interrupts while the statements run."
+      ]
+    },
+    {
+      "id": "papers-006",
+      "question": "Birrell: what does Wait(m, c) do atomically?",
+      "answer": "Unlocks m and blocks on c in one step (then re-locks m on wake-up).",
+      "distractors": [
+        "Locks m and signals c in one step.",
+        "Blocks on c while keeping m locked.",
+        "Unlocks m, then checks c once without blocking."
+      ]
+    },
+    {
+      "id": "papers-007",
+      "question": "Why must Wait's unlock-and-block be atomic?",
+      "answer": "Otherwise a Signal could arrive between the unlock and the block, and the wake-up would be lost.",
+      "distractors": [
+        "So the mutex can never be held by two threads.",
+        "So Broadcast wakes threads in FIFO order.",
+        "So the waiting thread keeps its priority."
+      ]
+    },
+    {
+      "id": "papers-008",
+      "question": "Birrell: how many waiting threads does Signal wake?",
+      "answer": "At least one (it may wake more).",
+      "memory": "One reason the condition must be re-checked in a WHILE loop.",
+      "distractors": [
+        "Exactly one, always.",
+        "All of them.",
+        "None until the mutex is unlocked."
+      ]
+    },
+    {
+      "id": "papers-009",
+      "question": "Birrell: what is an alert?",
+      "answer": "A request asking a thread to abandon a long wait or computation.",
+      "distractors": [
+        "A signal from the kernel that a device finished I/O.",
+        "A warning that a deadlock was detected.",
+        "A condition variable that wakes all waiters."
+      ]
+    },
+    {
+      "id": "papers-010",
+      "question": "Birrell: AlertWait vs TestAlert?",
+      "answer": "AlertWait is a Wait that raises Alerted if the thread is alerted; TestAlert just polls whether it was alerted.",
+      "distractors": [
+        "AlertWait polls; TestAlert blocks until alerted.",
+        "AlertWait alerts another thread; TestAlert alerts itself.",
+        "Both block; AlertWait also releases the mutex."
+      ]
+    },
+    {
+      "id": "papers-011",
+      "question": "Birrell: what does a mutex really protect?",
+      "answer": "An invariant on the shared data that holds whenever the mutex is unlocked.",
+      "distractors": [
+        "A single variable, nothing more.",
+        "The code, not the data.",
+        "The CPU that runs the critical section."
+      ]
+    },
+    {
+      "id": "papers-012",
+      "question": "Birrell: what must you do before calling Wait?",
+      "answer": "Restore the mutex's invariant, because Wait releases the mutex and other threads will see the data.",
+      "distractors": [
+        "Unlock the mutex yourself.",
+        "Signal every other condition variable.",
+        "Nothing; Wait saves the data for you."
+      ]
+    },
+    {
+      "id": "papers-013",
+      "question": "Birrell's race: table[i] := r; i := i + 1 without a mutex. What goes wrong?",
+      "answer": "Two threads interleave: one entry is lost (overwritten) and a slot is orphaned.",
+      "distractors": [
+        "Deadlock: both threads wait forever.",
+        "Nothing; each statement is atomic.",
+        "The table grows twice as fast."
+      ]
+    },
+    {
+      "id": "papers-014",
+      "question": "Birrell: how do you prevent deadlock between mutexes?",
+      "answer": "Impose a partial order on lock acquisition (always lock in that order).",
+      "distractors": [
+        "Use one condition variable per mutex.",
+        "Always use Broadcast instead of Signal.",
+        "Give every thread the same priority."
+      ]
+    },
+    {
+      "id": "papers-015",
+      "question": "What is the lock granularity trade-off?",
+      "answer": "Finer-grained locks mean fewer conflicts but more complexity.",
+      "memory": "Birrell's example: one global lock for the file table plus one lock per open file.",
+      "distractors": [
+        "Finer locks mean more conflicts but simpler code.",
+        "Coarser locks mean fewer conflicts and more parallelism.",
+        "Granularity only affects memory use."
+      ]
+    },
+    {
+      "id": "papers-016",
+      "question": "What is priority inversion?",
+      "answer": "Low-priority C holds mutex M, medium-priority B runs, and high-priority A, blocked on M, waits behind B.",
+      "distractors": [
+        "A high-priority thread starves all low-priority ones.",
+        "Two threads each hold a lock the other needs.",
+        "The scheduler runs threads in reverse priority order."
+      ]
+    },
+    {
+      "id": "papers-017",
+      "question": "What fixes priority inversion?",
+      "answer": "Priority inheritance: the lock holder temporarily runs at the blocked waiter's priority.",
+      "memory": "Birrell described the problem (SRC didn't solve it); Eykholt's SunOS kernel solved it with priority inheritance plus turnstiles.",
+      "distractors": [
+        "Lock ordering.",
+        "Using Broadcast instead of Signal.",
+        "Adaptive mutexes."
+      ]
+    },
+    {
+      "id": "papers-018",
+      "question": "Birrell: when is an unlocked read (double-checked initialization) safe?",
+      "answer": "Only as a \"hint\", and only if the language guarantees it.",
+      "distractors": [
+        "Always, since reads never change data.",
+        "Never, under any circumstances.",
+        "Whenever the variable is an integer."
+      ]
+    },
+    {
+      "id": "papers-019",
+      "question": "Birrell's term: what is a \"spurious wakeup\" in the readers/writer example?",
+      "answer": "Waking threads that can't proceed; fixed by using separate condition variables for readers and writers.",
+      "memory": "Terminology trap: the lecture's \"spurious wake-up\" is what Birrell calls a spurious lock conflict.",
+      "distractors": [
+        "A woken thread blocking on the mutex the signaler still holds; fixed by signaling after unlocking.",
+        "A thread waking with no Signal at all; fixed by a longer timeslice.",
+        "A lost Signal; fixed by making Wait atomic."
+      ]
+    },
+    {
+      "id": "papers-020",
+      "question": "Birrell's term: what is a \"spurious lock conflict\"?",
+      "answer": "A woken thread immediately blocks on the mutex that the signaler still holds.",
+      "memory": "This is what the lecture calls a spurious wake-up.",
+      "distractors": [
+        "Two threads locking mutexes in opposite order.",
+        "Waking readers and writers on the same condition variable.",
+        "A thread locking a mutex it already holds."
+      ]
+    },
+    {
+      "id": "papers-021",
+      "question": "Birrell: how do you avoid spurious lock conflicts?",
+      "answer": "Signal after the LOCK clause ends (after unlocking), so the woken thread doesn't block on the mutex.",
+      "distractors": [
+        "Use separate condition variables for readers and writers.",
+        "Replace Wait with a spin loop.",
+        "Hold the mutex across the Signal and the Wait."
+      ]
+    },
+    {
+      "id": "papers-022",
+      "question": "Birrell: how do you stop steady readers from starving writers?",
+      "answer": "Count waiting writers, and make new readers wait while any writer is waiting.",
+      "distractors": [
+        "Give writers their own mutex.",
+        "Use Signal for readers and Broadcast for writers.",
+        "Limit the number of readers to one."
+      ]
+    },
+    {
+      "id": "papers-023",
+      "question": "Birrell: what did the readers/writer fixes cost, and what's his advice?",
+      "answer": "The code grew from 15 to 30 lines; add fixes only if the load actually needs them.",
+      "distractors": [
+        "They halved throughput; always skip them.",
+        "Nothing; always add them.",
+        "They required kernel changes; use a library instead."
+      ]
+    },
+    {
+      "id": "papers-024",
+      "question": "What is the nested monitor problem?",
+      "answer": "A thread waits on monitor b while still holding monitor a's mutex, so the thread that would signal it (which needs a) deadlocks.",
+      "distractors": [
+        "A monitor that calls itself recursively.",
+        "Two threads waiting on the same condition variable.",
+        "A signal handler that locks a mutex."
+      ]
+    },
+    {
+      "id": "papers-025",
+      "question": "Birrell: how are pipeline stages connected?",
+      "answer": "By producer-consumer queues (e.g., PaintChar → Rasterize → Painter).",
+      "distractors": [
+        "By shared global variables with no locks.",
+        "By Join on each previous stage.",
+        "By signals between processes."
+      ]
+    },
+    {
+      "id": "papers-026",
+      "question": "Birrell: what fixes the concurrency of a pipeline?",
+      "answer": "The number of stages (and the stages must be balanced).",
+      "distractors": [
+        "The number of CPUs only.",
+        "The length of the queues.",
+        "The number of mutexes."
+      ]
+    },
+    {
+      "id": "papers-027",
+      "question": "Birrell: what's the cost of more runnable threads than CPUs vs blocked threads?",
+      "answer": "Extra runnable threads hurt performance; blocked threads are cheap.",
+      "distractors": [
+        "Both are free.",
+        "Blocked threads are expensive; runnable ones are free.",
+        "Both always improve throughput."
+      ]
+    },
+    {
+      "id": "papers-028",
+      "question": "Birrell: why not Fork tiny tasks?",
+      "answer": "A Fork costs about 2–3 scheduling decisions, which outweighs a tiny task.",
+      "distractors": [
+        "Fork copies the whole address space.",
+        "Tiny tasks can't hold a mutex.",
+        "The OS limits a process to a few threads."
+      ]
+    },
+    {
+      "id": "papers-029",
+      "question": "Birrell: what must the OS do when a thread blocks on I/O or a page fault?",
+      "answer": "Block only the calling thread, not the whole process.",
+      "memory": "Exactly what kernel threads provide, and what Flash's MT server depends on.",
+      "distractors": [
+        "Block every thread in the process.",
+        "Kill the thread and restart it.",
+        "Switch to another process immediately."
+      ]
+    },
+    {
+      "id": "papers-030",
+      "question": "Birrell: what is an up-call?",
+      "answer": "A lower layer calling up into a higher one (e.g., network receive), avoiding a context switch per layer.",
+      "distractors": [
+        "A system call from user mode to the kernel.",
+        "A thread raising its own priority.",
+        "A signal sent to the parent process."
+      ]
+    },
+    {
+      "id": "papers-031",
+      "question": "Birrell: what rule applies when making an up-call?",
+      "answer": "Don't hold a mutex while up-calling.",
+      "distractors": [
+        "Always hold every mutex while up-calling.",
+        "Disable interrupts while up-calling.",
+        "Only up-call from the main thread."
+      ]
+    },
+    {
+      "id": "papers-032",
+      "question": "Birrell: what are version stamps for?",
+      "answer": "Detecting stale cached data.",
+      "distractors": [
+        "Ordering lock acquisition.",
+        "Numbering threads for Join.",
+        "Tracking which CPU a thread ran on."
+      ]
+    },
+    {
+      "id": "papers-033",
+      "question": "Birrell: what is a work crew?",
+      "answer": "A fixed pool of threads processing a queue of requests.",
+      "memory": "Birrell's work crews = the lecture's boss-worker pattern; his pipelining = the pipeline pattern.",
+      "distractors": [
+        "A chain of stages, one thread per stage.",
+        "One thread per request, created on demand.",
+        "A group of processes sharing memory."
+      ]
+    },
+    {
+      "id": "papers-034",
+      "question": "Birrell: what four properties should threaded programs aim for?",
+      "answer": "Useful, correct, live, efficient (get it correct first, then fast).",
+      "distractors": [
+        "Fast, small, portable, secure.",
+        "Lock-free, wait-free, fair, simple.",
+        "Correct, fast, cheap, parallel."
+      ]
+    },
+    {
+      "id": "papers-035",
+      "question": "Birrell: how should library entry points behave?",
+      "answer": "Thread-safe and synchronous.",
+      "distractors": [
+        "Asynchronous with callbacks.",
+        "Single-threaded only.",
+        "Lock-free and non-blocking."
+      ]
+    },
+    {
+      "id": "papers-036",
+      "question": "What are the limits of Birrell's paper?",
+      "answer": "A tutorial with no experiments; selective and biased toward SRC's design; Modula-2+ examples not meant for production.",
+      "distractors": [
+        "Simulation only, with synthetic workloads.",
+        "Uniprocessor only, with small memory.",
+        "No end-to-end benchmarks; assumes interrupts rarely block."
+      ]
+    },
+    {
+      "id": "papers-037",
+      "question": "Eykholt et al. (1992): what did they do to SunOS 5.0 (Solaris 2.0)?",
+      "answer": "Rebuilt the kernel around kernel threads, making it fully preemptible, real-time capable, and SMP-ready.",
+      "distractors": [
+        "Added a user-level threads library on top of the old kernel.",
+        "Replaced the kernel with a microkernel.",
+        "Added locks to the old kernel and nothing else."
+      ]
+    },
+    {
+      "id": "papers-038",
+      "question": "Eykholt: what three goals did simply adding locks to the old kernel fail to meet?",
+      "answer": "SMP concurrency, multiple threads per user process, and bounded real-time dispatch latency.",
+      "distractors": [
+        "Portability, security, and smaller memory use.",
+        "Faster I/O, faster file systems, and faster networking.",
+        "User-level scheduling, green threads, and coroutines."
+      ]
+    },
+    {
+      "id": "papers-039",
+      "question": "SunOS: what is a kernel thread?",
+      "answer": "The unit scheduled onto a CPU: just a small struct plus a stack.",
+      "distractors": [
+        "A full process with its own address space.",
+        "A user-level thread visible only to the library.",
+        "A hardware context on a multithreaded core."
+      ]
+    },
+    {
+      "id": "papers-040",
+      "question": "SunOS: what is an LWP?",
+      "answer": "A kernel-supported thread inside a user process.",
+      "distractors": [
+        "A kernel thread with no user process.",
+        "A user-level thread the kernel can't see.",
+        "A lightweight copy of the parent process."
+      ]
+    },
+    {
+      "id": "papers-041",
+      "question": "SunOS: how do LWPs and kernel threads relate?",
+      "answer": "Every LWP has a kernel thread, but not every kernel thread has an LWP.",
+      "memory": "Kernel-only threads (e.g., daemons, interrupt threads) have no LWP.",
+      "distractors": [
+        "Every kernel thread has an LWP, but not every LWP has a kernel thread.",
+        "They are one-to-one: each always has the other.",
+        "They are unrelated structures."
+      ]
+    },
+    {
+      "id": "papers-042",
+      "question": "SunOS: what four levels is kernel data split into?",
+      "answer": "Per-process (proc), per-LWP, per-kernel-thread, and per-CPU.",
+      "distractors": [
+        "Per-user, per-group, per-session, per-terminal.",
+        "Per-page, per-segment, per-file, per-device.",
+        "Per-process only, in one big PCB."
+      ]
+    },
+    {
+      "id": "papers-043",
+      "question": "SunOS: per-LWP vs per-kernel-thread data: which is swappable?",
+      "answer": "Per-LWP data (user registers) is swappable; per-kernel-thread data (kernel registers) is not.",
+      "distractors": [
+        "Per-kernel-thread is swappable; per-LWP is not.",
+        "Both are swappable.",
+        "Neither is swappable."
+      ]
+    },
+    {
+      "id": "papers-044",
+      "question": "SPARC register %g7: what does it point to in the kernel vs in user space?",
+      "answer": "Kernel: the current kernel thread (curthread). User space: the current user thread's TLS.",
+      "distractors": [
+        "Kernel: the current process. User space: the stack pointer.",
+        "Kernel: the interrupt table. User space: the heap.",
+        "Both: the current CPU's run queue."
+      ]
+    },
+    {
+      "id": "papers-045",
+      "question": "SunOS: what are the three scheduling classes?",
+      "answer": "System, timesharing, and real-time.",
+      "distractors": [
+        "Batch, interactive, and idle.",
+        "FIFO, round-robin, and lottery.",
+        "Kernel, user, and interrupt."
+      ]
+    },
+    {
+      "id": "papers-046",
+      "question": "SunOS: when is kernel preemption turned off?",
+      "answer": "Only in small, bounded sections.",
+      "distractors": [
+        "Whenever any mutex is held.",
+        "For the whole time a system call runs.",
+        "Never; interrupts are always enabled."
+      ]
+    },
+    {
+      "id": "papers-047",
+      "question": "Why does an adaptive mutex spin only while the lock owner is running?",
+      "answer": "A running owner (on another CPU) will likely release soon; a sleeping owner won't, so spinning would waste the CPU.",
+      "distractors": [
+        "Spinning is only allowed in user mode.",
+        "A running owner can't be preempted.",
+        "Spinning makes the owner run faster."
+      ]
+    },
+    {
+      "id": "papers-048",
+      "question": "SunOS: which locks get priority inheritance, and why those?",
+      "answer": "Mutexes and writer locks, because they have a single owner to boost.",
+      "distractors": [
+        "Reader locks, because they have many owners.",
+        "Condition variables, because they have waiters.",
+        "Spin locks, because they never sleep."
+      ]
+    },
+    {
+      "id": "papers-049",
+      "question": "SunOS: what is a turnstile?",
+      "answer": "A per-lock structure holding the sleep queue and priority-inheritance info; more predictable than hashed sleep queues.",
+      "distractors": [
+        "A spin lock used only by interrupt handlers.",
+        "A queue of runnable threads per CPU.",
+        "A counter limiting how many threads enter a lock."
+      ]
+    },
+    {
+      "id": "papers-050",
+      "question": "Interrupts as threads: what does \"pinned\" mean?",
+      "answer": "The interrupted thread is pinned (held in place, can't run elsewhere) while the interrupt thread borrows its CPU.",
+      "distractors": [
+        "The interrupt thread is bound to one LWP forever.",
+        "The interrupt is masked until the handler ends.",
+        "The interrupt thread's stack is locked in memory."
+      ]
+    },
+    {
+      "id": "papers-051",
+      "question": "Interrupts as threads: when does an interrupt become a full thread?",
+      "answer": "Only if its handler blocks.",
+      "distractors": [
+        "On every interrupt.",
+        "Only for timer interrupts.",
+        "Only when the interrupted thread is idle."
+      ]
+    },
+    {
+      "id": "papers-052",
+      "question": "SunOS: what is special about interrupts above \"thread level\"?",
+      "answer": "They are not handled as threads and may use only spin locks.",
+      "distractors": [
+        "They always become full threads.",
+        "They may block on any mutex.",
+        "They are ignored."
+      ]
+    },
+    {
+      "id": "papers-053",
+      "question": "SunOS: about how much memory does each interrupt thread use?",
+      "answer": "About 8 KB.",
+      "distractors": [
+        "About 1.7 KB.",
+        "About 1 MB.",
+        "About 128 MB."
+      ]
+    },
+    {
+      "id": "papers-054",
+      "question": "What are the limits of the Eykholt (SunOS kernel) paper?",
+      "answer": "No end-to-end benchmarks; the net-gain argument assumes interrupts rarely block; deadlock detection misses reader locks and condition variables.",
+      "distractors": [
+        "No experiments at all; a biased tutorial.",
+        "Simulation only, with synthetic workloads.",
+        "Uniprocessor only, with simulated WAN conditions."
+      ]
+    },
+    {
+      "id": "papers-055",
+      "question": "Stein & Shah (1992): what problem did they address?",
+      "answer": "One LWP per thread wastes kernel resources, since most threads are idle at any moment.",
+      "distractors": [
+        "The kernel couldn't be preempted.",
+        "Web servers blocked on disk I/O.",
+        "Multithreaded cores left the pipeline idle."
+      ]
+    },
+    {
+      "id": "papers-056",
+      "question": "Stein & Shah: what is their solution?",
+      "answer": "A user-level library that multiplexes many cheap threads onto a small, self-adjusting pool of LWPs (M:N).",
+      "distractors": [
+        "One kernel thread per user thread (1:1).",
+        "All user threads on a single LWP (M:1).",
+        "An event loop with helper processes."
+      ]
+    },
+    {
+      "id": "papers-057",
+      "question": "Stein & Shah: what is a bound thread, and when do you use one?",
+      "answer": "A thread permanently tied to one LWP, giving system-wide scheduling scope (e.g., for real-time).",
+      "distractors": [
+        "A thread that shares the LWP pool with others.",
+        "A thread that can't be preempted by signals.",
+        "A thread whose stack size is fixed."
+      ]
+    },
+    {
+      "id": "papers-058",
+      "question": "Stein & Shah: what is an unbound thread?",
+      "answer": "A thread that shares the pool of LWPs with other unbound threads (the default, cheapest case).",
+      "distractors": [
+        "A thread permanently tied to one LWP.",
+        "A thread with no stack.",
+        "A thread detached from its parent."
+      ]
+    },
+    {
+      "id": "papers-059",
+      "question": "Stein & Shah: where is a thread's TLS, and what does it hold?",
+      "answer": "At the base of the thread's stack; it holds the thread struct and a per-thread errno.",
+      "distractors": [
+        "In the kernel's LWP struct; it holds the signal mask.",
+        "In the heap; it holds the thread's return value.",
+        "In a global table; it holds the thread ID."
+      ]
+    },
+    {
+      "id": "papers-060",
+      "question": "Stein & Shah: what are the five thread states?",
+      "answer": "RUNNABLE, ACTIVE, SLEEPING, STOPPED, ZOMBIE.",
+      "distractors": [
+        "New, ready, running, waiting, terminated.",
+        "Bound, unbound, parked, idle, dead.",
+        "Created, joined, detached, alerted, exited."
+      ]
+    },
+    {
+      "id": "papers-061",
+      "question": "Stein & Shah: how does the library schedule threads?",
+      "answer": "A user-level priority queue with fixed priorities.",
+      "distractors": [
+        "Round-robin with a kernel timer per thread.",
+        "By CPI, mixing CPU- and memory-bound threads.",
+        "The kernel schedules every user thread directly."
+      ]
+    },
+    {
+      "id": "papers-062",
+      "question": "Stein & Shah: what is idling vs parking?",
+      "answer": "Idling: an idle LWP waits on a global condition variable. Parking: a blocked bound thread's LWP waits on that thread's semaphore.",
+      "distractors": [
+        "Idling: a thread sleeps on a mutex. Parking: an LWP is destroyed.",
+        "Idling: the CPU halts. Parking: the process is swapped out.",
+        "They are the same thing."
+      ]
+    },
+    {
+      "id": "papers-063",
+      "question": "Stein & Shah: how does the library preempt a running thread?",
+      "answer": "Sets a flag, then sends the thread's LWP a SIGLWP signal.",
+      "distractors": [
+        "Sends SIGWAITING to the process.",
+        "Asks the kernel to destroy the LWP.",
+        "Waits for the thread to call yield."
+      ]
+    },
+    {
+      "id": "papers-064",
+      "question": "What triggers SIGWAITING?",
+      "answer": "Every LWP in the process is blocked.",
+      "distractors": [
+        "A thread waits on a condition variable.",
+        "An LWP has been idle for 5 minutes.",
+        "A mutex has more than one waiter."
+      ]
+    },
+    {
+      "id": "papers-065",
+      "question": "What does the threads library do when it gets SIGWAITING?",
+      "answer": "Adds an LWP to the pool so runnable threads can run.",
+      "memory": "SIGWAITING and Flash's helper processes both fix \"one blocking call stalls everything.\"",
+      "distractors": [
+        "Kills the blocked threads.",
+        "Removes an idle LWP from the pool.",
+        "Ignores it until a thread yields."
+      ]
+    },
+    {
+      "id": "papers-066",
+      "question": "Stein & Shah: what is thr_setconcurrency?",
+      "answer": "A hint to the library about how many LWPs to keep.",
+      "distractors": [
+        "A hard limit on the number of threads.",
+        "A call that binds a thread to an LWP.",
+        "A call that sets the timeslice."
+      ]
+    },
+    {
+      "id": "papers-067",
+      "question": "Stein & Shah: what happens to LWPs that sit idle too long?",
+      "answer": "After about 5 minutes idle, they are aged out (removed from the pool).",
+      "distractors": [
+        "They are kept forever.",
+        "They are turned into bound threads.",
+        "They trigger SIGWAITING."
+      ]
+    },
+    {
+      "id": "papers-068",
+      "question": "Stein & Shah: detached vs undetached thread exit?",
+      "answer": "Detached threads go to deathrow (a reaper frees and caches their stacks); undetached threads wait for thr_join.",
+      "distractors": [
+        "Detached threads wait for thr_join; undetached go to deathrow.",
+        "Both are freed immediately.",
+        "Both become zombies until the process exits."
+      ]
+    },
+    {
+      "id": "papers-069",
+      "question": "Stein & Shah: process-local vs process-shared sync variables?",
+      "answer": "Process-local ones use user-level sleep queues; process-shared ones use kernel LWP synchronization, keyed by file and offset.",
+      "distractors": [
+        "Both use user-level sleep queues.",
+        "Process-local use the kernel; process-shared use user-level queues.",
+        "Process-shared variables aren't supported."
+      ]
+    },
+    {
+      "id": "papers-070",
+      "question": "Stein & Shah: how does an LWP's signal mask compare to its thread's?",
+      "answer": "Equal to or less restrictive than the thread's mask.",
+      "distractors": [
+        "Always more restrictive than the thread's.",
+        "Always identical.",
+        "Unrelated to the thread's mask."
+      ]
+    },
+    {
+      "id": "papers-071",
+      "question": "Why can't the kernel deliver a signal directly to the right user thread?",
+      "answer": "It can't see user-level threads or their masks: threads change masks at user level with no system call.",
+      "memory": "So the library's handler intercepts every signal and re-sends it if the current thread has it masked.",
+      "distractors": [
+        "Signals are only allowed for processes, never threads.",
+        "The kernel sees the masks but ignores them for speed.",
+        "User threads have no signal masks."
+      ]
+    },
+    {
+      "id": "papers-072",
+      "question": "What are the limits of the Stein & Shah paper?",
+      "answer": "No performance data at all; SIGWAITING only fires when every LWP is blocked; preemption interrupts system calls, which then restart.",
+      "distractors": [
+        "No end-to-end benchmarks; assumes interrupts rarely block.",
+        "Simulation only, with synthetic workloads.",
+        "Uniprocessor only, with small memory."
+      ]
+    },
+    {
+      "id": "papers-073",
+      "question": "Fedorova et al. (2004): what is the main result?",
+      "answer": "Putting a mix of CPU-bound and memory-bound threads on each core, using CPI to tell them apart, doubled throughput in simulation.",
+      "distractors": [
+        "Grouping similar threads on the same core doubled throughput.",
+        "Adding more hardware contexts always doubles throughput.",
+        "An event-driven server beat multithreaded ones by 50%."
+      ]
+    },
+    {
+      "id": "papers-074",
+      "question": "Fedorova: what problem motivates the paper?",
+      "answer": "Server workloads leave the pipeline as little as 19% utilized, and a naive scheduler on CMT chips can waste up to half the performance.",
+      "distractors": [
+        "Kernel locks limit SMP scalability.",
+        "User threads waste kernel resources.",
+        "Web servers block on disk I/O."
+      ]
+    },
+    {
+      "id": "papers-075",
+      "question": "Fedorova: why not just try every combination of co-scheduled threads?",
+      "answer": "It doesn't scale: 100 threads on 16 contexts gives an astronomical number of combinations.",
+      "distractors": [
+        "The hardware forbids moving threads between contexts.",
+        "CPI can't be measured at all.",
+        "There are only a few combinations, so it isn't needed."
+      ]
+    },
+    {
+      "id": "papers-076",
+      "question": "What is CMP?",
+      "answer": "Chip multiprocessing: multiple cores per chip.",
+      "distractors": [
+        "One core with several register sets.",
+        "Multiple multithreaded cores on one chip.",
+        "Several functional units running multiple threads at once."
+      ]
+    },
+    {
+      "id": "papers-077",
+      "question": "What is hardware MT (multithreading)?",
+      "answer": "One core with several register sets (hardware contexts).",
+      "distractors": [
+        "Multiple cores per chip.",
+        "Multiple multithreaded cores on one chip.",
+        "A user-level threads library."
+      ]
+    },
+    {
+      "id": "papers-078",
+      "question": "What is CMT?",
+      "answer": "Chip multithreading: CMP + MT, multiple multithreaded cores on one chip.",
+      "distractors": [
+        "One core with several register sets.",
+        "Multiple single-threaded cores per chip.",
+        "Several functional units running multiple threads in one cycle."
+      ]
+    },
+    {
+      "id": "papers-079",
+      "question": "What is SMT?",
+      "answer": "Simultaneous multithreading: several functional units execute instructions from multiple threads at the same time.",
+      "distractors": [
+        "Switching hardware context every cycle.",
+        "Multiple cores per chip.",
+        "One thread per core, switched by the OS."
+      ]
+    },
+    {
+      "id": "papers-080",
+      "question": "What is fine-grained multithreading?",
+      "answer": "The core switches hardware context every cycle and skips stalled threads, hiding memory latency.",
+      "distractors": [
+        "The OS switches threads every timeslice.",
+        "Several threads issue instructions in the same cycle.",
+        "Each thread gets its own core."
+      ]
+    },
+    {
+      "id": "papers-081",
+      "question": "How does the OS see each hardware context on a multithreaded core?",
+      "answer": "As a logical CPU.",
+      "distractors": [
+        "As a process.",
+        "As an LWP.",
+        "It can't see them at all."
+      ]
+    },
+    {
+      "id": "papers-082",
+      "question": "Fedorova: instruction delay latencies for ALU, branch, and L1 load hit?",
+      "answer": "ALU 0 cycles, branch 2 cycles, L1 load hit 4 cycles.",
+      "distractors": [
+        "ALU 4, branch 2, L1 load hit 0.",
+        "ALU 1, branch 1, L1 load hit 1.",
+        "ALU 0, branch 4, L1 load hit 2."
+      ]
+    },
+    {
+      "id": "papers-083",
+      "question": "What is CPI, and where does Fedorova get it?",
+      "answer": "Cycles per instruction, read from hardware performance counters.",
+      "distractors": [
+        "Context switches per interrupt, from the kernel.",
+        "Cache misses per instruction, from a simulator only.",
+        "Calls per invocation, from the compiler."
+      ]
+    },
+    {
+      "id": "papers-084",
+      "question": "Low CPI vs high CPI: which is CPU-bound?",
+      "answer": "Low CPI = CPU-bound; high CPI = memory-bound.",
+      "distractors": [
+        "High CPI = CPU-bound; low CPI = memory-bound.",
+        "Both are CPU-bound.",
+        "CPI doesn't indicate either."
+      ]
+    },
+    {
+      "id": "papers-085",
+      "question": "Why is low CPI a sign a thread needs more pipeline resources?",
+      "answer": "It issues an instruction almost every cycle, so it competes hard for the shared pipeline; high-CPI threads mostly stall on memory and leave the pipeline idle.",
+      "distractors": [
+        "Low CPI means it misses the cache often.",
+        "Low CPI means it is waiting on I/O.",
+        "Low CPI means it needs more memory bandwidth."
+      ]
+    },
+    {
+      "id": "papers-086",
+      "question": "Fedorova thought experiment, CPU-bound workload: A (single-threaded core) vs B (4-context MT core) vs C (4-way multiprocessor)?",
+      "answer": "A ≈ B; C is 4× faster.",
+      "memory": "CPU-bound threads already keep one pipeline busy, so extra contexts on one core don't help.",
+      "distractors": [
+        "B ≈ C; both 4× faster than A.",
+        "A ≈ C; B is 4× faster.",
+        "All three perform the same."
+      ]
+    },
+    {
+      "id": "papers-087",
+      "question": "Fedorova thought experiment, memory-bound workload: A (single-threaded core) vs B (4-context MT core) vs C (4-way multiprocessor)?",
+      "answer": "B ≈ C; both about 4× faster than A.",
+      "memory": "Memory-bound threads stall a lot, so the other contexts fill those idle cycles.",
+      "distractors": [
+        "A ≈ B; C is 4× faster.",
+        "A is fastest.",
+        "All three perform the same."
+      ]
+    },
+    {
+      "id": "papers-088",
+      "question": "Fedorova: what was the main experiment's setup?",
+      "answer": "4 cores × 4 contexts, running 16 threads with CPI 1, 6, 11, and 16.",
+      "distractors": [
+        "1 core × 16 contexts, running 4 threads.",
+        "16 single-threaded cores running 100 threads.",
+        "A real web server on a 333 MHz Pentium II."
+      ]
+    },
+    {
+      "id": "papers-089",
+      "question": "Fedorova: how much did mixing CPIs on every core help?",
+      "answer": "2× vs fully grouping similar threads, and 1.5× vs partly grouping.",
+      "distractors": [
+        "1.5× vs fully grouped, 2× vs partly grouped.",
+        "No difference.",
+        "Grouping similar threads was 2× faster."
+      ]
+    },
+    {
+      "id": "papers-090",
+      "question": "Fedorova's scheduling rule?",
+      "answer": "Put a mix of CPU-bound and memory-bound threads on each core.",
+      "distractors": [
+        "Put all CPU-bound threads on the same core.",
+        "Give each thread its own core.",
+        "Schedule threads by fixed priority."
+      ]
+    },
+    {
+      "id": "papers-091",
+      "question": "Fedorova: why did a larger working set hurt the MT core (B)?",
+      "answer": "Its hardware contexts share one L1 cache, so they evict each other's data.",
+      "distractors": [
+        "Each context has a tiny private cache.",
+        "The pipeline gets longer with more data.",
+        "The OS stops scheduling memory-bound threads."
+      ]
+    },
+    {
+      "id": "papers-092",
+      "question": "What are the limits of the Fedorova paper?",
+      "answer": "Synthetic workloads, simulation only, no scheduler actually built; CPI ignores cache and FPU contention; single-threaded CPI is hard to measure on a busy system.",
+      "distractors": [
+        "No experiments at all; a biased tutorial.",
+        "No performance data at all; SIGWAITING fires too late.",
+        "Uniprocessor only, with simulated WAN conditions."
+      ]
+    },
+    {
+      "id": "papers-093",
+      "question": "Why does a hardware context switch cost nothing, unlike a software one?",
+      "answer": "Each hardware context keeps its own copies of PC, SP, and registers; a software switch must save and restore them.",
+      "distractors": [
+        "Hardware contexts share one set of registers.",
+        "The OS pre-copies the registers in the background.",
+        "Hardware switches only happen on cache hits."
+      ]
+    },
+    {
+      "id": "papers-094",
+      "question": "Flash (Pai et al., 1999): what is the headline result?",
+      "answer": "AMPED matches SPED on cached workloads and MP/MT on disk-bound ones; Flash beat Zeus by up to 30% and Apache by up to 50%.",
+      "distractors": [
+        "SPED beat every design on disk-bound workloads.",
+        "MP beat Flash by up to 50% on cached workloads.",
+        "All designs performed the same in every test."
+      ]
+    },
+    {
+      "id": "papers-095",
+      "question": "Flash: which web server request steps can block?",
+      "answer": "accept, read (the request), stat/open, file read, and send.",
+      "distractors": [
+        "Only the file read.",
+        "Only accept and send.",
+        "None, if you use select."
+      ]
+    },
+    {
+      "id": "papers-096",
+      "question": "Flash: how does the server check whether a file is already in memory?",
+      "answer": "mincore()",
+      "distractors": [
+        "stat()",
+        "select()",
+        "mmap()"
+      ]
+    },
+    {
+      "id": "papers-097",
+      "question": "Flash: what does a helper do when a file isn't in memory?",
+      "answer": "mmaps the file and touches its pages (so it's read into memory), then signals completion over a pipe.",
+      "distractors": [
+        "Sends the file to the client itself.",
+        "Copies the file into the dispatcher's stack.",
+        "Tells the client to retry later."
+      ]
+    },
+    {
+      "id": "papers-098",
+      "question": "Flash: how does the dispatcher learn that a helper finished?",
+      "answer": "The helper's pipe message arrives as a select event.",
+      "distractors": [
+        "A shared-memory flag it polls.",
+        "A SIGWAITING signal.",
+        "It joins the helper thread."
+      ]
+    },
+    {
+      "id": "papers-099",
+      "question": "Flash: why are the helpers processes rather than threads?",
+      "answer": "Portability: not all kernels of the time supported kernel threads.",
+      "distractors": [
+        "Processes are faster than threads.",
+        "Processes share memory more easily.",
+        "Threads can't do disk I/O."
+      ]
+    },
+    {
+      "id": "papers-100",
+      "question": "Flash: what are AMPED's weaknesses?",
+      "answer": "Pipe communication with helpers, and the overhead of the mincore check.",
+      "distractors": [
+        "High memory use and no shared cache.",
+        "Needs locks and kernel threads.",
+        "Disk reads block the whole server."
+      ]
+    },
+    {
+      "id": "papers-101",
+      "question": "Why is MP weak on cached workloads in the Flash experiments?",
+      "answer": "Each process has its own memory and caches: no shared cache, a large memory footprint, and costly process switches.",
+      "distractors": [
+        "MP blocks on every disk read.",
+        "MP needs locks for every request.",
+        "MP can't use select."
+      ]
+    },
+    {
+      "id": "papers-102",
+      "question": "Flash: which optimization gave the biggest gain?",
+      "answer": "The pathname translation cache.",
+      "distractors": [
+        "The response header cache.",
+        "32-byte header alignment.",
+        "Using helper processes."
+      ]
+    },
+    {
+      "id": "papers-103",
+      "question": "Flash: name its four optimizations.",
+      "answer": "Pathname translation cache, response header cache, mapped-file cache, and 32-byte header alignment for writev.",
+      "distractors": [
+        "Thread pools, adaptive mutexes, turnstiles, and priority inheritance.",
+        "Compression, encryption, prefetching, and load balancing.",
+        "Helpers, pipes, select, and mincore."
+      ]
+    },
+    {
+      "id": "papers-104",
+      "question": "Flash: what would happen without its caches?",
+      "answer": "Small-file throughput would drop by about half.",
+      "distractors": [
+        "Nothing measurable.",
+        "Large-file throughput would double.",
+        "The server would deadlock."
+      ]
+    },
+    {
+      "id": "papers-105",
+      "question": "Flash: what hardware and OSes were the tests run on?",
+      "answer": "A 333 MHz Pentium II with 128 MB RAM, running Solaris 2.6 and FreeBSD 2.2.6.",
+      "distractors": [
+        "A 4-core CMT chip in simulation.",
+        "A SPARC multiprocessor running SunOS 5.0.",
+        "A 2 GHz server with 8 GB RAM running Linux."
+      ]
+    },
+    {
+      "id": "papers-106",
+      "question": "Flash: what workloads were used?",
+      "answer": "A single cached file, the Rice CS and Owlnet traces, an ECE trace at 15–150 MB, and up to 500 persistent connections.",
+      "distractors": [
+        "Synthetic threads with CPI 1, 6, 11, and 16.",
+        "Only the CS trace.",
+        "Only a single cached file."
+      ]
+    },
+    {
+      "id": "papers-107",
+      "question": "Flash results: when all data is cached, how much does the architecture matter?",
+      "answer": "Barely at all.",
+      "distractors": [
+        "A lot: SPED is 4× faster.",
+        "A lot: MP is 2× faster.",
+        "Only MT works."
+      ]
+    },
+    {
+      "id": "papers-108",
+      "question": "Flash results: what happens once the dataset exceeds memory?",
+      "answer": "SPED collapses; Flash stays at or above MP.",
+      "distractors": [
+        "Flash collapses; SPED stays on top.",
+        "All designs perform the same.",
+        "MP collapses; SPED stays on top."
+      ]
+    },
+    {
+      "id": "papers-109",
+      "question": "Flash results: why was Apache so far behind?",
+      "answer": "Mostly its missing optimizations, not its MP design.",
+      "distractors": [
+        "Its MP design, not missing optimizations.",
+        "It ran on slower hardware.",
+        "It didn't support persistent connections."
+      ]
+    },
+    {
+      "id": "papers-110",
+      "question": "Flash results: Solaris vs FreeBSD?",
+      "answer": "Solaris was up to 50% slower than FreeBSD.",
+      "distractors": [
+        "FreeBSD was up to 50% slower than Solaris.",
+        "They were identical.",
+        "Only FreeBSD could run Flash."
+      ]
+    },
+    {
+      "id": "papers-111",
+      "question": "Flash results: when did MT match Flash?",
+      "answer": "Only after careful lock tuning.",
+      "distractors": [
+        "Never.",
+        "Always, with no tuning.",
+        "Only on the single-file test."
+      ]
+    },
+    {
+      "id": "papers-112",
+      "question": "Flash results: what happens above 200 connections?",
+      "answer": "SPED and AMPED level off, MT slowly declines, and MP drops sharply.",
+      "distractors": [
+        "MP levels off, and SPED and AMPED drop sharply.",
+        "All designs keep improving.",
+        "MT drops sharply, and MP levels off."
+      ]
+    },
+    {
+      "id": "papers-113",
+      "question": "What are the limits of the Flash paper?",
+      "answer": "Uniprocessor only (one event loop can't use multiple CPUs), small memory, simulated WAN conditions, and a design tied to 1999 OS limits.",
+      "distractors": [
+        "No experiments at all; a biased tutorial.",
+        "Simulation only, with synthetic workloads.",
+        "No performance data; SIGWAITING fires too late."
+      ]
+    },
+    {
+      "id": "papers-114",
+      "question": "Papers as layers: order them from software down to hardware.",
+      "answer": "Birrell (programming model) → Stein & Shah (user threads on LWPs) → Eykholt (kernel threads on CPUs) → Fedorova (hardware contexts sharing a pipeline). Flash shows an application using the layers.",
+      "distractors": [
+        "Fedorova → Eykholt → Stein & Shah → Birrell, with Flash at the bottom.",
+        "Flash → Birrell → Fedorova → Eykholt → Stein & Shah.",
+        "Eykholt → Birrell → Flash → Stein & Shah → Fedorova."
+      ]
+    },
+    {
+      "id": "papers-115",
+      "question": "Why do MT web servers need kernel threads?",
+      "answer": "With user-level-only threads, one disk read blocks the whole process.",
+      "memory": "Stein & Shah's SIGWAITING and Flash's helper processes both address this.",
+      "distractors": [
+        "Kernel threads use less memory than user threads.",
+        "User-level threads can't share a cache.",
+        "Only kernel threads can call select."
+      ]
+    },
+    {
+      "id": "papers-116",
+      "question": "What shared principle links \"many user threads on few LWPs\" and \"one file descriptor per connection in SPED/AMPED\"?",
+      "answer": "Don't give every activity its own kernel resources.",
+      "distractors": [
+        "Give every activity its own kernel thread.",
+        "Always use processes for isolation.",
+        "Avoid file descriptors wherever possible."
+      ]
+    }
+  ]
+}

@@ -2265,6 +2265,248 @@
         "The CPU is slower for large files.",
         "The network is disabled for large files."
       ]
+    },
+    {
+      "id": "mid-207",
+      "question": "Which ways create a new process: fork, exec, or both?",
+      "answer": "fork alone, or fork followed by exec.",
+      "memory": "exec never creates a process; it only swaps the program inside an existing one.",
+      "distractors": [
+        "exec alone, or exec followed by fork.",
+        "fork or exec, either one alone.",
+        "Only exec followed by fork."
+      ]
+    },
+    {
+      "id": "mid-208",
+      "question": "Does exec alone create a new process?",
+      "answer": "No. It replaces the calling process's program image (same PCB, new program).",
+      "memory": "fork = new PCB (copy). exec = new program in the existing PCB.",
+      "distractors": [
+        "Yes. It creates a child with a new PCB.",
+        "Yes, but only if called by init.",
+        "No. It duplicates the parent's PCB."
+      ]
+    },
+    {
+      "id": "mid-209",
+      "question": "After exec, where does the process's PC point?",
+      "answer": "The first instruction of the new program.",
+      "memory": "The old program's code is gone, so there's nothing \"after exec\" to return to.",
+      "distractors": [
+        "The instruction right after the exec call.",
+        "The instruction right after the parent's fork.",
+        "The start of the parent's program."
+      ]
+    },
+    {
+      "id": "mid-210",
+      "question": "After fork, where do the parent and child resume?",
+      "answer": "Both at the instruction right after fork (the child's PCB is a copy, PC included).",
+      "memory": "Same PC copied → same next instruction in both.",
+      "distractors": [
+        "The child starts at main(); the parent continues after fork.",
+        "Only the child runs until it exits.",
+        "Both restart at the beginning of the program."
+      ]
+    },
+    {
+      "id": "mid-211",
+      "question": "Producer/consumer: after adding an item, which condition variable does the producer signal?",
+      "answer": "not_empty (to wake a waiting consumer).",
+      "memory": "Signal the condition you just made true: adding makes the buffer not empty.",
+      "distractors": [
+        "not_full (to wake a waiting producer).",
+        "Both not_empty and not_full.",
+        "Neither; the mutex unlock wakes consumers."
+      ]
+    },
+    {
+      "id": "mid-212",
+      "question": "Producer/consumer: after removing an item, which condition variable does the consumer signal?",
+      "answer": "not_full (to wake a waiting producer).",
+      "memory": "Signaling not_empty from the consumer is a classic bug: it wakes the wrong side.",
+      "distractors": [
+        "not_empty (to wake another consumer).",
+        "Both not_empty and not_full.",
+        "Neither; producers poll the buffer."
+      ]
+    },
+    {
+      "id": "mid-213",
+      "question": "Producer added one item: signal or broadcast?",
+      "answer": "Signal: one item can satisfy only one consumer.",
+      "memory": "P2L3: \"we inserted one element, no point waking up seven consumer threads.\" Broadcast still works, but it wastes wake-ups.",
+      "distractors": [
+        "Broadcast: every consumer must check the buffer.",
+        "Broadcast: signal can lose the wake-up.",
+        "Neither: the unlock wakes the consumer."
+      ]
+    },
+    {
+      "id": "mid-214",
+      "question": "What's wrong with condition_wait(&not_full) with no mutex argument?",
+      "answer": "wait must take the mutex, so it can release it while sleeping and reacquire it on wake-up.",
+      "memory": "Correct form: condition_wait(&not_full, &m).",
+      "distractors": [
+        "Nothing; the condition variable remembers its mutex.",
+        "wait must take both condition variables.",
+        "wait must be called after unlocking."
+      ]
+    },
+    {
+      "id": "mid-215",
+      "question": "Producer/consumer loop: what must happen before the loop body ends?",
+      "answer": "Unlock the mutex (every mutex_lock needs a matching mutex_unlock).",
+      "memory": "Missing unlock = the next iteration (or any other thread) blocks forever on the lock.",
+      "distractors": [
+        "Broadcast on both condition variables.",
+        "Reset in and out to 0.",
+        "Call condition_wait one more time."
+      ]
+    },
+    {
+      "id": "mid-216",
+      "question": "Circular buffer with in/out indices: when is it full?",
+      "answer": "(in + 1) % N == out",
+      "memory": "One slot stays empty so that full and empty can be told apart. Holds at most N − 1 items.",
+      "distractors": [
+        "in == out",
+        "in == N",
+        "(out + 1) % N == in"
+      ]
+    },
+    {
+      "id": "mid-217",
+      "question": "Circular buffer with in/out indices: when is it empty?",
+      "answer": "in == out",
+      "memory": "Nothing between the read position and the write position.",
+      "distractors": [
+        "(in + 1) % N == out",
+        "in == 0",
+        "out == N"
+      ]
+    },
+    {
+      "id": "mid-218",
+      "question": "Solaris signals: what intercepts every signal first?",
+      "answer": "The user-level threading library's wrapper handler (it can see all ULT signal masks).",
+      "memory": "The kernel only sees KLT/LWP masks, so the library must decide which ULT gets the signal.",
+      "distractors": [
+        "The ULT that happens to be running.",
+        "The kernel, which reads each ULT's mask directly.",
+        "A dedicated signal-handling kernel thread."
+      ]
+    },
+    {
+      "id": "mid-219",
+      "question": "Solaris signal case 1: the running ULT has the signal enabled. Who handles it?",
+      "answer": "That ULT, the one it was delivered to.",
+      "memory": "ULT mask = 1, KLT mask = 1: no conflict.",
+      "distractors": [
+        "The library sends it to another CPU.",
+        "The library disables it in the kernel mask.",
+        "It is ignored."
+      ]
+    },
+    {
+      "id": "mid-220",
+      "question": "Solaris signal case 2: the running ULT has it disabled, but a runnable ULT has it enabled. Who handles it?",
+      "answer": "The library schedules the enabled ULT onto this same KLT/LWP to handle it.",
+      "memory": "Same CPU, different ULT.",
+      "distractors": [
+        "The running ULT handles it anyway.",
+        "The kernel creates a new KLT for it.",
+        "The signal is dropped."
+      ]
+    },
+    {
+      "id": "mid-221",
+      "question": "Solaris signal case 3: the only ULT with it enabled is running on another CPU. What happens?",
+      "answer": "The library sends a directed signal to that ULT's KLT/LWP, and that ULT handles it.",
+      "memory": "Different CPU → directed signal.",
+      "distractors": [
+        "The library migrates that ULT to this CPU.",
+        "The current ULT handles it despite its mask.",
+        "The kernel queues it until that CPU is idle."
+      ]
+    },
+    {
+      "id": "mid-222",
+      "question": "Solaris signal case 4: every ULT has the signal disabled. What happens?",
+      "answer": "The library disables it in the KLT's kernel mask (a syscall) and re-raises it, repeating until every KLT mask is 0.",
+      "memory": "When a ULT re-enables it later, the library syscalls to re-enable one KLT mask.",
+      "distractors": [
+        "The library handles it itself and discards it.",
+        "It is delivered to the first ULT anyway.",
+        "The process is terminated."
+      ]
+    },
+    {
+      "id": "mid-223",
+      "question": "Pipeline with unequal stages: how many threads per stage?",
+      "answer": "Stage time ÷ shortest stage time.",
+      "memory": "Stages 10 / 30 / 20 ms → 1 / 3 / 2 threads, so every stage finishes one request per 10 ms.",
+      "distractors": [
+        "One thread per stage, always.",
+        "Stage time ÷ total pipeline time.",
+        "Equal threads in every stage."
+      ]
+    },
+    {
+      "id": "mid-224",
+      "question": "Pipeline with unequal stages: total time for N requests?",
+      "answer": "Σ stage times + (N − 1) × max(stage time ÷ its threads).",
+      "memory": "10/30/20 ms with 1/3/2 threads, 100 requests: 60 + 99 × 10 = 1,050 ms = 1.05 s. With 1 thread each: 60 + 99 × 30.",
+      "distractors": [
+        "Σ stage times × N.",
+        "N × shortest stage time.",
+        "S × t + (N − 1) × t, using the average stage time."
+      ]
+    },
+    {
+      "id": "mid-225",
+      "question": "How do you compute average throughput for a run of N requests?",
+      "answer": "N ÷ total execution time (in seconds).",
+      "memory": "100 requests in 1.05 s ≈ 95.2 req/s.",
+      "distractors": [
+        "Total execution time ÷ N.",
+        "N ÷ shortest stage time.",
+        "N × bottleneck stage time."
+      ]
+    },
+    {
+      "id": "mid-226",
+      "question": "Flash: Owlnet vs CS trace dataset sizes?",
+      "answer": "Owlnet ≈ 100 MB (mostly fits in memory); CS ≈ 7.8 GB (doesn't fit).",
+      "memory": "Test machine: 128 MB RAM. Small trace = cache-bound; big trace = disk-bound.",
+      "distractors": [
+        "Owlnet ≈ 7.8 GB; CS ≈ 100 MB.",
+        "Both ≈ 100 MB.",
+        "Both larger than memory."
+      ]
+    },
+    {
+      "id": "mid-227",
+      "question": "Flash, Owlnet trace: performance ranking?",
+      "answer": "Flash > SPED > MT > MP > Apache.",
+      "memory": "Mostly cached, like the best case. Flash edges out SPED because the occasional disk read blocks SPED but goes to Flash's helpers.",
+      "distractors": [
+        "SPED > Flash > MT > MP > Apache.",
+        "MT > MP > Flash > SPED > Apache.",
+        "Apache > MP > MT > SPED > Flash."
+      ]
+    },
+    {
+      "id": "mid-228",
+      "question": "Flash, CS trace: performance ranking?",
+      "answer": "Flash best, then MT > MP; SPED falls below MT and MP; Apache is worst.",
+      "memory": "Disk-bound: SPED's only thread blocks. MT beats MP (smaller footprint, cheaper switches).",
+      "distractors": [
+        "SPED ≈ Flash > MT > MP > Apache.",
+        "MP > MT > Flash > SPED > Apache.",
+        "Flash > SPED > MP > MT > Apache."
+      ]
     }
   ]
 }
