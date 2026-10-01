@@ -55,7 +55,7 @@
     },
     {
       "id": "p2l3-v2-006",
-      "question": "Birrell's fork ≈ which PThreads call?",
+      "question": "Which PThreads call corresponds to Birrell's thread fork()?",
       "answer": "pthread_create()",
       "distractors": [
         "pthread_join()",
@@ -65,7 +65,7 @@
     },
     {
       "id": "p2l3-v2-007",
-      "question": "Birrell's join ≈ which PThreads call?",
+      "question": "Which PThreads call corresponds to Birrell's join()?",
       "answer": "pthread_join()",
       "distractors": [
         "pthread_exit()",
@@ -260,7 +260,7 @@
     },
     {
       "id": "p2l3-v2-026",
-      "question": "In Example 1, 4 threads each run hello() (prints \"Hello Thread\"). What is the output?",
+      "question": "Lecture PThreads Example 1: main creates 4 threads, and each runs hello(), which prints \"Hello Thread\". What is the output?",
       "answer": "\"Hello Thread\" printed 4 times.",
       "distractors": [
         "\"Hello Thread\" printed once.",
@@ -280,7 +280,7 @@
     },
     {
       "id": "p2l3-v2-028",
-      "question": "In Example 2, the loop passes &i to each thread. Why can \"Thread number 1\" go missing?",
+      "question": "Lecture PThreads Example 2: main's loop creates 4 threads, passing each one &i (the address of the loop variable), and each thread prints \"Thread number\" with the value it reads. Why can \"Thread number 1\" go missing?",
       "answer": "main incremented the shared i before thread 1 read it, so two threads saw i = 2.",
       "memory": "Every thread gets the SAME address → they see whatever i is at read time.",
       "distractors": [
@@ -301,7 +301,7 @@
     },
     {
       "id": "p2l3-v2-030",
-      "question": "How was the Example 2 race on i fixed?",
+      "question": "Lecture PThreads Example 2 (each thread was passed &i, the address of main's loop variable): how was the race on i fixed?",
       "answer": "Copy i into tNum[i] and pass &tNum[i], giving each thread its own private copy.",
       "memory": "Rule: never pass the address of a loop variable to a thread.",
       "distractors": [
@@ -435,7 +435,7 @@
     },
     {
       "id": "p2l3-v2-043",
-      "question": "pthread_cond_signal() vs pthread_cond_broadcast()?",
+      "question": "What is the difference between pthread_cond_signal() and pthread_cond_broadcast()?",
       "answer": "signal wakes one waiting thread; broadcast wakes all of them.",
       "distractors": [
         "signal wakes all; broadcast wakes one.",
@@ -445,7 +445,7 @@
     },
     {
       "id": "p2l3-v2-044",
-      "question": "Unsure whether to signal or broadcast? What's the safe default?",
+      "question": "If you're unsure whether to use pthread_cond_signal() or pthread_cond_broadcast(), which is the safe default?",
       "answer": "broadcast (it is correct, but slower).",
       "distractors": [
         "signal (it's always correct).",
@@ -475,7 +475,7 @@
     },
     {
       "id": "p2l3-v2-047",
-      "question": "Producer/consumer: what do num, add, and rem track in the shared buffer?",
+      "question": "Lecture PThreads producer/consumer example: what do num, add, and rem track in the shared circular buffer?",
       "answer": "num = item count; add = next slot to write; rem = next slot to read.",
       "distractors": [
         "num = buffer size; add = producer count; rem = consumer count.",
@@ -485,7 +485,7 @@
     },
     {
       "id": "p2l3-v2-048",
-      "question": "Producer/consumer: when does the producer wait, and on which CV?",
+      "question": "Lecture PThreads producer/consumer example (circular buffer; num = item count, add = next slot to write, rem = next slot to read): when does the producer wait, and on which condition variable?",
       "answer": "When num == BUFFER_SIZE (buffer full); it waits on c_prod.",
       "distractors": [
         "When num == 0; it waits on c_cons.",
@@ -495,7 +495,7 @@
     },
     {
       "id": "p2l3-v2-049",
-      "question": "Producer/consumer: when does the consumer wait, and on which CV?",
+      "question": "Lecture PThreads producer/consumer example (circular buffer; num = item count, add = next slot to write, rem = next slot to read): when does the consumer wait, and on which condition variable?",
       "answer": "When num == 0 (buffer empty); it waits on c_cons.",
       "distractors": [
         "When num == BUFFER_SIZE; it waits on c_prod.",
@@ -505,7 +505,7 @@
     },
     {
       "id": "p2l3-v2-050",
-      "question": "Why does the producer use signal (not broadcast) after adding an item?",
+      "question": "Lecture PThreads producer/consumer example: why does the producer use signal (not broadcast) after adding an item?",
       "answer": "Only one item was added, so only one consumer can make progress.",
       "distractors": [
         "Broadcast isn't allowed on c_cons.",
@@ -515,7 +515,7 @@
     },
     {
       "id": "p2l3-v2-051",
-      "question": "How do add and rem wrap around the fixed-size buffer?",
+      "question": "Lecture PThreads producer/consumer example (circular buffer; num = item count, add = next slot to write, rem = next slot to read): how do add and rem wrap around the fixed-size buffer?",
       "answer": "Modulo: add = (add + 1) % BUFFER_SIZE",
       "memory": "Circular buffer.",
       "distractors": [

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T23:30:44.271Z",
+  "generatedAt": "2026-10-01T00:48:27.725Z",
   "decks": [
     {
       "path": "biology/cell-structure.json",
@@ -11,7 +11,7 @@
       "path": "cs6200/midterm-review-p1l2-p2l5.json",
       "title": "Midterm Review: P1L2–P2L5",
       "subject": "cs6200",
-      "cardCount": 228
+      "cardCount": 229
     },
     {
       "path": "cs6200/p1l2-introduction-to-operating-systems.json",
@@ -119,7 +119,7 @@
       "path": "cs6200/readings-gios-papers.json",
       "title": "Readings: GIOS Papers",
       "subject": "cs6200",
-      "cardCount": 116
+      "cardCount": 122
     },
     {
       "path": "history/ww2.json",

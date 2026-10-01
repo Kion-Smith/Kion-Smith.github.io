@@ -313,12 +313,12 @@
     },
     {
       "id": "p2l1-032",
-      "question": "What are the two basic OS mechanisms for creating a process?",
-      "answer": "fork and exec.",
+      "question": "What two OS mechanisms does the P2L1 lecture name for process creation?",
+      "answer": "fork and exec (fork creates the new process; exec loads a new program into an existing one).",
       "distractors": [
-        "create and destroy.",
-        "spawn and kill.",
-        "open and exec."
+        "create and destroy (create makes the process; destroy removes it).",
+        "spawn and kill (spawn starts a process; kill ends it).",
+        "open and exec (open loads the program; exec runs it)."
       ]
     },
     {
@@ -515,7 +515,7 @@
     },
     {
       "id": "p2l1-gap-003",
-      "question": "Can the heap have holes?",
+      "question": "Can parts of a process's heap be unallocated (\"holes\")?",
       "answer": "Yes. Parts may be unallocated, and the process can't access them.",
       "memory": "Heap = Swiss cheese; touching a hole = segfault.",
       "distractors": [
@@ -548,7 +548,7 @@
     },
     {
       "id": "p2l1-gap-006",
-      "question": "Besides mapping, what does the OS use the page table for?",
+      "question": "Besides mapping virtual addresses to physical ones, what does the OS use a process's page table for?",
       "answer": "Checking that each memory access is valid.",
       "memory": "Page table = map + security guard.",
       "distractors": [
@@ -559,7 +559,7 @@
     },
     {
       "id": "p2l1-gap-007",
-      "question": "What must the OS keep for every process's memory?",
+      "question": "For each process, what memory information must the OS keep track of?",
       "answer": "Its virtual → physical (or disk) mappings.",
       "memory": "Every virtual address needs a \"where is it really?\" entry.",
       "distractors": [
@@ -570,7 +570,7 @@
     },
     {
       "id": "p2l1-gap-008",
-      "question": "Cache vs memory access time?",
+      "question": "Roughly how long does a CPU cache access take compared with a main-memory access?",
       "answer": "Cache: a few cycles. Memory: hundreds of cycles.",
       "memory": "Cache = desk drawer. Memory = the basement.",
       "distractors": [
@@ -624,7 +624,7 @@
     },
     {
       "id": "p2l1-gap-013",
-      "question": "CPU utilization formula for timeslice Tp and scheduling time Tsched?",
+      "question": "Each process runs for a timeslice Tp, and the scheduler takes Tsched to run between processes. What is the CPU utilization?",
       "answer": "2Tp / (2Tp + 2Tsched), i.e., Tp / (Tp + Tsched).",
       "memory": "Useful time ÷ total time.",
       "distractors": [
@@ -635,7 +635,7 @@
     },
     {
       "id": "p2l1-gap-014",
-      "question": "Utilization when Tp = Tsched?",
+      "question": "What is the CPU utilization when the timeslice Tp equals the scheduler's run time Tsched?",
       "answer": "50%",
       "memory": "Half the time is overhead.",
       "distractors": [
@@ -646,7 +646,7 @@
     },
     {
       "id": "p2l1-gap-015",
-      "question": "Utilization when Tp = 10 × Tsched?",
+      "question": "What is the CPU utilization when the timeslice Tp is 10 × the scheduler's run time Tsched?",
       "answer": "≈ 91% (10/11)",
       "memory": "A longer timeslice means less overhead.",
       "distractors": [
@@ -690,7 +690,7 @@
     },
     {
       "id": "p2l1-gap-019",
-      "question": "Can the scheduler control when events happen?",
+      "question": "Can the CPU scheduler control when external events (like I/O completions) happen?",
       "answer": "No, except for timer interrupts.",
       "memory": "The scheduler controls the clock, not the disk.",
       "distractors": [

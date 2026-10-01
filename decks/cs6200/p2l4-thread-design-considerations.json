@@ -156,7 +156,7 @@
     },
     {
       "id": "p2l4-v2-016",
-      "question": "Why use a table index instead of a direct pointer for thread IDs?",
+      "question": "In Stein & Shah's (Solaris) threads library, why is a thread ID a table index rather than a direct pointer to the thread's data?",
       "answer": "The table entry can report a meaningful error when a thread is corrupted.",
       "memory": "Bad pointer = garbage memory. Bad table entry = readable error message.",
       "distractors": [
@@ -187,7 +187,7 @@
     },
     {
       "id": "p2l4-v2-019",
-      "question": "Why is that stack-overflow bug so hard to debug?",
+      "question": "When one user-level thread's growing stack overwrites a neighboring thread's data, why is the bug so hard to debug?",
       "answer": "The error appears when the victim thread runs, not the thread that caused it.",
       "distractors": [
         "The overflowing thread crashes immediately.",
@@ -238,7 +238,7 @@
     },
     {
       "id": "p2l4-v2-024",
-      "question": "Is the kernel-level thread structure swappable?",
+      "question": "In Solaris, is the kernel-level thread data structure swappable?",
       "answer": "No. It must always stay in memory (e.g., the scheduler needs it).",
       "distractors": [
         "Yes. It's swapped out when the thread sleeps.",
@@ -248,7 +248,7 @@
     },
     {
       "id": "p2l4-v2-025",
-      "question": "Is the lightweight process (LWP) structure swappable?",
+      "question": "In Solaris, is the lightweight process (LWP) data structure swappable?",
       "answer": "Yes. It can be swapped out under memory pressure.",
       "distractors": [
         "No. It must always stay in memory.",
@@ -268,7 +268,7 @@
     },
     {
       "id": "p2l4-v2-027",
-      "question": "How does SPARC find the current thread quickly?",
+      "question": "On SPARC, how does the Solaris kernel find the current thread quickly?",
       "answer": "A dedicated register always points to the current thread.",
       "distractors": [
         "It scans the CPU's run queue.",
@@ -278,7 +278,7 @@
     },
     {
       "id": "p2l4-v2-028",
-      "question": "What is set_concurrency() for?",
+      "question": "In Solaris M:N threading, what is set_concurrency() for?",
       "answer": "The process asks the kernel for more kernel-level threads.",
       "distractors": [
         "The kernel asks the process to use fewer threads.",
@@ -359,7 +359,7 @@
     },
     {
       "id": "p2l4-v2-036",
-      "question": "Multi-CPU: T2 unlocks; T3 (high priority) is now ready, and T1 (low) runs on another CPU. How is T1 preempted?",
+      "question": "M:N threads on two CPUs: user-level thread T2 unlocks a mutex, making high-priority T3 runnable, while low-priority T1 runs on the other CPU. How does the library get T1 off that CPU?",
       "answer": "Send a signal/IPI to the other CPU so the library runs there and swaps T1 out.",
       "memory": "You can't touch another CPU's registers; you have to \"tap it on the shoulder.\"",
       "distractors": [
@@ -440,7 +440,7 @@
     },
     {
       "id": "p2l4-v2-044",
-      "question": "Minimum number of threads Linux needs to boot?",
+      "question": "According to the Linux kernel source (fork.c), what is the minimum number of threads needed to boot?",
       "answer": "20",
       "distractors": [
         "1",
@@ -450,7 +450,7 @@
     },
     {
       "id": "p2l4-v2-045",
-      "question": "Which Linux variable sets that thread limit?",
+      "question": "In the Linux kernel source, which variable holds the thread limit that is checked at boot (at least 20 threads)?",
       "answer": "max_threads",
       "distractors": [
         "nr_threads",
@@ -501,7 +501,7 @@
     },
     {
       "id": "p2l4-v2-050",
-      "question": "What determines which interrupts a platform has? Which signals?",
+      "question": "What determines which interrupts a platform has, and what determines which signals it has?",
       "answer": "Interrupts depend on the hardware. Signals depend on the OS.",
       "distractors": [
         "Both depend only on the OS.",
@@ -511,7 +511,7 @@
     },
     {
       "id": "p2l4-v2-051",
-      "question": "Interrupt mask vs signal mask: what is each tied to?",
+      "question": "What is an interrupt mask tied to, and what is a signal mask tied to?",
       "answer": "Interrupt mask is per CPU. Signal mask is per execution context (process/thread).",
       "distractors": [
         "Both are per process.",
@@ -521,7 +521,7 @@
     },
     {
       "id": "p2l4-v2-052",
-      "question": "Who defines interrupt handlers? Who can define signal handlers?",
+      "question": "Who defines interrupt handlers, and who can define signal handlers?",
       "answer": "The OS defines interrupt handlers (system-wide); processes can set their own signal handlers.",
       "distractors": [
         "Each process defines its own interrupt handlers.",
@@ -611,7 +611,7 @@
     },
     {
       "id": "p2l4-v2-061",
-      "question": "How do masks prevent handler deadlock?",
+      "question": "How do interrupt and signal masks keep a handler from deadlocking on a mutex the interrupted thread holds?",
       "answer": "Disable the interrupt/signal before locking; re-enable it after unlocking.",
       "distractors": [
         "Disable all interrupts permanently.",
@@ -621,7 +621,7 @@
     },
     {
       "id": "p2l4-v2-062",
-      "question": "What happens to an event that arrives while it is masked?",
+      "question": "What happens to an interrupt or signal that arrives while it is masked?",
       "answer": "It stays pending until the mask re-enables it.",
       "distractors": [
         "It's discarded forever.",
@@ -672,7 +672,7 @@
     },
     {
       "id": "p2l4-v2-067",
-      "question": "POSIX signal name: terminal interrupt?",
+      "question": "Which POSIX signal means \"terminal interrupt\" (e.g., Ctrl-C)?",
       "answer": "SIGINT",
       "distractors": [
         "SIGTERM",
@@ -682,7 +682,7 @@
     },
     {
       "id": "p2l4-v2-068",
-      "question": "POSIX signal name: high-bandwidth data available on a socket?",
+      "question": "Which POSIX signal means \"high-bandwidth data is available on a socket\"?",
       "answer": "SIGURG",
       "distractors": [
         "SIGIO",
@@ -692,7 +692,7 @@
     },
     {
       "id": "p2l4-v2-069",
-      "question": "POSIX signal name: background process attempting to write?",
+      "question": "Which POSIX signal means \"a background process attempted to write to the terminal\"?",
       "answer": "SIGTTOU",
       "distractors": [
         "SIGTTIN",
@@ -702,7 +702,7 @@
     },
     {
       "id": "p2l4-v2-070",
-      "question": "POSIX signal name: file size limit exceeded?",
+      "question": "Which POSIX signal means \"file size limit exceeded\"?",
       "answer": "SIGXFSZ",
       "distractors": [
         "SIGFPE",
@@ -722,7 +722,7 @@
     },
     {
       "id": "p2l4-v2-072",
-      "question": "When does Solaris run a handler as a real thread?",
+      "question": "When does Solaris run an interrupt handler as a real thread?",
       "answer": "Only when the handler may lock a mutex. Otherwise it runs on the interrupted thread's stack.",
       "distractors": [
         "Always, for every interrupt.",
@@ -742,7 +742,7 @@
     },
     {
       "id": "p2l4-v2-074",
-      "question": "Linux interrupt top half: what are its rules?",
+      "question": "In Linux, what are the rules for the top half of an interrupt handler?",
       "answer": "Runs right away, minimal work, must never block.",
       "distractors": [
         "Runs later as a thread and can block.",
@@ -752,7 +752,7 @@
     },
     {
       "id": "p2l4-v2-075",
-      "question": "Linux interrupt bottom half: what are its rules?",
+      "question": "In Linux, what are the rules for the bottom half of an interrupt handler?",
       "answer": "Runs later as a scheduled thread; it can block and do arbitrary work.",
       "memory": "Top = triage in the ER. Bottom = surgery booked for later.",
       "distractors": [
@@ -763,7 +763,7 @@
     },
     {
       "id": "p2l4-v2-076",
-      "question": "Interrupts-as-threads: cost vs savings?",
+      "question": "Solaris interrupts as threads: what does it cost per interrupt, and what does it save per mutex lock/unlock?",
       "answer": "+40 instructions per interrupt; −12 instructions per mutex lock/unlock.",
       "distractors": [
         "−40 instructions per interrupt; +12 per mutex op.",
@@ -773,7 +773,7 @@
     },
     {
       "id": "p2l4-v2-077",
-      "question": "Why does interrupts-as-threads come out ahead overall?",
+      "question": "Why do Solaris's interrupts as threads come out ahead overall?",
       "answer": "Mutex operations are far more frequent than interrupts.",
       "memory": "The big lesson: optimize for the common case.",
       "distractors": [
@@ -794,7 +794,7 @@
     },
     {
       "id": "p2l4-v2-079",
-      "question": "Signal case 1: ULT mask = 1 and KLT mask = 1. What happens?",
+      "question": "Solaris M:N threads: a signal arrives on an LWP, and both the running user-level thread's mask and the LWP's kernel mask have it enabled. What happens?",
       "answer": "The kernel interrupts the running ULT and its handler runs. No problem.",
       "distractors": [
         "The signal is discarded.",
@@ -804,7 +804,7 @@
     },
     {
       "id": "p2l4-v2-080",
-      "question": "What does the threading library install for every signal?",
+      "question": "In Solaris M:N threading, what does the threads library install for every signal?",
       "answer": "A wrapper handler that can see all the ULT signal masks.",
       "distractors": [
         "Nothing; the kernel calls user handlers directly.",
@@ -814,7 +814,7 @@
     },
     {
       "id": "p2l4-v2-081",
-      "question": "Signal case 2: running ULT mask = 0, and another runnable ULT has mask = 1. What happens?",
+      "question": "Solaris M:N threads: a signal arrives on an LWP whose running user-level thread has it disabled, but another runnable user-level thread has it enabled. What happens?",
       "answer": "The library wrapper schedules the enabled ULT onto this KLT to handle it.",
       "distractors": [
         "The signal is discarded.",
@@ -824,7 +824,7 @@
     },
     {
       "id": "p2l4-v2-082",
-      "question": "Signal case 3: the enabled ULT is running on another CPU's KLT. What happens?",
+      "question": "Solaris M:N threads: the only user-level thread with a signal enabled is running on another CPU's LWP when the signal arrives. What happens?",
       "answer": "The library sends a directed signal to that KLT's LWP.",
       "distractors": [
         "The library waits until that ULT migrates here.",
@@ -834,7 +834,7 @@
     },
     {
       "id": "p2l4-v2-083",
-      "question": "Signal case 4: every ULT has the signal disabled. What happens?",
+      "question": "Solaris M:N threads: a signal arrives, but every user-level thread has it disabled. What happens?",
       "answer": "The library syscalls to set this KLT's mask to 0, then re-raises the signal; repeat until all KLT masks are 0.",
       "distractors": [
         "The signal is discarded immediately.",
@@ -844,7 +844,7 @@
     },
     {
       "id": "p2l4-v2-084",
-      "question": "What does the library do later when a ULT re-enables that signal?",
+      "question": "Solaris M:N threads: the library turned a signal off in the kernel masks because every user-level thread had it disabled. Later a thread re-enables it. What does the library do?",
       "answer": "It makes a syscall to re-enable one KLT's mask.",
       "distractors": [
         "Nothing; the kernel notices automatically.",
@@ -854,7 +854,7 @@
     },
     {
       "id": "p2l4-v2-085",
-      "question": "Why does Solaris make signal delivery complex instead of mask updates?",
+      "question": "Why does Solaris make signal delivery complicated instead of making every signal-mask update a system call?",
       "answer": "Mask updates are frequent and signals are rare, so keep the common case cheap.",
       "distractors": [
         "Signals are frequent and mask updates are rare.",
@@ -925,7 +925,7 @@
     },
     {
       "id": "p2l4-v2-092",
-      "question": "clone() with ALL sharing flags set creates…?",
+      "question": "In Linux, what does calling clone() with all sharing flags set create?",
       "answer": "A new thread (shares everything).",
       "distractors": [
         "A new process (like fork).",
@@ -935,7 +935,7 @@
     },
     {
       "id": "p2l4-v2-093",
-      "question": "clone() with NO sharing flags set is like…?",
+      "question": "In Linux, what is calling clone() with no sharing flags set equivalent to?",
       "answer": "fork() (a new process). Linux implements fork via clone this way.",
       "distractors": [
         "pthread_create() (a new thread).",

@@ -595,7 +595,7 @@
     },
     {
       "id": "p1l2-gap-011",
-      "question": "What does the syscall return path involve?",
+      "question": "When a system call finishes, what does the return path involve?",
       "answer": "Switch back to user mode, copy results, jump to right after the call.",
       "memory": "Return = undo every step of the entry.",
       "distractors": [
@@ -617,7 +617,7 @@
     },
     {
       "id": "p1l2-gap-013",
-      "question": "Where does the CPU know it's in kernel mode?",
+      "question": "How does the CPU know it is in kernel mode?",
       "answer": "A special privilege bit in the CPU is set.",
       "memory": "Bit on = kernel; bit off = user.",
       "distractors": [

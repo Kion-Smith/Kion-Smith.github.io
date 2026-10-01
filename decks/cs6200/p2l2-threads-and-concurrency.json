@@ -303,7 +303,7 @@
     },
     {
       "id": "p2l2-031",
-      "question": "What does wait() do to the mutex it's called with?",
+      "question": "What does a condition variable's wait() do to the mutex passed to it?",
       "answer": "Automatically releases it while waiting, and automatically reacquires it before returning.",
       "distractors": [
         "Keeps holding it the whole time.",
@@ -703,7 +703,7 @@
     },
     {
       "id": "p2l2-071",
-      "question": "What's the preferred way for the boss to hand off work, and why?",
+      "question": "In the boss-workers pattern, what's the preferred way for the boss to hand off work, and why?",
       "answer": "A shared producer-consumer queue — avoids the boss tracking worker status or waiting on a handshake.",
       "distractors": [
         "Direct handshake with each worker, so no queue sync is needed.",
@@ -854,7 +854,7 @@
     },
     {
       "id": "p2l2-gap-002",
-      "question": "Why is join() unnecessary in the safe_insert example?",
+      "question": "Lecture safe_insert example: a child thread inserts into a shared list, and the parent later calls join() on it. Why is the join() not actually needed?",
       "answer": "The result is already visible in the shared list.",
       "memory": "join is for getting results; here they're already shared.",
       "distractors": [
@@ -887,7 +887,7 @@
     },
     {
       "id": "p2l2-gap-005",
-      "question": "In producer/consumer without a CV, what does the consumer do?",
+      "question": "In producer/consumer code without a condition variable, what does the consumer have to do?",
       "answer": "Busy-waits: lock, check if full, unlock, repeat.",
       "memory": "\"Are we there yet?\"",
       "distractors": [
@@ -898,7 +898,7 @@
     },
     {
       "id": "p2l2-gap-006",
-      "question": "When does a producer signal list_full?",
+      "question": "Lecture producer/consumer example (producers insert into a shared list; the consumer prints and clears it once it's full, waiting on condition variable list_full): when does a producer signal list_full?",
       "answer": "Only when its insert made the list full.",
       "memory": "Only ring the bell when there's news.",
       "distractors": [
@@ -909,7 +909,7 @@
     },
     {
       "id": "p2l2-gap-007",
-      "question": "wait() implementation step 1?",
+      "question": "Inside a condition variable's wait() implementation, what happens when a thread first calls it?",
       "answer": "Release the mutex and join the CV's wait queue.",
       "memory": "Release the key, then take a seat in the waiting room.",
       "distractors": [
@@ -920,7 +920,7 @@
     },
     {
       "id": "p2l2-gap-008",
-      "question": "wait() implementation step 2 (on signal)?",
+      "question": "Inside a condition variable's wait() implementation, what happens when the waiting thread is signaled?",
       "answer": "Leave the queue and reacquire the mutex, then return.",
       "memory": "Hand back the key while you nap; grab it again on waking.",
       "distractors": [
@@ -931,7 +931,7 @@
     },
     {
       "id": "p2l2-gap-009",
-      "question": "Why is broadcast sometimes not very useful?",
+      "question": "Why does a broadcast on a condition variable sometimes help less than you'd expect?",
       "answer": "Woken threads still take the mutex one at a time.",
       "memory": "Everyone wakes, but there's still one key.",
       "distractors": [
@@ -942,8 +942,8 @@
     },
     {
       "id": "p2l2-gap-010",
-      "question": "CV quiz: why use while instead of if?",
-      "answer": "The list may change before the consumer reacquires the mutex (all of the above).",
+      "question": "Lecture condition-variable quiz: why does the consumer wait in a while loop instead of an if?",
+      "answer": "All of the quiz's reasons: it handles multiple consumers, the mutex isn't guaranteed right after the signal, and the list can change before the consumer reacquires the mutex.",
       "memory": "Wake-up means \"maybe\"; the while loop checks again.",
       "distractors": [
         "A while loop is faster than an if.",
@@ -953,7 +953,7 @@
     },
     {
       "id": "p2l2-gap-011",
-      "question": "Toy shop quiz: what is the new-order entry predicate?",
+      "question": "Toy-shop critical-section quiz (at most 3 new orders at once; at most 1 new order while any old/repair orders are in progress): what is the new-order entry predicate?",
       "answer": "while (new_order == 3 || (new_order == 1 && old_order > 0)) wait",
       "memory": "Up to 3 new orders; old orders only allowed while ≤ 1 new order.",
       "distractors": [
@@ -964,7 +964,7 @@
     },
     {
       "id": "p2l2-gap-012",
-      "question": "Toy shop quiz: is `if` instead of `while` correct?",
+      "question": "Toy-shop critical-section quiz (at most 3 new orders at once; at most 1 new order while any old/repair orders are in progress): is using if instead of while in the new-order check correct?",
       "answer": "No. Another thread may change the counts first.",
       "memory": "if = trust the old news; while = check again.",
       "distractors": [
@@ -975,7 +975,7 @@
     },
     {
       "id": "p2l2-gap-013",
-      "question": "Toy shop quiz: is `new_order >= 3` also correct?",
+      "question": "Toy-shop critical-section quiz: the correct new-order check is while (new_order == 3 || (new_order == 1 && old_order > 0)) wait. Would new_order >= 3 instead of new_order == 3 also be correct?",
       "answer": "Yes. new_order can never exceed 3.",
       "memory": "Can't exceed 3, so ≥ 3 behaves the same as == 3.",
       "distractors": [
@@ -986,7 +986,7 @@
     },
     {
       "id": "p2l2-gap-014",
-      "question": "Does signaling one CV before another give it priority?",
+      "question": "If a thread signals one condition variable before another, will the first one's waiters run first?",
       "answer": "No. The scheduler decides who runs first.",
       "memory": "Code order ≠ run order.",
       "distractors": [
@@ -997,7 +997,7 @@
     },
     {
       "id": "p2l2-gap-015",
-      "question": "Deadlock fix: why doesn't fine-grained locking (unlock A, then lock B) work?",
+      "question": "Two threads lock mutexes A and B in opposite orders and deadlock. Why doesn't fine-grained locking (unlock A, then lock B) fix it?",
       "answer": "The code needs A and B held together.",
       "memory": "Fine-grained only works if you need one lock at a time.",
       "distractors": [
@@ -1008,7 +1008,7 @@
     },
     {
       "id": "p2l2-gap-016",
-      "question": "Deadlock fix: what does one mega-lock for A and B cost?",
+      "question": "Two threads lock mutexes A and B in opposite orders and deadlock. What does replacing A and B with one big lock cost?",
       "answer": "Parallelism: only one thread at a time.",
       "memory": "One giant lock = one thread at a time.",
       "distractors": [
@@ -1019,7 +1019,7 @@
     },
     {
       "id": "p2l2-gap-017",
-      "question": "What do the deadlock-handling techniques have in common?",
+      "question": "Deadlock handling beyond lock ordering (checking every lock request for cycles, or detecting deadlocks and rolling back): what do these techniques have in common?",
       "answer": "They're expensive; used mostly in performance-critical systems.",
       "memory": "Prevention and detection cost a lot; lock order is the cheap fix.",
       "distractors": [
@@ -1030,7 +1030,7 @@
     },
     {
       "id": "p2l2-gap-018",
-      "question": "Toy shop: which step does the boss do in boss-workers?",
+      "question": "Lecture toy-shop boss-workers example (each order has 6 steps): which step does the boss do?",
       "answer": "Only step 1 (accept the order).",
       "memory": "The boss hands off immediately to stay fast.",
       "distractors": [
@@ -1041,7 +1041,7 @@
     },
     {
       "id": "p2l2-gap-019",
-      "question": "Boss-worker handshake: pro?",
+      "question": "In the boss-workers pattern, what is the advantage of the boss handing work directly to a free worker (a handshake)?",
       "answer": "Workers don't need to synchronize with each other.",
       "memory": "Each worker gets its own direct order: no tray fights.",
       "distractors": [
@@ -1052,7 +1052,7 @@
     },
     {
       "id": "p2l2-gap-020",
-      "question": "Boss-worker handshake: con?",
+      "question": "In the boss-workers pattern, what is the drawback of the boss handing work directly to a free worker (a handshake)?",
       "answer": "The boss tracks and waits on workers, so throughput drops.",
       "memory": "The boss becomes a babysitter.",
       "distractors": [
@@ -1063,7 +1063,7 @@
     },
     {
       "id": "p2l2-gap-021",
-      "question": "Boss-worker: what happens when the shared queue is full?",
+      "question": "In the boss-workers pattern, what happens when the shared work queue is full?",
       "answer": "The boss waits, so throughput drops.",
       "memory": "Full tray → the boss stands and waits.",
       "distractors": [
@@ -1074,7 +1074,7 @@
     },
     {
       "id": "p2l2-gap-022",
-      "question": "Boss-worker pool: how does it grow?",
+      "question": "In the boss-workers pattern with a dynamic thread pool, how does the pool grow when work piles up?",
       "answer": "Several threads at a time, not one per request.",
       "memory": "Hire in batches.",
       "distractors": [
@@ -1085,7 +1085,7 @@
     },
     {
       "id": "p2l2-gap-023",
-      "question": "Layered pattern: what is its benefit over a pipeline?",
+      "question": "What is the benefit of the layered pattern over a pipeline?",
       "answer": "Coarser, so choosing threads per layer is easier.",
       "memory": "Fewer, bigger groups = fewer sizing decisions.",
       "distractors": [
@@ -1096,7 +1096,7 @@
     },
     {
       "id": "p2l2-gap-024",
-      "question": "Specialized threads: what else can you do with them besides locality?",
+      "question": "Boss-workers with specialized workers: besides better cache locality, what else do specialized workers let you do?",
       "answer": "Give important tasks or customers higher priority.",
       "memory": "VIP customers get more workers.",
       "distractors": [
@@ -1107,7 +1107,7 @@
     },
     {
       "id": "p2l2-gap-025",
-      "question": "Kernel-level threads: what else do they run besides user threads?",
+      "question": "Besides running user-level threads, what else do kernel-level threads run?",
       "answer": "OS services such as daemons and drivers.",
       "memory": "The kernel has its own staff too.",
       "distractors": [
